@@ -1,0 +1,16 @@
+*.aux
+*.bbl
+*.blg
+*.dvi
+*.fdb_latexmk
+*.fls
+*.log
+*.gz
+*.toc
+
+
+### macOS ###
+# General
+.DS_Store
+.AppleDouble
+.LSOverride
