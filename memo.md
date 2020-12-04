@@ -1,8 +1,32 @@
 # 様々なことメモ
 
-論文にする前の下書きや、アイデアなどのメモ
+## 注意
 
-## original contribution(もっと洗練させる)
+・bibtex だけでは不十分。資料を見て参考文献の表記法を確認すること
+
+## 何の役に立つのか
+
+・作成したモデルの検証が可能（実際のモデルと比較して良いモデルにできているのか？）
+. In particular, evaluating similarity between graphs is crucial to network analysis and
+graph-based anomaly detection (Papadimitriou et al., 2010;　 Akoglu et al., 2015; Ranshous et al., 2015).
+
+## 流れ
+
+従来研究
+・VNGE: 前処理ができない
+・NetLSD: 前処理ができても、指標が複雑で意味を捉えにくい
+
+スペクトルを用いた計算法
+従来手法とは異なる方法の計算。
+→ 前計算が可能。cos dist なら検索が早い（これは NetLSD は L2 ノルムを用いているが、これにも適用可能？）
+
+## VNGE
+
+the von Neumann graph entropy (VNGE) (Braunstein et al., 2006; Passerini & Severini,
+2008; 2009) facilitates the measure of (quantum) JensenShannon divergence and distance (Endres & Schindelin,
+2003; Briet & Harremo ¨ es¨ , 2009) between graphs.
+
+## original contribution(もっと洗練させる
 
 先行研究でのネットワークの距離を計算する手法は、「スケールしない」or「大規模グラフにも適応可能だが、グラフの距離を同時に複数計算するのに時間がかかる」という欠点がありました。
 
