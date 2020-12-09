@@ -1,7 +1,7 @@
 \documentclass[senior,final,11pt]{iscs-thesis}
 % 論文の種類とフォントサイズをオプションに
 %-------------------
-\etitle{Analysis and quantitative evaluation of large networks using spectral distribution}
+\etitle{Analysis and Quantitative Evaluation of Large Networks Using Spectral Distributions}
 \jtitle{スペクトル分布を用いた大規模ネットワークの分析と定量的評価について}
 %
 \eauthor{Naoki Murakami}
@@ -13,14 +13,20 @@
 %-------------------
 \begin{document}
 \begin{eabstract}
-    In analyzing the  properties and  structure of a network, the spectrum can be a very important tool. However, since computing the full eigendecomposition is expensive, the analysis of large networks have been done by using only a part of the full spectrum. Recently, a method for calculating the entire spectrum distribution has been developed, but its application has not yet been deeply considered, and it has been limited to qualitative evaluation by visualizing the spectrum distribution.
+    To analyze the properties and structure of a network, one of the very important tools is the spectrum, or eigenvalue distribution. However, since computing the full eigendecomposition is expensive, large networks have been analyzed by using only part of the spectrum. Recently, a method for calculating the entire eigenvalue distribution has been developed, but the analysis and application of the spectrum have not yet been deeply considered.
 
-    In this study, we will analyze the distribution of the overall spectrum of the theoretically created graphs and the real-world network. Then, we will discuss the relation between the properties of the network and the spectrum. As a result, we find that graphs in which vertices are adjacent to each other with similar properties have sharp spectra found in complex networks. Furthermore, we illustrate that graphs with randomness in vertex adjacencies will have the semicircular spectra found in random graphs. We also suggest applying the concepts of entropy and divergence of discrete probability distributions to quantitative evaluation and comparison of spectral distributions. A fast way to search for similar spectra using cosine distance is also discussed.
+    In this paper, we firstly discuss the quantitative evaluation of spectra and its applications. For quantitative evaluation and comparison of spectral densities, we suggest applying the concepts of divergence and metric of discrete probability distributions to spectral distributions. This allows an intuitive comparison based on the structure of networks. As an application, a fast search algorithm for similar spectra using cosine distance is also discussed. Secondly, we analyze the distribution of the overall spectrum of theoretical graphs and real-world networks. Then, we discuss the relation between the network properties and the spectrum. As a result, for sparse networks, there is a large correspondence between the local structure of the network, called a motif, and the distribution of eigenvalues. In addition, we find that a graph in which vertices connected to neighbors have a sharp spectrum found in complex networks. Furthermore, we illustrate that graphs with vertices connected randomly have the semicircular spectra found in Erdős-Rényi random graphs.
+
+    We show the quantitative evaluation and application of spectra and that graphs with common spectra have common properties. This is useful for analyzing the properties of real-world networks.
+
+
 \end{eabstract}
 \begin{jabstract}
-    ネットワークの性質や構造を分析する上で、スペクトルは非常に重要な指標となり得る。しかし、大規模ネットワークについては、計算量の問題からスペクトルの一部を利用した分析しか行われていなかった。近年スペクトルの分布全体を計算する手法が考案されたが、応用方法などはまだ深く考えられておらず、スペクトル分布を視覚化して定性的な評価をするにとどまっている。
+    ネットワークの性質や構造を分析する上で、スペクトルは非常に重要な指標となり得る。しかし、大規模ネットワークについては、計算量の問題からスペクトルの一部を利用した分析しか行われていなかった。近年スペクトル全体を計算する手法が考案されたが、スペクトルの分析や応用などはまだ深く考えられていない。
 
-    本研究では、理論的に得られるグラフと実世界のネットワークのスペクトル全体の分布を分析し、ネットワークの性質とスペクトルの対応について考察する。 結果として、性質が近い頂点同士が隣接するようなグラフは、複雑ネットワークに見られるような鋭いスペクトルを持つこと分かった。さらに、頂点同士の隣接にランダム性があるグラフは、ランダムグラフに見られる半円状のスペクトルになることを例示する。 また、スペクトル分布の定量的な評価や比較のために、離散確率分布に対するエントロピーやダイバージェンスの概念を流用することを提案する。これにより、ネットワークの構造に基づいた直感的な比較が可能になる。cosine distance を用いて類似のスペクトルを高速に検索する方法についても言及する。
+    本研究では、はじめにスペクトルの定量的評価とその応用方法について議論する。スペクトル分布の定量的な評価や比較のために、離散確率分布に対するダイバージェンスや距離の概念を流用することを提案する。これにより、ネットワークの構造に基づいた直感的な比較が可能になる。応用方法として cosine distance を用いた類似のスペクトルを高速に検索する手法についても言及する。 次に、理論的に得られるグラフと実世界のネットワークのスペクトル全体の分布を分析し、ネットワークの性質とスペクトルの対応について考察する。 結果として、平均次数が小さい疎なネットワークについては、モチーフと呼ばれるネットワークの局所的な構造と固有値の分布が大きく対応していることが分かった。 また、近くの頂点同士が隣接するようなグラフは、複雑ネットワークに見られるような鋭いスペクトルを持つ。さらに、頂点同士の隣接にランダム性があるグラフは、Erdős-Rényi ランダムグラフに見られる半円状のスペクトルになることを例示する。
+
+    我々は、スペクトルの定量的評価と応用法や、共通するスペクトルを持つグラフは共通する性質を持つことを示した。これは、実世界のネットワークの性質解明に役立つと考えられる。
 \end{jabstract}
 \maketitle
 
