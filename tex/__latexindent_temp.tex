@@ -1,4 +1,9 @@
 \documentclass[senior,final,11pt]{iscs-thesis}
+\usepackage{amsmath,amssymb} % mathbb
+\usepackage{amsmath,amsthm} % theorem
+\DeclareMathAlphabet\mathbfcal{OMS}{cmsy}{b}{n}
+\newtheorem{theorem}{Theorem}
+\newtheorem{corollary}{Corollary}[theorem]
 % 論文の種類とフォントサイズをオプションに
 %-------------------
 \etitle{Analysis and Quantitative Evaluation of Large Networks Using Spectral Distributions}
@@ -17,7 +22,7 @@
 
     In this paper, we firstly discuss the quantitative evaluation of spectra and its applications. For quantitative evaluation and comparison of spectral densities, we suggest applying the concepts of divergence and metric of discrete probability distributions to spectral distributions. This allows an intuitive comparison based on the structure of networks. As an application, a fast search algorithm for similar spectra using cosine distance is also discussed. Secondly, we analyze the distribution of the overall spectrum of theoretical graphs and real-world networks. Then, we discuss the relation between the network properties and the spectrum. As a result, for sparse networks, there is a large correspondence between the local structure of the network, called a motif, and the distribution of eigenvalues. In addition, we find that a graph in which vertices connected to neighbors have a sharp spectrum found in complex networks. Furthermore, we illustrate that graphs with vertices connected randomly have the semicircular spectra found in Erdős-Rényi random graphs.
 
-    We show the quantitative evaluation and application of spectra and that graphs with common spectra have common properties. This is useful for analyzing the properties of real-world networks.
+    This study explains a quantitative evaluation and application of spectra and shows that the shape of the spectra can give us information about the network properties. This means that the spectral analysis is an effective tool for clarifying the network properties.
 
 
 \end{eabstract}
@@ -26,7 +31,7 @@
 
     本研究では、はじめにスペクトルの定量的評価とその応用方法について議論する。スペクトル分布の定量的な評価や比較のために、離散確率分布に対するダイバージェンスや距離の概念を流用することを提案する。これにより、ネットワークの構造に基づいた直感的な比較が可能になる。応用方法として cosine distance を用いた類似のスペクトルを高速に検索する手法についても言及する。 次に、理論的に得られるグラフと実世界のネットワークのスペクトル全体の分布を分析し、ネットワークの性質とスペクトルの対応について考察する。 結果として、平均次数が小さい疎なネットワークについては、モチーフと呼ばれるネットワークの局所的な構造と固有値の分布が大きく対応していることが分かった。 また、近くの頂点同士が隣接するようなグラフは、複雑ネットワークに見られるような鋭いスペクトルを持つ。さらに、頂点同士の隣接にランダム性があるグラフは、Erdős-Rényi ランダムグラフに見られる半円状のスペクトルになることを例示する。
 
-    我々は、スペクトルの定量的評価と応用法や、共通するスペクトルを持つグラフは共通する性質を持つことを示した。これは、実世界のネットワークの性質解明に役立つと考えられる。
+    本研究はスペクトルの定量的評価や応用法について提案するとともに、スペクトルの形状からネットワークの性質についての情報が得られることを示した。これによりスペクトルの分析がネットワークの性質解明に有効な手段であることがわかる。
 \end{jabstract}
 \maketitle
 
@@ -70,6 +75,75 @@ There are fast online search tool for DOS\cite{borysov2018online,geilhufe2018tow
 
 \chapter{Preliminaries}
 \section{General Notation}
+
+Let $G=(V,E,w)$ be a wighted undirected graph where $V=(v_1, v_2, ..., v_n)$ is a set of vertices, $E \subseteq V\times V$ is a set of undirected edges, and $w: E \rightarrow \mathbb{R}$ is a weight function. The adjacency matrix ${\mathbf A}$ is a $n \times n$ matrix of $G$, (i.e., $ A_{ij}= w((v_i ,u_i))$ ).
+\begin{table}[htb]
+    \begin{center}
+      \begin{tabular}{l r}
+        \bf{Symbol} & \bf{Description} \\ \hline
+        $n \in \mathbb{N}$ & $|V|$:the number of vertices \\
+        $m \in \mathbb{N}$ & $|E|$:the number of edges \\ \hline
+      \end{tabular}
+      \caption{Summary of notion used}
+      \label{tab:notion}
+    \end{center}
+  \end{table}
+
+
+\section{Laplacian Matrix}
+
+\section{Stochastic Trace Estimator}
+For trace estimation of large implicit matrices, we can use randomized estimator described by Hunchinson \cite{hutchinson1989stochastic, adams2018estimating}.
+\begin{theorem}
+    \label{Hunchinson}
+    (Proposition 4.1 \cite{adams2018estimating}) Let ${\mathbf A} \in \mathbb{R}^{n\times n}$ be a square matrix and $\mathbf{x} \in \mathbb{R}^n$ be a random vector such that $\mathbb{E}_{p(\mathbf{x})}[\mathbf{xx^T}] = \mathbf{I}$. Then $\mathbb{E}_{p(\mathbf{x})}[\mathbf{x}^{T}\mathbf{A}\mathbf{x}] = \mathrm{tr}(\mathbf{A})$.
+\end{theorem}
+
+\begin{proof}
+    \begin{align*}
+        \mathbb{E}_{p(\mathbf{x})}[\mathbf{x}^{T}\mathbf{A}\mathbf{x}] &= \mathbb{E}_{p(\mathbf{x})}[\mathrm{tr}(\mathbf{x}^{T}\mathbf{A}\mathbf{x})] \\
+          &=  \mathbb{E}_{p(\mathbf{x})}[\mathrm{tr}(\mathbf{A}\mathbf{x}\mathbf{x}^{T})]  &\text{invariance to cyclic permutation} \\
+          &= \mathrm{tr}(\mathbb{E}_{p(\mathbf{x})}[\mathbf{A}\mathbf{x}\mathbf{x}^{T}] ) &\text{linearity of trace}  \\
+          &= \mathrm{tr}(\mathbf{A}\mathbb{E}_{p(\mathbf{x})}[\mathbf{x}\mathbf{x}^{T}] ) &\text{linearity of expectation}  \\
+          &= \mathrm{tr}(\mathbf{A})
+    \end{align*}
+\end{proof}
+
+The requirement $\mathbb{E}_{p(\mathbf{x})}[\mathbf{xx^T}] = \mathbf{I}$ for the random vector  $\mathbf{x}$ can be easily satisfied. For example, paractical choices of $p(\mathbf{x})$ include Ramemacher or standard normal distributions with zero mean and one variance.
+
+The estimation method of $\mathrm{tr}(f(\mathbf{A}))$ is based on Theorem \ref{Hunchinson}, which we apply in our setting for the trace of power of matrix $f({\mathbf L})={\mathbf L}^k$ or $f({\mathbfcal{L}})={\mathbfcal L}^k$. The following corollary holds.
+\begin{corollary}
+    \label{approxtrace}
+    If $f(\mathbf{A}) \in \mathbb{R}^{n\times n}$ is a square matrix, and $\mathbf{x}_1, \mathbf{x}_2, \cdots, \mathbf{x}_{n_v} \in \mathbb{R}^n$ are random vectors drawn from a distribution $p(\mathbf{x})$ such that $\mathbb{E}_{p(\mathbf{x})}[\mathbf{xx^T}] = \mathbf{I}$, then
+    \begin{align*}
+        \mathrm{tr}(f(\mathbf{A})) =\mathbb{E}_{p(\mathbf{x})}[\mathbf{x}^{T}f(\mathbf{A})\mathbf{x}] \approx \frac{1}{n_v}\sum_{i=1}^{n_v} \mathbf{x}_i^{T}f(\mathbf{A})\mathbf{x}_i
+    \end{align*}
+\end{corollary}
+
+Unit vectors $\mathbf{z}_i = \frac{\mathbf{x}_i}{\|\mathbf{x}_i\|_2}$ can be used instead of $\mathbf{x}_i$. We can rewrite the formula of Corollary \ref{approxtrace}.
+\begin{theorem}
+    \label{approxtraceUniformed}
+    Let $\mathbf{z}_i = \frac{\mathbf{x}_i}{\|\mathbf{x}_i\|_2}$ be a unit vector, then
+    \begin{align*}
+        \mathrm{tr}(f(\mathbf{A})) \approx \frac{n}{n_v}\sum_{i=1}^{n_v} \mathbf{z}_i^{T}f(\mathbf{A})\mathbf{z}_i
+    \end{align*}
+\end{theorem}
+\begin{proof}
+    \begin{align*}
+        \mathrm{tr}(f(\mathbf{A})) &\approx \frac{1}{n_v}\sum_{i=1}^{n_v} \mathbf{x}_i^{T}f(\mathbf{A})\mathbf{x}_i \\
+        &= \frac{1}{n_v}\sum_{i=1}^{n_v} \|\mathbf{x}_i\|_2^2 \cdot \mathbf{z}_i^{T}f(\mathbf{A})\mathbf{z}_i \\
+        &\approx \frac{1}{n_v}\sum_{i=1}^{n_v} n \cdot \mathbf{z}_i^{T}f(\mathbf{A})\mathbf{z}_i &\text{$ \mathbb{E}_{p(\mathbf{x})}[\|\mathbf{x}_i\|_2^2$]  is equal to $n$}\\
+        &= \frac{n}{n_v}\sum_{i=1}^{n_v} \mathbf{z}_i^{T}f(\mathbf{A})\mathbf{z}_i
+    \end{align*}
+\end{proof}
+
+For Randemacher vectors, $\|\mathbf{x}_i\|_2^2$ is always $n$. For other random vectors, $\mathbb{E}_{p(\mathbf{x})}[\|\mathbf{x}_i\|_2^2$]  is equal to $n$ as long as $\mathbb{E}_{p(\mathbf{x})}[\mathbf{xx^T}] = \mathbf{I}$.
+
+For accurate computation, $n_v$ should approaches infinity. However  using large $n_v$ is expensive. For practical purposes, we can use small $n_v$. The convergence rate of such estimator was studied by Avron and Toledo\cite{avron2011randomized}. Hence, we only need to compute the scalars of $\mathbf{z}_i^{T}f(\mathbf{A})\mathbf{z}_i$ which can be estimated by using stochastic Lanczos quadrature.
+
+\section{Stochastic Lanczos Quadrature(SLQ)}
+
+\chapter{the Sum of Powers of Network Eigenvalues}
 
 \chapter{Conclusion}
 
