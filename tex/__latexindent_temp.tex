@@ -3,6 +3,8 @@
 \usepackage{amsmath,amsthm} % theorem
 \DeclareMathAlphabet\mathbfcal{OMS}{cmsy}{b}{n}
 \newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+\newtheorem{definition}{Definition}
 \newtheorem{corollary}{Corollary}[theorem]
 % 論文の種類とフォントサイズをオプションに
 %-------------------
@@ -74,21 +76,44 @@ Motif multiplicity corresponds to eigenvalues multiplicity \cite{mehatari2015eff
 There are fast online search tool for DOS\cite{borysov2018online,geilhufe2018towards}
 
 \chapter{Preliminaries}
-\section{General Notation}
+\section{Matrix and Spectra}
+Firstly, we define some concepts regarding matrix and its eigenvalues and prove some theorems which are used later.
+\begin{definition}
+    Let $\lambda_0 \leq \lambda_2 \leq ... \leq \lambda_{n-1}$ be the eigenvalues of a n-dimensional matrix $\mathbf{A}$. The spectrum $\sigma(\mathbf{A})$ of $\mathbf{A}$ is the set of its overall eigenvalues.
+    \[\sigma(\mathbf{A}) := \{\lambda_i | i=0,1,...,n-1\}\]
+\end{definition}
+\begin{definition}
+    The spectral radius $\rho(\mathbf{A})$ of a n-dimensional matrix $\mathbf{A}$ is the nonnegative number
+    \[\rho(\mathbf{A}):=\sup_{\lambda \in \sigma(A)} |\lambda|.\]
+\end{definition}
 
-Let $G=(V,E,w)$ be a wighted undirected graph where $V=(v_1, v_2, ..., v_n)$ is a set of vertices, $E \subseteq V\times V$ is a set of undirected edges, and $w: E \rightarrow \mathbb{R}$ is a weight function. The adjacency matrix ${\mathbf A}$ is a $n \times n$ matrix of $G$, (i.e., $ A_{ij}= w((v_i ,u_i))$ ).
-\begin{table}[htb]
-    \begin{center}
-      \begin{tabular}{l r}
-        \bf{Symbol} & \bf{Description} \\ \hline
-        $n \in \mathbb{N}$ & $|V|$:the number of vertices \\
-        $m \in \mathbb{N}$ & $|E|$:the number of edges \\ \hline
-      \end{tabular}
-      \caption{Summary of notion used}
-      \label{tab:notion}
-    \end{center}
-  \end{table}
+\begin{theorem}
+    \label{power_eigenvalues}
+    Let $\lambda_0 \leq \lambda_2 \leq ... \leq \lambda_{n-1}$ be the eigenvalues of a real symmetric matrix $\mathbf{A}$ and the eigendecomposition of $\mathbf{A}$ be $\mathbf{A}=\mathbf{Q}\mathbf{\Lambda}\mathbf{Q}^T$. Then $\lambda_0^k, \lambda_2^k, ..., \lambda_{n-1}^k$ are eigenvalues of $\mathbf{A}^k$.
+\end{theorem}
+\begin{proof}
+    \begin{align*}
+        \mathbf{A}^k &= (\mathbf{\mathbf{Q}\mathbf{\Lambda}\mathbf{Q}^T})^k \\
+        &= (\mathbf{\mathbf{Q}\mathbf{\Lambda}\mathbf{Q}^{-1}})^k &\text{$\mathbf{Q}$ is a orthogonal matrix}\\
+        &= \mathbf{\mathbf{Q}\mathbf{\Lambda}^k\mathbf{Q}^{-1}}\\
+        &= \mathbf{\mathbf{Q}\mathbf{\Lambda}^k\mathbf{Q}^T}
+    \end{align*}
+\end{proof}
 
+\begin{theorem}
+    Let the eigendecomposition of a real symmetric matrix $\mathbf{A}$ be $\mathbf{A}=\mathbf{Q}\mathbf{\Lambda}\mathbf{Q}^T$. If $f(x)$ is given by $f(x)=\sum_{k=0}^{\infty} a_k x^k$ with radius of convergence greater than the spectral radius $\rho(\mathbf{A})$ and $f(\mathbf{A})$ is defined by $f(\mathbf{A})=\sum_{k=0}^{\infty} a_k \mathbf{A}^k$, then
+    \[f(\mathbf{A}) = \mathbf{Q}f(\mathbf{\Lambda})\mathbf{Q}^T.\]
+\end{theorem}
+\begin{proof}
+    $\mathbf{\Lambda}$ is a diagonal matrix. Therefore $f(\mathbf{\Lambda})$ is easy to calculate:
+    \[
+    [f(\mathbf{\Lambda})]_{ij} = \begin{cases}
+        f(\lambda_i) & (i=j) \\
+        0 & (otherwise)
+        \end{cases}
+    \]
+    By applying theorem \ref{power_eigenvalues} to each degree, we can get $f(\mathbf{A}) = \mathbf{Q}f(\mathbf{\Lambda})\mathbf{Q}^T$.
+\end{proof}
 
 \section{Laplacian Matrix}
 
@@ -139,11 +164,30 @@ Unit vectors $\mathbf{z}_i = \frac{\mathbf{x}_i}{\|\mathbf{x}_i\|_2}$ can be use
 
 For Randemacher vectors, $\|\mathbf{x}_i\|_2^2$ is always $n$. For other random vectors, $\mathbb{E}_{p(\mathbf{x})}[\|\mathbf{x}_i\|_2^2$]  is equal to $n$ as long as $\mathbb{E}_{p(\mathbf{x})}[\mathbf{xx^T}] = \mathbf{I}$.
 
-For accurate computation, $n_v$ should approaches infinity. However  using large $n_v$ is expensive. For practical purposes, we can use small $n_v$. The convergence rate of such estimator was studied by Avron and Toledo\cite{avron2011randomized}. Hence, we only need to compute the scalars of $\mathbf{z}_i^{T}f(\mathbf{A})\mathbf{z}_i$ which can be estimated by using stochastic Lanczos quadrature.
+For accurate computation, $n_v$ should approaches infinity. However  using large $n_v$ is expensive. For practical purposes, we can use small $n_v$. The convergence rate of such estimator was studied by Avron and Toledo\cite{avron2011randomized}. Hence, we only need to compute $\mathbf{z}_i^{T}f(\mathbf{A})\mathbf{z}_i$.
 
 \section{Stochastic Lanczos Quadrature(SLQ)}
+There is a method called stochastic Lanczos quadrature(SLQ) \cite{ubaru2017fast}, for approximate computing of the trace of functions of large matrices. Firstly, the stochastic trace estimator is used for approximating the trace. Next, the bilinear form $\mathbf{z}^{T}f(\mathbf{A})\mathbf{z}$ is reformed as a Riemann-Stieltjes integral and approximated by applying Gauss quadrature rule. Then, the Lanczos algorithm is applied for calculation.
+
+The stochastic trace estimator has been explained in the previous section.
+
+
 
 \chapter{the Sum of Powers of Network Eigenvalues}
+\section{General Notation}
+
+Let $G=(V,E,w)$ be a wighted undirected graph where $V=(v_1, v_2, ..., v_n)$ is a set of vertices, $E \subseteq V\times V$ is a set of undirected edges, and $w: E \rightarrow \mathbb{R}$ is a weight function. The adjacency matrix ${\mathbf A}$ is a $n \times n$ matrix of $G$, (i.e., $ A_{ij}= w((v_i ,u_i))$ ).
+\begin{table}[htb]
+    \begin{center}
+      \begin{tabular}{l r}
+        \bf{Symbol} & \bf{Description} \\ \hline
+        $n \in \mathbb{N}$ & $|V|$:the number of vertices \\
+        $m \in \mathbb{N}$ & $|E|$:the number of edges \\ \hline
+      \end{tabular}
+      \caption{Summary of notion used}
+      \label{tab:notion}
+    \end{center}
+  \end{table}
 
 \chapter{Conclusion}
 
