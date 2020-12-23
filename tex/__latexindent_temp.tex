@@ -76,107 +76,11 @@ Motif multiplicity corresponds to eigenvalues multiplicity \cite{mehatari2015eff
 There are fast online search tool for DOS\cite{borysov2018online,geilhufe2018towards}
 
 \chapter{Preliminaries}
-\section{Matrix and Spectra}
-Firstly, we define some concepts regarding matrix and its eigenvalues and prove some theorems which are used later.
-\begin{definition}
-    Let $\lambda_0 \leq \lambda_2 \leq ... \leq \lambda_{n-1}$ be the eigenvalues of a n-dimensional matrix $\mathbf{A}$. The spectrum $\sigma(\mathbf{A})$ of $\mathbf{A}$ is the set of its overall eigenvalues.
-    \[\sigma(\mathbf{A}) := \{\lambda_i | i=0,1,...,n-1\}\]
-\end{definition}
-\begin{definition}
-    The spectral radius $\rho(\mathbf{A})$ of a n-dimensional matrix $\mathbf{A}$ is the nonnegative number
-    \[\rho(\mathbf{A}):=\sup_{\lambda \in \sigma(A)} |\lambda|.\]
-\end{definition}
-
-\begin{theorem}
-    \label{power_eigenvalues}
-    Let $\lambda_0 \leq \lambda_2 \leq ... \leq \lambda_{n-1}$ be the eigenvalues of a real symmetric matrix $\mathbf{A}$ and the eigendecomposition of $\mathbf{A}$ be $\mathbf{A}=\mathbf{Q}\mathbf{\Lambda}\mathbf{Q}^T$. Then $\lambda_0^k, \lambda_2^k, ..., \lambda_{n-1}^k$ are eigenvalues of $\mathbf{A}^k$.
-\end{theorem}
-\begin{proof}
-    \begin{align*}
-        \mathbf{A}^k &= (\mathbf{\mathbf{Q}\mathbf{\Lambda}\mathbf{Q}^T})^k \\
-        &= (\mathbf{\mathbf{Q}\mathbf{\Lambda}\mathbf{Q}^{-1}})^k &\text{$\mathbf{Q}$ is a orthogonal matrix}\\
-        &= \mathbf{\mathbf{Q}\mathbf{\Lambda}^k\mathbf{Q}^{-1}}\\
-        &= \mathbf{\mathbf{Q}\mathbf{\Lambda}^k\mathbf{Q}^T}
-    \end{align*}
-\end{proof}
-
-\begin{theorem}
-    Let the eigendecomposition of a real symmetric matrix $\mathbf{A}$ be $\mathbf{A}=\mathbf{Q}\mathbf{\Lambda}\mathbf{Q}^T$. If $f(x)$ is given by $f(x)=\sum_{k=0}^{\infty} a_k x^k$ with radius of convergence greater than the spectral radius $\rho(\mathbf{A})$ and $f(\mathbf{A})$ is defined by $f(\mathbf{A})=\sum_{k=0}^{\infty} a_k \mathbf{A}^k$, then
-    \[f(\mathbf{A}) = \mathbf{Q}f(\mathbf{\Lambda})\mathbf{Q}^T.\]
-\end{theorem}
-\begin{proof}
-    $\mathbf{\Lambda}$ is a diagonal matrix. Therefore $f(\mathbf{\Lambda})$ is easy to calculate:
-    \[
-    [f(\mathbf{\Lambda})]_{ij} = \begin{cases}
-        f(\lambda_i) & (i=j) \\
-        0 & (otherwise)
-        \end{cases}
-    \]
-    By applying theorem \ref{power_eigenvalues} to each degree, we can get $f(\mathbf{A}) = \mathbf{Q}f(\mathbf{\Lambda})\mathbf{Q}^T$.
-\end{proof}
-
-\section{Laplacian Matrix}
-
-\section{Stochastic Trace Estimator}
-For trace estimation of large implicit matrices, we can use randomized estimator described by Hunchinson \cite{hutchinson1989stochastic, adams2018estimating}.
-\begin{theorem}
-    \label{Hunchinson}
-    (Proposition 4.1 \cite{adams2018estimating}) Let ${\mathbf A} \in \mathbb{R}^{n\times n}$ be a square matrix and $\mathbf{x} \in \mathbb{R}^n$ be a random vector such that $\mathbb{E}_{p(\mathbf{x})}[\mathbf{xx^T}] = \mathbf{I}$. Then $\mathbb{E}_{p(\mathbf{x})}[\mathbf{x}^{T}\mathbf{A}\mathbf{x}] = \mathrm{tr}(\mathbf{A})$.
-\end{theorem}
-
-\begin{proof}
-    \begin{align*}
-        \mathbb{E}_{p(\mathbf{x})}[\mathbf{x}^{T}\mathbf{A}\mathbf{x}] &= \mathbb{E}_{p(\mathbf{x})}[\mathrm{tr}(\mathbf{x}^{T}\mathbf{A}\mathbf{x})] \\
-          &=  \mathbb{E}_{p(\mathbf{x})}[\mathrm{tr}(\mathbf{A}\mathbf{x}\mathbf{x}^{T})]  &\text{invariance to cyclic permutation} \\
-          &= \mathrm{tr}(\mathbb{E}_{p(\mathbf{x})}[\mathbf{A}\mathbf{x}\mathbf{x}^{T}] ) &\text{linearity of trace}  \\
-          &= \mathrm{tr}(\mathbf{A}\mathbb{E}_{p(\mathbf{x})}[\mathbf{x}\mathbf{x}^{T}] ) &\text{linearity of expectation}  \\
-          &= \mathrm{tr}(\mathbf{A})
-    \end{align*}
-\end{proof}
-
-The requirement $\mathbb{E}_{p(\mathbf{x})}[\mathbf{xx^T}] = \mathbf{I}$ for the random vector  $\mathbf{x}$ can be easily satisfied. For example, paractical choices of $p(\mathbf{x})$ include Ramemacher or standard normal distributions with zero mean and one variance.
-
-The estimation method of $\mathrm{tr}(f(\mathbf{A}))$ is based on Theorem \ref{Hunchinson}, which we apply in our setting for the trace of power of matrix $f({\mathbf L})={\mathbf L}^k$ or $f({\mathbfcal{L}})={\mathbfcal L}^k$. The following corollary holds.
-\begin{corollary}
-    \label{approxtrace}
-    If $f(\mathbf{A}) \in \mathbb{R}^{n\times n}$ is a square matrix, and $\mathbf{x}_1, \mathbf{x}_2, \cdots, \mathbf{x}_{n_v} \in \mathbb{R}^n$ are random vectors drawn from a distribution $p(\mathbf{x})$ such that $\mathbb{E}_{p(\mathbf{x})}[\mathbf{xx^T}] = \mathbf{I}$, then
-    \begin{align*}
-        \mathrm{tr}(f(\mathbf{A})) =\mathbb{E}_{p(\mathbf{x})}[\mathbf{x}^{T}f(\mathbf{A})\mathbf{x}] \approx \frac{1}{n_v}\sum_{i=1}^{n_v} \mathbf{x}_i^{T}f(\mathbf{A})\mathbf{x}_i
-    \end{align*}
-\end{corollary}
-
-Unit vectors $\mathbf{z}_i = \frac{\mathbf{x}_i}{\|\mathbf{x}_i\|_2}$ can be used instead of $\mathbf{x}_i$. We can rewrite the formula of Corollary \ref{approxtrace}.
-\begin{theorem}
-    \label{approxtraceUniformed}
-    Let $\mathbf{z}_i = \frac{\mathbf{x}_i}{\|\mathbf{x}_i\|_2}$ be a unit vector, then
-    \begin{align*}
-        \mathrm{tr}(f(\mathbf{A})) \approx \frac{n}{n_v}\sum_{i=1}^{n_v} \mathbf{z}_i^{T}f(\mathbf{A})\mathbf{z}_i
-    \end{align*}
-\end{theorem}
-\begin{proof}
-    \begin{align*}
-        \mathrm{tr}(f(\mathbf{A})) &\approx \frac{1}{n_v}\sum_{i=1}^{n_v} \mathbf{x}_i^{T}f(\mathbf{A})\mathbf{x}_i \\
-        &= \frac{1}{n_v}\sum_{i=1}^{n_v} \|\mathbf{x}_i\|_2^2 \cdot \mathbf{z}_i^{T}f(\mathbf{A})\mathbf{z}_i \\
-        &\approx \frac{1}{n_v}\sum_{i=1}^{n_v} n \cdot \mathbf{z}_i^{T}f(\mathbf{A})\mathbf{z}_i &\text{$ \mathbb{E}_{p(\mathbf{x})}[\|\mathbf{x}_i\|_2^2$]  is equal to $n$}\\
-        &= \frac{n}{n_v}\sum_{i=1}^{n_v} \mathbf{z}_i^{T}f(\mathbf{A})\mathbf{z}_i
-    \end{align*}
-\end{proof}
-
-For Randemacher vectors, $\|\mathbf{x}_i\|_2^2$ is always $n$. For other random vectors, $\mathbb{E}_{p(\mathbf{x})}[\|\mathbf{x}_i\|_2^2$]  is equal to $n$ as long as $\mathbb{E}_{p(\mathbf{x})}[\mathbf{xx^T}] = \mathbf{I}$.
-
-For accurate computation, $n_v$ should approaches infinity. However  using large $n_v$ is expensive. For practical purposes, we can use small $n_v$. The convergence rate of such estimator was studied by Avron and Toledo\cite{avron2011randomized}. Hence, we only need to compute $\mathbf{z}_i^{T}f(\mathbf{A})\mathbf{z}_i$.
-
-\section{Stochastic Lanczos Quadrature(SLQ)}
-There is a method called stochastic Lanczos quadrature(SLQ) \cite{ubaru2017fast}, for approximate computing of the trace of functions of large matrices. Firstly, the stochastic trace estimator is used for approximating the trace. Next, the bilinear form $\mathbf{z}^{T}f(\mathbf{A})\mathbf{z}$ is reformed as a Riemann-Stieltjes integral and approximated by applying Gauss quadrature rule. Then, the Lanczos algorithm is applied for calculation.
-
-The stochastic trace estimator has been explained in the previous section.
-
-
-
-\chapter{the Sum of Powers of Network Eigenvalues}
 \section{General Notation}
 
 Let $G=(V,E,w)$ be a wighted undirected graph where $V=(v_1, v_2, ..., v_n)$ is a set of vertices, $E \subseteq V\times V$ is a set of undirected edges, and $w: E \rightarrow \mathbb{R}$ is a weight function. The adjacency matrix ${\mathbf A}$ is a $n \times n$ matrix of $G$, (i.e., $ A_{ij}= w((v_i ,u_i))$ ).
+
+Let ${\mathbf M}$ denote a real symmetric matrix that can be ${\mathbf A}$, ${\mathbf L}$, or ${\mathbfcal L}$.
 \begin{table}[htb]
     \begin{center}
       \begin{tabular}{l r}
@@ -189,6 +93,146 @@ Let $G=(V,E,w)$ be a wighted undirected graph where $V=(v_1, v_2, ..., v_n)$ is 
     \end{center}
   \end{table}
 
+\section{Laplacian Matrix and eigenvalues}
+L
+
+\section{Matrix and Spectra}
+Firstly, we define some concepts regarding matrix and its eigenvalues and prove some theorems which are used later.
+\begin{definition}
+    Let $\lambda_0 \leq \lambda_2 \leq ... \leq \lambda_{n-1}$ be the eigenvalues of a n-dimensional matrix $\mathbf{M}$. The spectrum $\sigma(\mathbf{M})$ of $\mathbf{M}$ is the set of its overall eigenvalues.
+    \[\sigma(\mathbf{M}) := \{\lambda_i | i=0,1,...,n-1\}\]
+\end{definition}
+\begin{definition}
+    The spectral radius $\rho(\mathbf{M})$ of a n-dimensional matrix $\mathbf{M}$ is the nonnegative number
+    \[\rho(\mathbf{M}):=\sup_{\lambda \in \sigma(A)} |\lambda|.\]
+\end{definition}
+
+\begin{theorem}
+    \label{power_eigenvalues}
+    Let $\lambda_0 \leq \lambda_2 \leq ... \leq \lambda_{n-1}$ be the eigenvalues of a real symmetric matrix $\mathbf{M}$ and the eigendecomposition of $\mathbf{M}$ be $\mathbf{M}=\mathbf{Q}\mathbf{\Lambda}\mathbf{Q}^T$. Then $\lambda_0^k, \lambda_2^k, ..., \lambda_{n-1}^k$ are eigenvalues of $\mathbf{M}^k$.
+\end{theorem}
+\begin{proof}
+    \begin{align*}
+        \mathbf{M}^k &= (\mathbf{\mathbf{Q}\mathbf{\Lambda}\mathbf{Q}^T})^k \\
+        &= (\mathbf{\mathbf{Q}\mathbf{\Lambda}\mathbf{Q}^{-1}})^k &\text{$\mathbf{Q}$ is a orthogonal matrix}\\
+        &= \mathbf{\mathbf{Q}\mathbf{\Lambda}^k\mathbf{Q}^{-1}}\\
+        &= \mathbf{\mathbf{Q}\mathbf{\Lambda}^k\mathbf{Q}^T}
+    \end{align*}
+\end{proof}
+
+\begin{theorem}
+    Let the eigendecomposition of a real symmetric matrix $\mathbf{M}$ be $\mathbf{M}=\mathbf{Q}\mathbf{\Lambda}\mathbf{Q}^T$. If $f(x)$ is given by $f(x)=\sum_{k=0}^{\infty} a_k x^k$ with radius of convergence greater than the spectral radius $\rho(\mathbf{M})$ and $f(\mathbf{M})$ is defined by $f(\mathbf{M})=\sum_{k=0}^{\infty} a_k \mathbf{M}^k$, then
+    \[f(\mathbf{M}) = \mathbf{Q}f(\mathbf{\Lambda})\mathbf{Q}^T.\]
+\end{theorem}
+\begin{proof}
+    $\mathbf{\Lambda}$ is a diagonal matrix. Therefore $f(\mathbf{\Lambda})$ is easy to calculate:
+    \[
+    [f(\mathbf{\Lambda})]_{ij} = \begin{cases}
+        f(\lambda_i) & (i=j) \\
+        0 & (otherwise)
+        \end{cases}
+    \]
+    By applying theorem \ref{power_eigenvalues} to each degree, we can get $f(\mathbf{M}) = \mathbf{Q}f(\mathbf{\Lambda})\mathbf{Q}^T$.
+\end{proof}
+
+
+\section{Stochastic Trace Estimator}
+For trace estimation of large implicit matrices, we can use randomized estimator described by Hunchinson \cite{hutchinson1989stochastic, adams2018estimating}.
+\begin{theorem}
+    \label{Hunchinson}
+    (Proposition 4.1 \cite{adams2018estimating}) Let ${\mathbf A} \in \mathbb{R}^{n\times n}$ be a square matrix and $\mathbf{x} \in \mathbb{R}^n$ be a random vector such that $\mathbb{E}_{p(\mathbf{x})}[\mathbf{xx^T}] = \mathbf{I}$. Then $\mathbb{E}_{p(\mathbf{x})}[\mathbf{x}^{T}\mathbf{M}\mathbf{x}] = \mathrm{tr}(\mathbf{M})$.
+\end{theorem}
+
+\begin{proof}
+    \begin{align*}
+        \mathbb{E}_{p(\mathbf{x})}[\mathbf{x}^{T}\mathbf{M}\mathbf{x}] &= \mathbb{E}_{p(\mathbf{x})}[\mathrm{tr}(\mathbf{x}^{T}\mathbf{M}\mathbf{x})] \\
+          &=  \mathbb{E}_{p(\mathbf{x})}[\mathrm{tr}(\mathbf{M}\mathbf{x}\mathbf{x}^{T})]  &\text{invariance to cyclic permutation} \\
+          &= \mathrm{tr}(\mathbb{E}_{p(\mathbf{x})}[\mathbf{M}\mathbf{x}\mathbf{x}^{T}] ) &\text{linearity of trace}  \\
+          &= \mathrm{tr}(\mathbf{M}\mathbb{E}_{p(\mathbf{x})}[\mathbf{x}\mathbf{x}^{T}] ) &\text{linearity of expectation}  \\
+          &= \mathrm{tr}(\mathbf{M})
+    \end{align*}
+\end{proof}
+
+The requirement $\mathbb{E}_{p(\mathbf{x})}[\mathbf{xx^T}] = \mathbf{I}$ for the random vector  $\mathbf{x}$ can be easily satisfied. For example, paractical choices of $p(\mathbf{x})$ include Ramemacher or standard normal distributions with zero mean and one variance.
+
+The following corollary holds.
+
+\begin{corollary}
+    \label{approxtrace}
+    If $f(\mathbf{M}) \in \mathbb{R}^{n\times n}$ is a square matrix, and $\mathbf{x}_1, \mathbf{x}_2, \cdots, \mathbf{x}_{n_v} \in \mathbb{R}^n$ are random vectors drawn from a distribution $p(\mathbf{x})$ such that $\mathbb{E}_{p(\mathbf{x})}[\mathbf{xx^T}] = \mathbf{I}$, then
+    \begin{align*}
+        \mathrm{tr}(f(\mathbf{M})) =\mathbb{E}_{p(\mathbf{x})}[\mathbf{x}^{T}f(\mathbf{M})\mathbf{x}] \approx \frac{1}{n_v}\sum_{i=1}^{n_v} \mathbf{x}_i^{T}f(\mathbf{M})\mathbf{x}_i
+    \end{align*}
+\end{corollary}
+
+Unit vectors $\mathbf{z}_i = \frac{\mathbf{x}_i}{\|\mathbf{x}_i\|_2}$ can be used instead of $\mathbf{x}_i$. We can rewrite the formula of Corollary \ref{approxtrace}.
+\begin{theorem}
+    \label{approxtraceUniformed}
+    Let $\mathbf{z}_i = \frac{\mathbf{x}_i}{\|\mathbf{x}_i\|_2}$ be a unit vector, then
+    \begin{align*}
+        \mathrm{tr}(f(\mathbf{M})) \approx \frac{n}{n_v}\sum_{i=1}^{n_v} \mathbf{z}_i^{T}f(\mathbf{M})\mathbf{z}_i
+    \end{align*}
+\end{theorem}
+\begin{proof}
+    \begin{align*}
+        \mathrm{tr}(f(\mathbf{M})) &\approx \frac{1}{n_v}\sum_{i=1}^{n_v} \mathbf{x}_i^{T}f(\mathbf{M})\mathbf{x}_i \\
+        &= \frac{1}{n_v}\sum_{i=1}^{n_v} \|\mathbf{x}_i\|_2^2 \cdot \mathbf{z}_i^{T}f(\mathbf{M})\mathbf{z}_i \\
+        &\approx \frac{1}{n_v}\sum_{i=1}^{n_v} n \cdot \mathbf{z}_i^{T}f(\mathbf{M})\mathbf{z}_i &\text{$ \mathbb{E}_{p(\mathbf{x})}[\|\mathbf{x}_i\|_2^2$]  is equal to $n$}\\
+        &= \frac{n}{n_v}\sum_{i=1}^{n_v} \mathbf{z}_i^{T}f(\mathbf{M})\mathbf{z}_i
+    \end{align*}
+\end{proof}
+
+For Randemacher vectors, $\|\mathbf{x}_i\|_2^2$ is always $n$. For other random vectors, $\mathbb{E}_{p(\mathbf{x})}[\|\mathbf{x}_i\|_2^2$]  is equal to $n$ as long as $\mathbb{E}_{p(\mathbf{x})}[\mathbf{xx^T}] = \mathbf{I}$.
+
+For accurate computation, $n_v$ should approaches infinity. However  using large $n_v$ is expensive. For practical purposes, we can use small $n_v$. The convergence rate of such estimator was studied by Avron and Toledo\cite{avron2011randomized}.
+
+
+\section{Stochastic Lanczos Quadrature(SLQ)}
+There is a method called stochastic Lanczos quadrature(SLQ) \cite{ubaru2017fast}, for approximate computing of the trace of functions of large matrices. Firstly, the stochastic trace estimator is used for approximating the trace. Next, the bilinear form $\mathbf{z}_i^{T}f(\mathbf{M})\mathbf{z}_i$ is reformed as a Riemann-Stieltjes integral and approximated by applying Gauss quadrature rule. Then, the Lanczos algorithm is applied for calculation.
+
+The stochastic trace estimator has been explained in the previous section.
+\begin{align}
+    \mathrm{tr}(f(\mathbf{M})) =\mathbb{E}_{p(\mathbf{x})}[\mathbf{x}^{T}f(\mathbf{M})\mathbf{x}] \approx \frac{n}{n_v}\sum_{i=1}^{n_v} \mathbf{z}_i^{T}f(\mathbf{M})\mathbf{z}_i
+\end{align}
+
+We need to compute $\mathbf{z}_i^{T}f(\mathbf{M})\mathbf{z}_i$.
+
+\begin{align*}
+    \mathbf{z}_i^{T}f(\mathbf{M})\mathbf{z}_i &= \mathbf{z}_i^{T}\mathbf{Q}f(\mathbf{\Lambda})\mathbf{Q}^T\mathbf{z}_i \\
+    &= \sum_{j=0}^{n-1}f(\mathbf{\lambda}_i)\mu^2_j \\
+    &= \int_a^b f(t) d\mu(t) &\text{Riemann–Stieltjes integral}\\
+    &\approx \sum_{k=0}^{s-1} \omega_k f(\theta_k) &\text{the Gauss quadrature rule}
+\end{align*}
+where $\mu_j = [\mathbf{Q}^T\mathbf{z}_i]_j$ and $\mu(t)$ is a piecewise constant function defined as
+\begin{align*}
+    \mu(t) = \begin{cases}
+        0 & \text{if $t<a=\lambda_0$} \\
+        \sum_{j=0}^{i-1} \mu_j^2 & \text{if $\lambda_{i-1} \leq t < \lambda_i, i=1,\cdots, n-1$} \\
+        \sum_{j=0}^{n-1} \mu_j^2 & \text{if $b=\lambda_{n-1}\leq t$}
+      \end{cases}
+\end{align*}
+and $\{\omega_k\}$ are the weights and $\{\theta_k\}$ are the nodes of the s-point Gauss quadrature.
+
+One choise for computing the nodes and the weights of the Gauss quadrature rule is the Lanczos algorithm. Let $\mathbf{M}$ be a real symmetric matrix, $\mathbf{w}_0$ be an arbitrary starting unit-vector, and ${\mathbfcal K}$ be the Krylov subspace spanning vectors $\{\mathbf{w}_0, \mathbf{M}\mathbf{w}_0, \cdots, \mathbf{M}^{s-1}\mathbf{w}_0\}$.
+The output of the Lanczos algorithm are an $n \times s$ matrix $\mathbf{W}$ and an $s \times s$ tridiagonal matrix $\mathbf{T}$, such that $\mathbf{W}^T\mathbf{M}\mathbf{W} = \mathbf{T}$. $\mathbf{W}$ has the orthonormal columns:
+\begin{align*}
+    w_0 : \text{an initial unit-vector}\\
+    w_k = p_k(\mathbf{M})w_0, k=1,\cdots,s-1
+\end{align*}
+where $p_k$ are the Lanczos polynomials which are orthogonal with respect to the measure $\mu(t)$.
+
+Now, the bilinear form $\mathbf{z}_i^{T}f(\mathbf{M})\mathbf{z}_i$ is reformed as
+\begin{align}
+    &\mathbf{z}_i^{T}f(\mathbf{M})\mathbf{z}_i \approx  \sum_{k=0}^{s-1} \tau_k^2 f(\theta_k)\\
+    &\tau_k = \mathbf{Y}_{0,k} = \mathbf{e}_1^T \mathbf{y}_k, ~ \theta_k= \Theta_{k,k}, ~ \mathbf{T}=\mathbf{Y}\mathbf{\Theta}\mathbf{Y}^T
+\end{align}
+By applying (2.2) to the stochastic trace estimator (2.1), we get Stochastic Lanczos Quadrature estimator:
+\begin{align*}
+    \mathrm{tr}(\mathbf{M}) \approx \frac{n}{n_v} \sum_{i=0}^{n_v-1}\left(\sum_{k=0}^{s-1} (\tau_k^i)^2 f(\lambda_k^i) \right)
+\end{align*}
+
+\chapter{the Sum of Powers of Network Eigenvalues}
+The estimation method of sum of powers of network eigenvalues is based on Stochastic Lanczos Quadrature, which we apply in our setting for the trace of power of matrix $f({\mathbf A})={\mathbf A}^k$, $f({\mathbf L})={\mathbf L}^k$ or $f({\mathbfcal{L}})={\mathbfcal L}^k$.
 \chapter{Conclusion}
 
 %-------------------
