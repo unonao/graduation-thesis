@@ -1,6 +1,7 @@
 \documentclass[senior,final,11pt]{iscs-thesis}
 \usepackage{amsmath,amssymb} % mathbb
 \usepackage{amsmath,amsthm} % theorem
+\usepackage{algorithm,algorithmic}
 \DeclareMathAlphabet\mathbfcal{OMS}{cmsy}{b}{n}
 \newtheorem{theorem}{Theorem}
 \newtheorem{lemma}{Lemma}
@@ -161,7 +162,7 @@ The following corollary holds.
     \label{approxtrace}
     If $f(\mathbf{M}) \in \mathbb{R}^{n\times n}$ is a square matrix, and $\mathbf{x}_1, \mathbf{x}_2, \cdots, \mathbf{x}_{n_v} \in \mathbb{R}^n$ are random vectors drawn from a distribution $p(\mathbf{x})$ such that $\mathbb{E}_{p(\mathbf{x})}[\mathbf{xx^T}] = \mathbf{I}$, then
     \begin{align*}
-        \mathrm{tr}(f(\mathbf{M})) =\mathbb{E}_{p(\mathbf{x})}[\mathbf{x}^{T}f(\mathbf{M})\mathbf{x}] \approx \frac{1}{n_v}\sum_{i=1}^{n_v} \mathbf{x}_i^{T}f(\mathbf{M})\mathbf{x}_i
+        \mathrm{tr}(f(\mathbf{M})) =\mathbb{E}_{p(\mathbf{x})}[\mathbf{x}^{T}f(\mathbf{M})\mathbf{x}] \approx \frac{1}{n_v}\sum_{i=0}^{n_v-1} \mathbf{x}_i^{T}f(\mathbf{M})\mathbf{x}_i
     \end{align*}
 \end{corollary}
 
@@ -170,15 +171,15 @@ Unit vectors $\mathbf{z}_i = \frac{\mathbf{x}_i}{\|\mathbf{x}_i\|_2}$ can be use
     \label{approxtraceUniformed}
     Let $\mathbf{z}_i = \frac{\mathbf{x}_i}{\|\mathbf{x}_i\|_2}$ be a unit vector, then
     \begin{align*}
-        \mathrm{tr}(f(\mathbf{M})) \approx \frac{n}{n_v}\sum_{i=1}^{n_v} \mathbf{z}_i^{T}f(\mathbf{M})\mathbf{z}_i
+        \mathrm{tr}(f(\mathbf{M})) \approx \frac{n}{n_v}\sum_{i=0}^{n_v-1} \mathbf{z}_i^{T}f(\mathbf{M})\mathbf{z}_i
     \end{align*}
 \end{theorem}
 \begin{proof}
     \begin{align*}
-        \mathrm{tr}(f(\mathbf{M})) &\approx \frac{1}{n_v}\sum_{i=1}^{n_v} \mathbf{x}_i^{T}f(\mathbf{M})\mathbf{x}_i \\
-        &= \frac{1}{n_v}\sum_{i=1}^{n_v} \|\mathbf{x}_i\|_2^2 \cdot \mathbf{z}_i^{T}f(\mathbf{M})\mathbf{z}_i \\
-        &\approx \frac{1}{n_v}\sum_{i=1}^{n_v} n \cdot \mathbf{z}_i^{T}f(\mathbf{M})\mathbf{z}_i &\text{$ \mathbb{E}_{p(\mathbf{x})}[\|\mathbf{x}_i\|_2^2$]  is equal to $n$}\\
-        &= \frac{n}{n_v}\sum_{i=1}^{n_v} \mathbf{z}_i^{T}f(\mathbf{M})\mathbf{z}_i
+        \mathrm{tr}(f(\mathbf{M})) &\approx \frac{1}{n_v}\sum_{i=0}^{n_v-1} \mathbf{x}_i^{T}f(\mathbf{M})\mathbf{x}_i \\
+        &= \frac{1}{n_v}\sum_{i=0}^{n_v-1} \|\mathbf{x}_i\|_2^2 \cdot \mathbf{z}_i^{T}f(\mathbf{M})\mathbf{z}_i \\
+        &\approx \frac{1}{n_v}\sum_{i=0}^{n_v-1} n \cdot \mathbf{z}_i^{T}f(\mathbf{M})\mathbf{z}_i &\text{$ \mathbb{E}_{p(\mathbf{x})}[\|\mathbf{x}_i\|_2^2$]  is equal to $n$}\\
+        &= \frac{n}{n_v}\sum_{i=0}^{n_v-1} \mathbf{z}_i^{T}f(\mathbf{M})\mathbf{z}_i
     \end{align*}
 \end{proof}
 
@@ -187,12 +188,13 @@ For Randemacher vectors, $\|\mathbf{x}_i\|_2^2$ is always $n$. For other random 
 For accurate computation, $n_v$ should approaches infinity. However  using large $n_v$ is expensive. For practical purposes, we can use small $n_v$. The convergence rate of such estimator was studied by Avron and Toledo\cite{avron2011randomized}.
 
 
+
 \section{Stochastic Lanczos Quadrature(SLQ)}
 There is a method called stochastic Lanczos quadrature(SLQ) \cite{ubaru2017fast}, for approximate computing of the trace of functions of large matrices. Firstly, the stochastic trace estimator is used for approximating the trace. Next, the bilinear form $\mathbf{z}_i^{T}f(\mathbf{M})\mathbf{z}_i$ is reformed as a Riemann-Stieltjes integral and approximated by applying Gauss quadrature rule. Then, the Lanczos algorithm is applied for calculation.
 
 The stochastic trace estimator has been explained in the previous section.
 \begin{align}
-    \mathrm{tr}(f(\mathbf{M})) =\mathbb{E}_{p(\mathbf{x})}[\mathbf{x}^{T}f(\mathbf{M})\mathbf{x}] \approx \frac{n}{n_v}\sum_{i=1}^{n_v} \mathbf{z}_i^{T}f(\mathbf{M})\mathbf{z}_i
+    \mathrm{tr}(f(\mathbf{M})) =\mathbb{E}_{p(\mathbf{x})}[\mathbf{x}^{T}f(\mathbf{M})\mathbf{x}] \approx \frac{n}{n_v}\sum_{i=0}^{n_v-1} \mathbf{z}_i^{T}f(\mathbf{M})\mathbf{z}_i
 \end{align}
 
 We need to compute $\mathbf{z}_i^{T}f(\mathbf{M})\mathbf{z}_i$.
@@ -232,7 +234,42 @@ By applying (2.2) to the stochastic trace estimator (2.1), we get Stochastic Lan
 \end{align*}
 
 \chapter{the Sum of Powers of Network Eigenvalues}
-The estimation method of sum of powers of network eigenvalues is based on Stochastic Lanczos Quadrature, which we apply in our setting for the trace of power of matrix $f({\mathbf A})={\mathbf A}^k$, $f({\mathbf L})={\mathbf L}^k$ or $f({\mathbfcal{L}})={\mathbfcal L}^k$.
+Our main purpose is computing sum of k-th powers of eigenvalues $\sum_{i=0}^{n-1} \lambda_i^k$. We propose two approximation algorithms based on the stochastic trace estimator and the stochastic Lanczos quadrature.
+
+
+\section{Method}
+\subsection{STE algorithm}
+The first estimation method of sum of powers of network eigenvalues is based on the stochastic trace estimator(STE), which we apply in our setting for the trace of power of matrix $f({\mathbf M})={\mathbf M}^k$. We are interested in the case where ${\mathbf M} = {\mathbf A}, {\mathbf L}, \text{or} {\mathbfcal L}$.
+
+By using theorem \ref{power_eigenvalues} and \ref{approxtraceUniformed}, we can apply the stochastic trace estimator for computing sum of powers of k-th eigenvalues.
+\begin{align}
+    \sum_{i=0}^{n-1} \lambda_i^k &= \mathrm{tr}({\mathbf M}^k)  \nonumber\\
+    &= \mathbb{E}_{p(\mathbf{x})}[\mathbf{x}^{T}{\mathbf M}^k \mathbf{x}] \approx \frac{n}{n_v}\sum_{i=0}^{n_v-1} \mathbf{z}_i^{T}{\mathbf M}^k\mathbf{z}_i
+\end{align}
+
+
+
+\begin{algorithm}
+    \caption{STE algorithm}
+    \begin{algorithmic}[1]
+    \renewcommand{\algorithmicrequire}{\textbf{Input:}}
+    \renewcommand{\algorithmicensure}{\textbf{Output:}}
+    \REQUIRE a real symmetric matrix ${\mathbf M} \in {\mathbb R}^{n\times n}$, index $k$, and $n_v$.
+    \ENSURE  Approximate sum of k-th powers of eigenvalues $\sum_{i=0}^{n-1} \lambda_i^k$
+     \FOR {$i = 0$ to $n_v-1$}
+     \STATE statements..
+     \IF {($i \ne 0$)}
+     \STATE statement..
+     \ENDIF
+     \ENDFOR
+    \RETURN $P$
+    \end{algorithmic}
+    \end{algorithm}
+
+\subsection{SLQ algorithm}
+The second estimation methods of sum of powers of network eigenvalues is based on the stochastic Lanczos quadrature(SLQ), which we apply in our setting for the trace of power of matrix $f({\mathbf M})={\mathbf M}^k$. We are interested in the case where ${\mathbf M} = {\mathbf A}, {\mathbf L}, \text{or} {\mathbfcal L}$.
+
+\section{Computational Complexity}
 \chapter{Conclusion}
 
 %-------------------
