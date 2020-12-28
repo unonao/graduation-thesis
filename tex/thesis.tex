@@ -89,16 +89,32 @@ The laplacian matrix ${\mathbf L}$ and the normalized laplacian matrix ${\mathbf
         0   & \text{otherwise.}
         \end{cases}
 \]
+\[
+    \mathcal{L}(u,v) = \begin{cases}
+        1 - \frac{w(u,v)}{d_v} & \text{if} u=v, \\
+        - \frac{w(u,v)}{\sqrt{d_u d_v}} &  \text{if $u$ and $v$ are adjacent,} \\
+        0   & \text{otherwise.}
+        \end{cases}
+\]
 
 Let ${\mathbf M}$ denote a real symmetric matrix that can be ${\mathbf A}$, ${\mathbf L}$, or ${\mathbfcal L}$.
 \begin{table}[htb]
     \begin{center}
-      \begin{tabular}{l r}
+      \begin{tabular}{l l}
         \bf{Symbol} & \bf{Description} \\ \hline
         $n \in \mathbb{N}$ & $|V|$:the number of vertices \\
         $m \in \mathbb{N}$ & $|E|$:the number of edges \\ \hline
+        ${\mathbf M} \in \mathbb{R}^{n\times n}$ & Real symmetric matrix which can be ${\mathbf A}$, ${\mathbf L}$, or ${\mathbfcal L}$\\
+        ${\mathbf A} \in \mathbb{R}^{n\times n}$ & Adjacency matrix of a graph $G$ \\
+        ${\mathbf L} \in \mathbb{R}^{n\times n}$ & Laplacian matrix of a graph $G$ \\
+        ${\mathbfcal L} \in \mathbb{R}^{n\times n}$ & Normalized Laplacian matrix of a graph $G$ \\
+        \hline
+        $n_v \in \mathbb{R}^+$ & Number of SLQ random vectors \\
+        $s \in \mathbb{R}^+$ & Number of Lanczos algorithm steps\\
+        ${\mathbf x} \in \mathbb{R}^n$ & Random vector which satisfies $\mathbb{E}_{p(\mathbf{x})}[\mathbf{xx^T}] = \mathbf{I}$\\
+        \hline
       \end{tabular}
-      \caption{Summary of notion used}
+      \caption{Summary of notion}
       \label{tab:notion}
     \end{center}
   \end{table}
@@ -202,13 +218,27 @@ There are relationships between matrix, orthogonal polynomials, quadrature rules
 
 Firstly,the bilinear form $\mathbf{z}^{T}f(\mathbf{M})\mathbf{z}$ is reformed as a Riemann-Stieltjes integral and approximated by applying Gauss quadrature rule. Then, the Lanczos algorithm is applied for calculation.
 
+The Riemann–Stieltjes integral is a generalization of the Riemann integral. It is defined to be the limit of a sum.
+\begin{definition}
+    A Riemann–Stieltjes integral of a real valued function $f$ of a real variable on the infinite interval $[a,b]$ with respect to a real function $\alpha$ is denoted by
+    \[ \int_a^b f(x) d\alpha (x). \]
+    This integral is defined to be the limit, as the length of the subinterval of the partition $\pi=\{a=x_0 < x_1 < ... < x_n = b\}$ goes to zero, of the approximating sum
+    \[ \sum_{x_i \in \pi} f(c_i)(\alpha(x_{i+1}) - \alpha(x_i)).\]
+    where $c_i$ is in the i-th subinterval $[x_i, x_{i+1}]$.
+\end{definition}
+
+\begin{theorem}
+    gauss quadrature
+\end{theorem}
+
+Finally, we can reform and compute the bilinear form $\mathbf{z}^{T}f(\mathbf{M})\mathbf{z}$ using the Gauss quadrature rule.
 \begin{align*}
-    \mathbf{z}_i^{T}f(\mathbf{M})\mathbf{z}_i &= \mathbf{z}_i^{T}\mathbf{Q}f(\mathbf{\Lambda})\mathbf{Q}^T\mathbf{z}_i \\
+    \mathbf{z}^{T}f(\mathbf{M})\mathbf{z} &= \mathbf{z}^{T}\mathbf{Q}f(\mathbf{\Lambda})\mathbf{Q}^T\mathbf{z}\\
     &= \sum_{j=0}^{n-1}f(\mathbf{\lambda}_i)\mu^2_j \\
     &= \int_a^b f(t) d\mu(t) &\text{Riemann–Stieltjes integral}\\
     &\approx \sum_{k=0}^{s-1} \omega_k f(\theta_k) &\text{the Gauss quadrature rule}
 \end{align*}
-where $\mu_j = [\mathbf{Q}^T\mathbf{z}_i]_j$ and $\mu(t)$ is a piecewise constant function defined as
+where $\mu_j = [\mathbf{Q}^T\mathbf{z}]_j$ and $\mu(t)$ is a piecewise constant function defined as
 \begin{align*}
     \mu(t) = \begin{cases}
         0 & \text{if $t<a=\lambda_0$} \\
@@ -252,7 +282,7 @@ Now, we need to compute $\mathbf{z}_i^{T}f(\mathbf{M})\mathbf{z}_i$. By applying
 Our main purpose is computing sum of k-th powers of eigenvalues $\sum_{i=0}^{n-1} \lambda_i^k$ which we call SPENet. We propose two approximation algorithms (STE and SLQ) based on the stochastic trace estimator and the stochastic Lanczos quadrature. For naive algorithms, the computational complexity of SPENet using full eigendecomposition is $O(n^3)$, while for STE algorithm it is $O(m k n_v)$ and for SLQ algorithm it is $O((ms + ns^2) n_v)$.
 
 
-\section{Method}
+\section{Algorithms}
 \subsection{STE algorithm}
 The first estimation method for SPENet is based on the stochastic trace estimator(STE), which we apply in our setting for the trace of power of matrix $f({\mathbf M})={\mathbf M}^k$. We are interested in the case where ${\mathbf M} = {\mathbf A}, {\mathbf L}, \text{or} {\mathbfcal L}$.
 
@@ -272,7 +302,7 @@ By using theorem 1 and (2.4), we can estimate SPENet.
 \begin{align}
     \sum_{i=0}^{n-1} \lambda_i^k &= \mathrm{tr}({\mathbf M}^k)  \nonumber\\
     &= \mathbb{E}_{p(\mathbf{x})}[\mathbf{x}^{T}{\mathbf M}^k \mathbf{x}] \approx \frac{n}{n_v}\sum_{i=0}^{n_v-1} \mathbf{z}_i^{T}{\mathbf M}^k\mathbf{z}_i \nonumber\\
-    &\approx \frac{n}{n_v} \sum_{i=0}^{n_v-1}\left(\sum_{k=0}^{s-1} (\tau_k^i)^2 f(\theta_k^i) \right)
+    &\approx \frac{n}{n_v} \sum_{i=0}^{n_v-1}\left(\sum_{j=0}^{s-1} (\tau_j)^2 (\theta_j)^k \right)
 \end{align}
 Since we apply s-step Lanczos algorithm for $\tau_k^i$ and $\theta_k^i$, the orthogonalization cost inside the Lanczos algorithm is $O(ns^2)$ and the cost of the product of a vector and a matrix s times in the Lanczos algorithm is $O(ms)$. From the above, all the computational cost of SLQ algorithm is $O((ms+ns^2)n_v)$.
 
@@ -287,7 +317,7 @@ Since we apply s-step Lanczos algorithm for $\tau_k^i$ and $\theta_k^i$, the ort
      \STATE Generate a random vector $\mathbf{x}_i$ with the standard normal distribution.
      \STATE Form unit vector $\mathbf{z}_i = \frac{\mathbf{x}_i}{\|\mathbf{x}_i\|_2}$.
      \STATE $\mathbf{v}_i^T \leftarrow \mathbf{z}_i^T $.
-        \FOR {$i = 0$ to $k-1$}
+        \FOR {$j = 0$ to $k-1$}
         \STATE $\mathbf{v}_i^T \leftarrow \mathbf{v}_i^T {\mathbf M}$.
         \ENDFOR
      \STATE $\Gamma \leftarrow \Gamma + \mathbf{v}_i^T \mathbf{z}_i$
@@ -309,13 +339,19 @@ Since we apply s-step Lanczos algorithm for $\tau_k^i$ and $\theta_k^i$, the ort
      \STATE Form unit vector $\mathbf{z}_i = \frac{\mathbf{x}_i}{\|\mathbf{x}_i\|_2}$.
      \STATE $T \leftarrow \text{Lanczos($\mathbf{M}$,$\mathbf{z}_i$, s)}$.
      \STATE $[\mathbf{Y}, \mathbf{\Theta}] \leftarrow \text{eig}(T)$
-     \STATE Compute $\tau_k = [e_1^T y_k]$ for $k=0, ..., s-1$
-     \STATE $\Gamma \leftarrow \Gamma + \sum_{k=0}^{s-1} (\tau_k)^2 f(\theta_k)$
+     \STATE Compute $\tau_j = [e_1^T y_j]$ for $j=0, ..., s-1$
+     \STATE $\Gamma \leftarrow \Gamma + \sum_{j=0}^{s-1} (\tau_j)^2 (\theta_j)^k$
      \ENDFOR
     \STATE $\Gamma \leftarrow \frac{n}{n_v}\Gamma$
     \RETURN $\Gamma$
     \end{algorithmic}
 \end{algorithm}
+
+
+\section{Experiments}
+We evaluate computational time and variance of SPENet using STE and SLQ algorithm. Additionally, we evaluate its relative error against the exact computation of the eigenvalues where allowed by the graph size. We perform our experiments averating 10 times for all experiments unless stated otherwise.
+
+\subsection{Parameter Settings}
 
 
 \chapter{Conclusion}
