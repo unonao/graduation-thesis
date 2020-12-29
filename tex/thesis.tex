@@ -281,10 +281,12 @@ Now, we need to compute $\mathbf{z}_i^{T}f(\mathbf{M})\mathbf{z}_i$. By applying
 \chapter{the Sum of Powers of Eigenvalues of Network (SPENet)}
 Our main purpose is computing sum of k-th powers of eigenvalues $\sum_{i=0}^{n-1} \lambda_i^k$ which we call SPENet. We propose two approximation algorithms (STE and SLQ) based on the stochastic trace estimator and the stochastic Lanczos quadrature. For naive algorithms, the computational complexity of SPENet using full eigendecomposition is $O(n^3)$, while for STE algorithm it is $O(m k n_v)$ and for SLQ algorithm it is $O((ms + ns^2) n_v)$.
 
+Since the laplacian matrix ${\mathbf L}$ and the normalized laplacian matrix ${\mathbfcal L}$ have zero eigenvalues, we are interested in the case that index of power $k$ is positive. When we consider the case that ${\mathbf M} = {\mathbf A}$, $k$ must be positive integer or zero because ${\mathbf A}$ have negative eigenvalues.
+
 
 \section{Algorithms}
 \subsection{STE algorithm}
-The first estimation method for SPENet is based on the stochastic trace estimator(STE), which we apply in our setting for the trace of power of matrix $f({\mathbf M})={\mathbf M}^k$. We are interested in the case where ${\mathbf M} = {\mathbf A}, {\mathbf L}, \text{or} {\mathbfcal L}$.
+The first estimation method for SPENet is based on the stochastic trace estimator(STE), which we apply in our setting for the trace of power of matrix $f({\mathbf M})={\mathbf M}^k$. We are interested in the case where ${\mathbf M} = {\mathbf A}, {\mathbf L}, \text{or} {\mathbfcal L}$. In this algorithm, the index of power $k$ must be positve integer.
 
 By using theorem \ref{power_eigenvalues} and \ref{approxtraceUniformed}, we can apply the stochastic trace estimator for computing sum of powers of k-th eigenvalues.
 \begin{align}
@@ -296,7 +298,7 @@ The product of two matrices costs $O(n^3)$, but the product of a vector and a sp
 
 
 \subsection{SLQ algorithm}
-The second estimation method for SPENet is based on the stochastic Lanczos quadrature(SLQ), which we apply in our setting for the trace of power of matrix $f({\mathbf M})={\mathbf M}^k$. We are interested in the case where ${\mathbf M} = {\mathbf A}, {\mathbf L}, \text{or} {\mathbfcal L}$.
+The second estimation method for SPENet is based on the stochastic Lanczos quadrature(SLQ), which we apply in our setting for the trace of power of matrix $f({\mathbf M})={\mathbf M}^k$. We are interested in the case where ${\mathbf M} = {\mathbf A}, {\mathbf L}, \text{or} {\mathbfcal L}$. In this algorithm, the index of power $k$ must be positve real number.
 
 By using theorem 1 and (2.4), we can estimate SPENet.
 \begin{align}
@@ -306,12 +308,13 @@ By using theorem 1 and (2.4), we can estimate SPENet.
 \end{align}
 Since we apply s-step Lanczos algorithm for $\tau_k^i$ and $\theta_k^i$, the orthogonalization cost inside the Lanczos algorithm is $O(ns^2)$ and the cost of the product of a vector and a matrix s times in the Lanczos algorithm is $O(ms)$. From the above, all the computational cost of SLQ algorithm is $O((ms+ns^2)n_v)$.
 
+
 \begin{algorithm}
     \caption{STE algorithm}
     \begin{algorithmic}[1]
     \renewcommand{\algorithmicrequire}{\textbf{Input:}}
     \renewcommand{\algorithmicensure}{\textbf{Output:}}
-    \REQUIRE a real symmetric matrix ${\mathbf M} \in {\mathbb R}^{n\times n}$, index $k$, and $n_v$.
+    \REQUIRE a real symmetric matrix ${\mathbf M} \in {\mathbb R}^{n\times n}$, a positive integer $k$, and $n_v$.
     \ENSURE  Approximate sum of k-th powers of eigenvalues $\sum_{i=0}^{n-1} \lambda_i^k$
      \FOR {$i = 0$ to $n_v-1$}
      \STATE Generate a random vector $\mathbf{x}_i$ with the standard normal distribution.
@@ -332,7 +335,7 @@ Since we apply s-step Lanczos algorithm for $\tau_k^i$ and $\theta_k^i$, the ort
     \begin{algorithmic}[1]
     \renewcommand{\algorithmicrequire}{\textbf{Input:}}
     \renewcommand{\algorithmicensure}{\textbf{Output:}}
-    \REQUIRE a real symmetric matrix ${\mathbf M} \in {\mathbb R}^{n\times n}$, index $k$, and $n_v$.
+    \REQUIRE a real symmetric matrix ${\mathbf M} \in {\mathbb R}^{n\times n}$, a positive real number $k$, and $n_v$.
     \ENSURE  Approximate sum of k-th powers of eigenvalues $\sum_{i=0}^{n-1} \lambda_i^k$
      \FOR {$i = 0$ to $n_v-1$}
      \STATE Generate a random vector $\mathbf{x}_i$ with the standard normal distribution.
@@ -347,6 +350,28 @@ Since we apply s-step Lanczos algorithm for $\tau_k^i$ and $\theta_k^i$, the ort
     \end{algorithmic}
 \end{algorithm}
 
+
+\section{Conditions of $k$}
+In SLQ algorithm, we can generalize the index of power $k$. If ${\mathbf M}$ is positive definite, we can use not only a positive integer but also a positive real number as $k$. This is because that $f(x)=x^k$ is analytic inside a closed interval $[\lambda_0, \lambda_{n-1}]$. However the function $f(x)=x^k$ have a singularity at zero and the laplacian matrix ${\mathbf L}$ and the normalized laplacian matrix ${\mathbfcal L}$ are positive semi-definite matrix, which have zero eigenvalues.
+
+To overcome the issue mentioned above, we can use {\it shifting the spectrum} proposed by Shashanka Ubaru, Jie Chen, and Yousef Saad\cite{ubaru2017fast}. The idea is shifting the eigenvalues by replacing ${\mathbf M}$ with ${\mathbf M}+\delta{\mathbf I}$. The shifted matrix have the eigenvalues in the interval $[\lambda_0 + \delta, \lambda_{n-1}+ \delta]$. Hence we can obtaing the approximation error bounds of SLQ algorithm and find that SLQ algorithm is practically useful.
+
+If $k$ is a positive real number and ${\mathbf M}={\mathbf A}$, $\sum_{i=0}^{n-1} \lambda_i^k$ is undefined because ${\mathbf A}$ have negative eigenvalues.
+
+\begin{table}[htb]
+    \begin{center}
+      \begin{tabular}{l| c c c }
+       & ${\mathbf A}$ & ${\mathbf L}$ & ${\mathbfcal L}$ \\ \hline
+        $k\in \mathbb{N}_{\geq 0}$ & STE or SLQ  & STE or SLQ  & STE or SLQ \\
+        $k\in \mathbb{R}_{\geq 0}$&  undefined  & SLQ  &  SLQ \\
+      \end{tabular}
+      \caption{Conditions under which the algorithms can be used}
+      \label{tab:notion}
+    \end{center}
+  \end{table}
+
+\section{Error bounds}
+Suppose $k$ is a positive integer and Lanczos step size is $s$. When $2s-1$ is greater or equal to the degree of $f(x)$, the error of Gauss quadrature rule is zero.
 
 \section{Experiments}
 We evaluate computational time and variance of SPENet using STE and SLQ algorithm. Additionally, we evaluate its relative error against the exact computation of the eigenvalues where allowed by the graph size. We perform our experiments averating 10 times for all experiments unless stated otherwise.
