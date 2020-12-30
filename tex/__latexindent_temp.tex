@@ -84,14 +84,14 @@ Let $G=(V,E,w)$ be a wighted undirected graph where $V=(v_0, v_2, ..., v_{n-1})$
 The laplacian matrix ${\mathbf L}$ and the normalized laplacian matrix ${\mathbfcal L}$ are defined by the weight function $w$ and the degree $d_v:=\sum_{u} w(u,v)$.
 \[
     L(u,v) = \begin{cases}
-        d_v - w(u,v) & \text{if} u=v, \\
+        d_v - w(u,v) & \text{if $u=v$}, \\
         - w(u,v) &  \text{if $u$ and $v$ are adjacent,} \\
         0   & \text{otherwise.}
         \end{cases}
 \]
 \[
     \mathcal{L}(u,v) = \begin{cases}
-        1 - \frac{w(u,v)}{d_v} & \text{if} u=v, \\
+        1 - \frac{w(u,v)}{d_v} & \text{if $u=v$}, \\
         - \frac{w(u,v)}{\sqrt{d_u d_v}} &  \text{if $u$ and $v$ are adjacent,} \\
         0   & \text{otherwise.}
         \end{cases}
@@ -119,8 +119,23 @@ Let ${\mathbf M}$ denote a real symmetric matrix that can be ${\mathbf A}$, ${\m
     \end{center}
   \end{table}
 
-\section{Laplacian Matrix and eigenvalues}
-L
+\section{The Laplacian and Eigenvalues}
+Let ${\mathbf D}$ denote the diagonal matrix, such that
+\begin{align*}
+    \mathbf{D}(u,v) = \begin{cases}
+        d_v & \text{if $u=v$}, \\
+        0   & \text{otherwise.}
+        \end{cases}
+\end{align*}
+
+There are some relationships among the adjacency matrix, laplacian matrix, and  normalized laplacian matrix.
+
+By definitions, we can write
+\begin{align*}
+    \mathbfcal{L} &= \mathbf{D}^{-\frac{1}{2}}\mathbf{L}\mathbf{D}^{-\frac{1}{2}}\\
+        &= \mathbf{I} - \mathbf{D}^{-\frac{1}{2}}\mathbf{A}\mathbf{D}^{-\frac{1}{2}}
+\end{align*}
+
 
 \section{Matrix and Spectra}
 Firstly, we define some concepts regarding matrix and its eigenvalues and prove some theorems which are used later.
@@ -227,9 +242,19 @@ The Riemann–Stieltjes integral is a generalization of the Riemann integral. It
     where $c_i$ is in the i-th subinterval $[x_i, x_{i+1}]$.
 \end{definition}
 
-\begin{theorem}
-    gauss quadrature
-\end{theorem}
+Now, we consider the approximation of this integral by Gauss quadrature rule. This is a relation:
+
+\begin{align}
+    I[f] =\int_a^b f(x) d\alpha(x) = \sum_{k=0}^{s-1} w_k f(\theta_k) + R[f]
+\end{align}
+
+where $\{w_k\}$ are the unknowns weights and $\{\theta_k\}$ are the unknowns nodes. In the right-hand side, the sum $\sum_{k=0}^{s-1} w_k f(\theta_k)$ is the approximation of the Riemann-Stieltjes integral $I[f]$, and $R[f]$ is the remainder. If $R[p]=0$ for all polynomials $p$ of degree $d$ and $R[q] \neq 0$ for any polynomials $q$ of degree $d+1$, the rule is called {\it exact}.
+
+The value of $R[f]$ is known \cite{golub2009matrices,stoer2013introduction}. If the measure $\alpha(x)$ is a positive nondecreasing function and $f \in C^{2s}[a,b]$, then
+\begin{align}
+    R[f] = \frac{f^{2s}(\xi)}{(2s)!} \int_a^b \left[\prod_{k=0}^{s-1}(x-\theta_k) \right]^2 d\alpha(x)
+\end{align}
+for some $\xi \in (a,b)$. Therefore, the Gauss rule is exact for polynomials $f$ of degree less than $2s$.
 
 Finally, we can reform and compute the bilinear form $\mathbf{z}^{T}f(\mathbf{M})\mathbf{z}$ using the Gauss quadrature rule.
 \begin{align*}
@@ -352,11 +377,11 @@ Since we apply s-step Lanczos algorithm for $\tau_k^i$ and $\theta_k^i$, the ort
 
 
 \section{Conditions of $k$}
-In SLQ algorithm, we can generalize the index of power $k$. If ${\mathbf M}$ is positive definite, we can use not only a positive integer but also a positive real number as $k$. This is because that $f(x)=x^k$ is analytic inside a closed interval $[\lambda_0, \lambda_{n-1}]$. However the function $f(x)=x^k$ have a singularity at zero and the laplacian matrix ${\mathbf L}$ and the normalized laplacian matrix ${\mathbfcal L}$ are positive semi-definite matrix, which have zero eigenvalues.
+In SLQ algorithm, we can generalize the index of power $k$. If ${\mathbf M}$ is positive definite, we can use not only a positive integer but also a positive real number as $k$. This is because that $f(x)=x^k$ is analytic inside a closed interval $[\lambda_0, \lambda_{n-1}]$. However the function $f(x)=x^k$ have a singularity at zero and the laplacian matrix ${\mathbf L}$ and the normalized laplacian matrix ${\mathbfcal L}$ are positive semi-definite matrix, which have $\lambda_0 = 0$.
 
 To overcome the issue mentioned above, we can use {\it shifting the spectrum} proposed by Shashanka Ubaru, Jie Chen, and Yousef Saad\cite{ubaru2017fast}. The idea is shifting the eigenvalues by replacing ${\mathbf M}$ with ${\mathbf M}+\delta{\mathbf I}$. The shifted matrix have the eigenvalues in the interval $[\lambda_0 + \delta, \lambda_{n-1}+ \delta]$. Hence we can obtaing the approximation error bounds of SLQ algorithm and find that SLQ algorithm is practically useful.
 
-If $k$ is a positive real number and ${\mathbf M}={\mathbf A}$, $\sum_{i=0}^{n-1} \lambda_i^k$ is undefined because ${\mathbf A}$ have negative eigenvalues.
+If $k$ is a positive real number and ${\mathbf M}={\mathbf A}$, the SPENet $\sum_{i=0}^{n-1} \lambda_i^k$ is undefined because ${\mathbf A}$ have negative eigenvalues.
 
 \begin{table}[htb]
     \begin{center}
