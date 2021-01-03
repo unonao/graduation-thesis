@@ -120,6 +120,8 @@ Let ${\mathbf M}$ denote a real symmetric matrix that can be ${\mathbf A}$, ${\m
   \end{table}
 
 \section{The Laplacian and Eigenvalues}
+The relationship between graphs and eigenvalues has been studied in spectral graph theory. A particular focus has been on eigenvalues of normalized laplacian matrices, and Fan Chung has written a comprehensive textbook on the subject\cite{chung1997spectral}, but there are also studies on laplacian matrices.
+
 Let ${\mathbf D}$ denote the diagonal matrix, such that
 \begin{align*}
     \mathbf{D}(u,v) = \begin{cases}
@@ -136,6 +138,19 @@ By definitions, we can write
         &= \mathbf{I} - \mathbf{D}^{-\frac{1}{2}}\mathbf{A}\mathbf{D}^{-\frac{1}{2}}
 \end{align*}
 
+
+\begin{theorem}
+    If G has no negative edges, $\mathbf{L}$ and $\mathbfcal{L}$ are positive semi-definite.
+\end{theorem}
+\begin{proof}
+    For all $\mathbf{x} \in \mathbb{R}^n$,
+    \begin{align*}
+        \mathbf{x}^T \mathbf{L} \mathbf{x} = \sum_{(u,v) \in E} w(u,v)(x_u - x_v)^2 \geq 0
+    \end{align*}
+    \begin{align*}
+        \mathbf{x}^T \mathbfcal{L} \mathbf{x} = \sum_{(u,v) \in E} w(u,v)\left(\frac{x_u}{\sqrt{d_u}} - \frac{x_v}{\sqrt{d_v}}\right)^2 \geq 0
+    \end{align*}
+\end{proof}
 
 \section{Matrix and Spectra}
 Firstly, we define some concepts regarding matrix and its eigenvalues and prove some theorems which are used later.
@@ -206,6 +221,7 @@ The following corollary holds.
     \end{align*}
 \end{corollary}
 
+
 Unit vectors $\mathbf{z}_i = \frac{\mathbf{x}_i}{\|\mathbf{x}_i\|_2}$ can be used instead of $\mathbf{x}_i$. We can rewrite the formula of Corollary \ref{approxtrace}.
 \begin{theorem}
     \label{approxtraceUniformed}
@@ -231,7 +247,7 @@ For accurate computation, $n_v$ should approaches infinity. However  using large
 \section{Estimation of bilinear form $\mathbf{z}^T f(\mathbf{M}) \mathbf{z}$} \label{bilinear}
 There are relationships between matrix, orthogonal polynomials, quadrature rules and the Lanczos algorithms. Gene H Golub and G\'erard Meurant compiled a book of previous research on such relationships and on estimation and bounds of bilinear form $\mathbf{u}^T f(\mathbf{M}) \mathbf{v}$ \cite{golub2009matrices}. In this paper, we focus on a special case that $\mathbf{u}=\mathbf{v}=\mathbf{z}$.
 
-Firstly,the bilinear form $\mathbf{z}^{T}f(\mathbf{M})\mathbf{z}$ is reformed as a Riemann-Stieltjes integral and approximated by applying Gauss quadrature rule. Then, the Lanczos algorithm is applied for calculation.
+Firstly, the bilinear form $\mathbf{z}^{T}f(\mathbf{M})\mathbf{z}$ is reformed as a Riemann-Stieltjes integral and approximated by applying Gauss quadrature rule. Then, the Lanczos algorithm is applied for calculation.
 
 The Riemann–Stieltjes integral is a generalization of the Riemann integral. It is defined to be the limit of a sum.
 \begin{definition}
@@ -316,7 +332,8 @@ The first estimation method for SPENet is based on the stochastic trace estimato
 By using theorem \ref{power_eigenvalues} and \ref{approxtraceUniformed}, we can apply the stochastic trace estimator for computing sum of powers of k-th eigenvalues.
 \begin{align}
     \sum_{i=0}^{n-1} \lambda_i^k &= \mathrm{tr}({\mathbf M}^k)  \nonumber\\
-    &= \mathbb{E}_{p(\mathbf{x})}[\mathbf{x}^{T}{\mathbf M}^k \mathbf{x}] \approx \frac{n}{n_v}\sum_{i=0}^{n_v-1} \mathbf{z}_i^{T}{\mathbf M}^k\mathbf{z}_i
+    &= \mathbb{E}_{p(\mathbf{x})}[\mathbf{x}^{T}{\mathbf M}^k \mathbf{x}] \approx \frac{n}{n_v}\sum_{i=0}^{n_v-1} \mathbf{z}_i^{T}{\mathbf M}^k\mathbf{z}_i \\
+    &= \frac{n}{n_v}\sum_{i=0}^{n_v-1} \mathbf{z}_i^{T} \underbrace{{\mathbf M}{\mathbf M} \cdots \cdots {\mathbf M}}_{k \text{ times}} \mathbf{z}_i
 \end{align}
 
 The product of two matrices costs $O(n^3)$, but the product of a vector and a sparse matrix costs only $O(m)$. Therefore, when calculating $\mathbf{z}_i^{T}{\mathbf M}^k\mathbf{z}_i$, we just calculate the product of a vector and a matrix k times, and the inner product of a vector once from the left. From the above, the cost of the STE algorithm will be $O(mkn_v)$.
@@ -329,7 +346,7 @@ By using theorem 1 and (2.4), we can estimate SPENet.
 \begin{align}
     \sum_{i=0}^{n-1} \lambda_i^k &= \mathrm{tr}({\mathbf M}^k)  \nonumber\\
     &= \mathbb{E}_{p(\mathbf{x})}[\mathbf{x}^{T}{\mathbf M}^k \mathbf{x}] \approx \frac{n}{n_v}\sum_{i=0}^{n_v-1} \mathbf{z}_i^{T}{\mathbf M}^k\mathbf{z}_i \nonumber\\
-    &\approx \frac{n}{n_v} \sum_{i=0}^{n_v-1}\left(\sum_{j=0}^{s-1} (\tau_j)^2 (\theta_j)^k \right)
+    &\approx \frac{n}{n_v} \sum_{i=0}^{n_v-1}\left(\sum_{j=0}^{s-1} (\tau_j^i)^2 (\theta_j^i)^k \right)
 \end{align}
 Since we apply s-step Lanczos algorithm for $\tau_k^i$ and $\theta_k^i$, the orthogonalization cost inside the Lanczos algorithm is $O(ns^2)$ and the cost of the product of a vector and a matrix s times in the Lanczos algorithm is $O(ms)$. From the above, all the computational cost of SLQ algorithm is $O((ms+ns^2)n_v)$.
 
