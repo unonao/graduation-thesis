@@ -9,8 +9,8 @@
 \newtheorem{corollary}{Corollary}[theorem]
 % 論文の種類とフォントサイズをオプションに
 %-------------------
-\etitle{Analysis and Quantitative Evaluation of Large Networks Using Spectral Distributions}
-\jtitle{スペクトル分布を用いた大規模ネットワークの分析と定量的評価について}
+\etitle{Analysis and Approximation Algorithms for Large-Scale Networks Using All Eigenvalues}
+\jtitle{全ての固有値を利用した大規模ネットワークの分析と近似アルゴリズム}
 %
 \eauthor{Naoki Murakami}
 \jauthor{村上直輝}
@@ -21,27 +21,26 @@
 %-------------------
 \begin{document}
 \begin{eabstract}
-    To analyze the properties and structure of a network, one of the very important tools is the spectrum, or eigenvalue distribution. However, since computing the full eigendecomposition is expensive, large networks have been analyzed by using only part of the spectrum. Recently, a method for calculating the entire eigenvalue distribution has been developed, but the analysis and application of the spectrum have not yet been deeply considered.
+    Spectral graph theory studies the relationship between the properties of graphs and eigenvalues. Spectra, or eigenvalues, are useful for analyzing the properties and structure of networks. However, since computing the full eigendecomposition is expensive, large networks have been analyzed using part of the spectrum. Research using the overall spectra of a large-scale network is still an underdeveloped field.
 
-    In this paper, we firstly discuss the quantitative evaluation of spectra and its applications. For quantitative evaluation and comparison of spectral densities, we suggest applying the concepts of divergence and metric of discrete probability distributions to spectral distributions. This allows an intuitive comparison based on the structure of networks. As an application, a fast search algorithm for similar spectra using cosine distance is also discussed. Secondly, we analyze the distribution of the overall spectrum of theoretical graphs and real-world networks. Then, we discuss the relation between the network properties and the spectrum. As a result, for sparse networks, there is a large correspondence between the local structure of the network, called a motif, and the distribution of eigenvalues. In addition, we find that a graph in which vertices connected to neighbors have a sharp spectrum found in complex networks. Furthermore, we illustrate that graphs with vertices connected randomly have the semicircular spectra found in Erdős-Rényi random graphs.
+    Recently, a method to calculate the distribution of the entire spectrum has been devised, but since there are still few studies that visualize the spectral distribution of real-world networks, the correspondence between the spectral distribution and the properties of the network has not yet been considered deeply. In this study, we first discuss the quantitative evaluation of spectra and their application methods. For the quantitative evaluation and comparison of spectral distributions, we propose to use the concepts of divergence and distance for discrete probability distributions. As an application method, we also mention a method for fast retrieval of similar spectra using cosine distance. Next, we present the spectral distributions obtained from the synthesized graph and the real-world network. Next, we analyze the obtained spectral distributions and discuss the relationship between the network properties and the spectra. The results show that for sparse networks, the local structure of the network, called motifs, and the distribution of eigenvalues are related. Besides, graphs in which nearby vertices are adjacent to each other have a sharp spectrum, as seen in complex networks. Furthermore, we exemplify that many graphs where vertices are randomly adjacent to each other have a semicircular spectral distribution as seen in Erdős-Rényi random graphs.
 
-    This study explains a quantitative evaluation and application of spectra and shows that the shape of the spectra can give us information about the network properties. This means that the spectral analysis is an effective tool for clarifying the network properties.
+    Next, we propose two approximation algorithms to compute the sum of powers of eigenvalues $\sum_{i=0}^{n-1} \lambda_i^k$ that scale to large networks. The sum of powers of eigenvalues is an important property, and in recent years, research on related inequalities has been conducted. However, the conventional simple algorithms for calculating the sum of powers of eigenvalues do not scale to large graphs. Our proposed method makes it possible to calculate the sum of powers of eigenvalues for networks with millions or billions of vertices in a practical time. This makes it possible to use the sum of powers of eigenvalues as a new measure for the network.
 
 
 \end{eabstract}
 \begin{jabstract}
-    ネットワークの性質や構造を分析する上で、スペクトルは非常に重要な指標となり得る。しかし、大規模ネットワークについては、計算量の問題からスペクトルの一部を利用した分析しか行われていなかった。近年スペクトル全体を計算する手法が考案されたが、スペクトルの分析や応用などはまだ深く考えられていない。
+    Spectral graph theory ではグラフの性質と固有値の関係について研究されるなど、ネットワークの性質や構造を分析する上でスペクトルは非常に重要な指標となり得る。しかし、大規模ネットワークについては、計算量の問題からスペクトルの一部を利用した分析しか行われていなかった。大規模ネットワークの全てのスペクトルを利用した研究はまだ未発展の分野である。
 
-    本研究では、はじめにスペクトルの定量的評価とその応用方法について議論する。スペクトル分布の定量的な評価や比較のために、離散確率分布に対するダイバージェンスや距離の概念を流用することを提案する。これにより、ネットワークの構造に基づいた直感的な比較が可能になる。応用方法として cosine distance を用いた類似のスペクトルを高速に検索する手法についても言及する。 次に、理論的に得られるグラフと実世界のネットワークのスペクトル全体の分布を分析し、ネットワークの性質とスペクトルの対応について考察する。 結果として、平均次数が小さい疎なネットワークについては、モチーフと呼ばれるネットワークの局所的な構造と固有値の分布が大きく対応していることが分かった。 また、近くの頂点同士が隣接するようなグラフは、複雑ネットワークに見られるような鋭いスペクトルを持つ。さらに、頂点同士の隣接にランダム性があるグラフは、Erdős-Rényi ランダムグラフに見られる半円状のスペクトルになることを例示する。
+    近年スペクトル全体の分布を計算する手法が考案されたが、実世界のネットワークのスペクトル分布を可視化した研究はまだ少ないため、スペクトル分布とネットワークの性質の対応関係についてはまだ深く考えられていない。本研究では、はじめにスペクトル分布の定量的評価とその応用方法について議論する。スペクトル分布の定量的な評価や比較のために、離散確率分布に対するダイバージェンスや距離の概念を流用することを提案する。応用方法として cosine distance を用いた類似のスペクトルを高速に検索する手法についても言及する。 次に、合成されたグラフと実世界のネットワークから得られたスペクトル分布を提示する。次に、得られたスペクトル分布を分析し、ネットワークの性質とスペクトルの関係について考察する。 結果として、疎なネットワークについては、モチーフと呼ばれるネットワークの局所的な構造と固有値の分布が関係していることが分かった。 また、近くの頂点同士が隣接するようなグラフは、複雑ネットワークに見られるような鋭いスペクトルを持つ。さらに、頂点同士がランダムに隣接する多くのグラフは、Erdős-Rényi ランダムグラフに見られる半円状のスペクトルになることを例示する。
 
-    本研究はスペクトルの定量的評価や応用法について提案するとともに、スペクトルの形状からネットワークの性質についての情報が得られることを示した。これによりスペクトルの分析がネットワークの性質解明に有効な手段であることがわかる。
+    次に、本研究では、大規模ネットワークにスケールするような、固有値の累乗の合計値 $\sum_{i=0}^{n-1} \lambda_i^k$ をもとめる近似アルゴリズムを2つ提案する。固有値の累乗の合計値は重要な性質を持っており、近年は関係した不等式の研究なども行われている。しかし、固有値の累乗の合計値を計算する従来の単純なアルゴリズムでは大規模グラフにスケールしなかった。本研究の提案手法により実用的な時間で、数百万や数十億単位の頂点を持つネットワークについて固有値の累乗の合計値を計算することが可能になった。 これにより、ネットワークに対する新たな指標として、固有値の累乗の合計値というものが利用可能となる。
+
 \end{jabstract}
 \maketitle
 
 \begin{acknowledge}
-    First of all, I really appreciate supports by Prof. Imai to proceed with my
-    research, to speak in seminar, and to write the thesis. His helpful advice from insight has tought me how to work on research. I am also grateful to Assist. Prof. Hiraishi for giving me suggestions and taking care of me. Finally, I would like to thank all members of Imai Laboratry. When
-    I got stuck in my research, they always gave me helpful technical advice.
+    First of all, I would like to express my gratitude to Professor Imai for his support in my research and writing this paper. His advice and insights were very helpful not only in the content of my research, but also in how to proceed with my research. I am also grateful to Assist. Prof. Hiraishi for taking care of me. Finally, I would like to thank all members of Imai Laboratry.
 \end{acknowledge}
 
 \frontmatter %% 前付け
@@ -53,8 +52,10 @@
 \mainmatter %% 本文
 
 \chapter{Introduction}
-\section{Complex Network}
-\section{von Neumann entropy of Network}
+\section{Large-Scale Network}
+\section{Spectra and Graphs}
+\subsection{Spectral Distributions}
+\subsection{Spectral Distance}
 
 The Kullback-Leibler Divergence \cite{kullback1951information} is the most popular divergence.
 However, the KLD is assimmetric.
@@ -75,6 +76,10 @@ other network distance metric, NetLSD, was developed \cite{tsitsulin2018netlsd,t
 Motif multiplicity corresponds to eigenvalues multiplicity \cite{mehatari2015effect,dong2019network}.
 
 There are fast online search tool for DOS\cite{borysov2018online,geilhufe2018towards}
+
+The eigenvalues of adjacency matrix and the number of closed walks are closely related\cite{butler2008eigenvalues}.
+
+\subsection{Sum of Powers of Eigenvalues}
 
 \chapter{Preliminaries}
 \section{General Notation}
@@ -151,6 +156,9 @@ By definitions, we can write
         \mathbf{x}^T \mathbfcal{L} \mathbf{x} = \sum_{(u,v) \in E} w(u,v)\left(\frac{x_u}{\sqrt{d_u}} - \frac{x_v}{\sqrt{d_v}}\right)^2 \geq 0
     \end{align*}
 \end{proof}
+
+
+\section{Spectral Distribution}
 
 \section{Matrix and Spectra}
 Firstly, we define some concepts regarding matrix and its eigenvalues and prove some theorems which are used later.
@@ -317,7 +325,11 @@ Now, we need to compute $\mathbf{z}_i^{T}f(\mathbf{M})\mathbf{z}_i$. By applying
 \end{align}
 
 
-
+\chapter{Gallery and Applications of Spectral Distributions}
+\section{Quantitative Evaluation}
+\section{Experiments}
+\subsection{Gallery of DOS/PDOS}
+\subsection{Propaties of Graphs with Similar DOS/PDOS}
 
 \chapter{the Sum of Powers of Eigenvalues of Network (SPENet)}
 Our main purpose is computing sum of k-th powers of eigenvalues $\sum_{i=0}^{n-1} \lambda_i^k$ which we call SPENet. We propose two approximation algorithms (STE and SLQ) based on the stochastic trace estimator and the stochastic Lanczos quadrature. For naive algorithms, the computational complexity of SPENet using full eigendecomposition is $O(n^3)$, while for STE algorithm it is $O(m k n_v)$ and for SLQ algorithm it is $O((ms + ns^2) n_v)$.
@@ -404,7 +416,7 @@ If $k$ is a positive real number and ${\mathbf M}={\mathbf A}$, the SPENet $\sum
     \begin{center}
       \begin{tabular}{l| c c c }
        & ${\mathbf A}$ & ${\mathbf L}$ & ${\mathbfcal L}$ \\ \hline
-        $k\in \mathbb{N}_{\geq 0}$ & STE or SLQ  & STE or SLQ  & STE or SLQ \\
+        $k\in \mathbb{Z}_{\geq 0}$ & STE or SLQ  & STE or SLQ  & STE or SLQ \\
         $k\in \mathbb{R}_{\geq 0}$&  undefined  & SLQ  &  SLQ \\
       \end{tabular}
       \caption{Conditions under which the algorithms can be used}
@@ -418,8 +430,11 @@ Suppose $k$ is a positive integer and Lanczos step size is $s$. When $2s-1$ is g
 \section{Experiments}
 We evaluate computational time and variance of SPENet using STE and SLQ algorithm. Additionally, we evaluate its relative error against the exact computation of the eigenvalues where allowed by the graph size. We perform our experiments averating 10 times for all experiments unless stated otherwise.
 
+We use 40 real-world small networks\cite{nr}.
 \subsection{Parameter Settings}
 
+\subsection{Approximation Accuracy}
+\subsection{Parameter Sensitivity}
 
 \chapter{Conclusion}
 
