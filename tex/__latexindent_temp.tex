@@ -53,9 +53,15 @@
 
 \chapter{Introduction}
 \section{Large-Scale Network}
+Large-scale networks appear in many places in our daily lives. For example, IP address networks, map graphs, web graphs, and so on. Algorithms that have been used in the past do not scale to the huge networks that appear in the real world. Therefore, research is being done to develop algorithms that can be applied to large-scale networks and to elucidate the properties of large-scale networks.
+
 \section{Spectra and Graphs}
+Spectral graph theory is one powerful tool for understanding the properties of networks. This theory is based on the fact that the properties of a network and its eigenvalues, when expressed as a matrix, are interrelated. However, when considering eigenvalues for real-world networks, only a subset of the eigenvalues have been analyzed due to computational complexity issues, since the computational complexity of obtaining all the eigenvalues is $O(n^3)$ when the number of vertices is $n$. In recent years, approximation algorithms that use all eigenvalues for analysis have been proposed, but this is still an undeveloped field.
+
 \subsection{Spectral Distributions}
-\subsection{Spectral Distance}
+Recently, an approximation algorithm for the distribution of eigenvalues that scales to large graphs has been proposed. This has made it possible to visualize the distribution of eigenvalues of various networks in the real world. However, a comprehensive analysis of the synthesized graphs and real-world networks has not yet been done.
+
+\subsection{Spectral Distance???}
 
 The Kullback-Leibler Divergence \cite{kullback1951information} is the most popular divergence.
 However, the KLD is assimmetric.
@@ -80,6 +86,9 @@ There are fast online search tool for DOS\cite{borysov2018online,geilhufe2018tow
 The eigenvalues of adjacency matrix and the number of closed walks are closely related\cite{butler2008eigenvalues}.
 
 \subsection{Sum of Powers of Eigenvalues}
+
+\section{Our Contributions}
+We study the spectral distribution and the sum of powers of eigenvalues as an analysis using all eigenvalues. First, we visualize and comprehensively summarize the spectral distributions for many synthesized graphs and real-world networks, and discuss methods and applications for treating spectral distributions quantitatively. Second, we propose an approximation algorithm for the sum of powers of eigenvalues that scales to large networks. By applying methods such as stochastic trace estimator and stochastic Lanczos quadrature, the sum of powers of eigenvalues can be calculated in a practical time. Experimental results for the analysis of relative errors are also shown.
 
 \chapter{Preliminaries}
 \section{General Notation}
@@ -157,9 +166,6 @@ By definitions, we can write
     \end{align*}
 \end{proof}
 
-
-\section{Spectral Distribution}
-
 \section{Matrix and Spectra}
 Firstly, we define some concepts regarding matrix and its eigenvalues and prove some theorems which are used later.
 \begin{definition}
@@ -199,8 +205,8 @@ Firstly, we define some concepts regarding matrix and its eigenvalues and prove 
     By applying theorem \ref{power_eigenvalues} to each degree, we can get $f(\mathbf{M}) = \mathbf{Q}f(\mathbf{\Lambda})\mathbf{Q}^T$.
 \end{proof}
 
-
-\section{Stochastic Trace Estimator} \label{STE}
+\section{Approximation Methods for Matrix Traces and Bilinear Forms}
+\subsection{Stochastic Trace Estimator} \label{STE}
 For trace estimation of large implicit matrices, we can use randomized estimator described by Hunchinson \cite{hutchinson1989stochastic, adams2018estimating}.
 \begin{theorem}
     \label{Hunchinson}
@@ -252,7 +258,7 @@ For Randemacher vectors, $\|\mathbf{x}_i\|_2^2$ is always $n$. For other random 
 For accurate computation, $n_v$ should approaches infinity. However  using large $n_v$ is expensive. For practical purposes, we can use small $n_v$. The convergence rate of such estimator was studied by Avron and Toledo\cite{avron2011randomized}.
 
 
-\section{Estimation of bilinear form $\mathbf{z}^T f(\mathbf{M}) \mathbf{z}$} \label{bilinear}
+\subsection{Estimation of bilinear form $\mathbf{z}^T f(\mathbf{M}) \mathbf{z}$} \label{bilinear}
 There are relationships between matrix, orthogonal polynomials, quadrature rules and the Lanczos algorithms. Gene H Golub and G\'erard Meurant compiled a book of previous research on such relationships and on estimation and bounds of bilinear form $\mathbf{u}^T f(\mathbf{M}) \mathbf{v}$ \cite{golub2009matrices}. In this paper, we focus on a special case that $\mathbf{u}=\mathbf{v}=\mathbf{z}$.
 
 Firstly, the bilinear form $\mathbf{z}^{T}f(\mathbf{M})\mathbf{z}$ is reformed as a Riemann-Stieltjes integral and approximated by applying Gauss quadrature rule. Then, the Lanczos algorithm is applied for calculation.
@@ -311,7 +317,7 @@ Now, the bilinear form $\mathbf{z}^{T}f(\mathbf{M})\mathbf{z}$ is reformed as
     &\tau_k = \mathbf{Y}_{0,k} = \mathbf{e}_1^T \mathbf{y}_k, ~ \theta_k= \Theta_{k,k}, ~ \mathbf{T}=\mathbf{Y}\mathbf{\Theta}\mathbf{Y}^T
 \end{align}
 
-\section{Stochastic Lanczos Quadrature(SLQ)}
+\subsection{Stochastic Lanczos Quadrature(SLQ)}
 There is a method called stochastic Lanczos quadrature(SLQ) \cite{ubaru2017fast}, for approximate computing of the trace of functions of large matrices. Firstly, the stochastic trace estimator is used for approximating the trace. Next, the estimation method we discussed in the section \ref{bilinear} is applied.
 
 The stochastic trace estimator has been explained in the previous section.
@@ -323,6 +329,33 @@ Now, we need to compute $\mathbf{z}_i^{T}f(\mathbf{M})\mathbf{z}_i$. By applying
 \begin{align}
     \mathrm{tr}(f(\mathbf{M})) \approx \frac{n}{n_v} \sum_{i=0}^{n_v-1}\left(\sum_{k=0}^{s-1} (\tau_k^i)^2 f(\theta_k^i) \right)
 \end{align}
+
+
+
+\section{Spectral Distribution}
+In the field of condensed matter physics, the density of states is defined as the distribution of eigenvalues. Since all eigenvalues need to be calculated for the exact solution, the computational complexity becomes $O(n^3)$ when the number of vertices is n. Therefore, it does not scale well for large-scale networks with millions or billions of vertices. Recently, Kun Dong et al. have developed an approximation algorithm for finding the distribution of eigenvalues in a network \cite{dong2019network}. This has made it possible to obtain the distribution of eigenvalues for large graphs in a practical time.
+
+First, we define DOS as the spectrum of the entire network. Next, we define LDOS as the local spectrum, and define what the equation looks like when we consider the spectrum of each vertex as its special case.
+\begin{definition}
+    Let ${\mathbf M} \in \mathbb{R}^{n\times n}$ be any real symmetric matrix. The spectral density, or density of states (DOS) is
+    \begin{align}
+        \mu(\lambda) = \frac{1}{n}\sum_{i=0}^{n-1} \delta(\lambda - \lambda_i), ~ \int f(\lambda)\mu(\lambda)= \mathrm{tr}(f({\mathbf M}))
+    \end{align}
+    where $\delta$ is the Dirac delta function and $f$ is any analytic test function.
+\end{definition}
+\begin{definition}
+    For any vector $u \in \mathbb{R}^n$, the local density of states (LDOS) is
+    \begin{align}
+        \mu(\lambda ; u) = \sum_{i=0}^{n-1} |u^T q_i|^2 \delta(\lambda - \lambda_i), ~ \int f(\lambda) \mu(\lambda; u) = u^T f({\mathbf M}) u
+    \end{align}
+    where $Q=[q_0, ..., q_{n-1}]$ is orthogonal.
+    Especially, when we consider the case $u=e_k$ where $e_k$ is the $k$-th standard basis vector, the pointwise density of states (PDOS) is
+    \begin{align}
+        \mu_k(\lambda) = \sum_{i=0}^{n-1} |e_k^T q_i|^2 \delta(\lambda - \lambda_i) = \sum_{i=0}^{n-1} |q_i(k)|^2 \delta(\lambda - \lambda_i), ~ \int f(\lambda) \mu_k(\lambda) = e_k^T f({\mathbf M}) e_k
+    \end{align}
+    where $|q_i(k)|$ is the magnitude of the weight for a $k$-th vertex in the $i$-th eigenvector.
+\end{definition}
+
 
 
 \chapter{Gallery and Applications of Spectral Distributions}
