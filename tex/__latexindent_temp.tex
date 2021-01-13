@@ -23,18 +23,19 @@
 \begin{eabstract}
     Spectral graph theory studies the relationship between the properties of graphs and eigenvalues. Spectra, or eigenvalues, are useful for analyzing the properties and structure of networks. However, since computing the full eigendecomposition is expensive, large networks have been analyzed using part of the spectrum. Research using the overall spectra of a large-scale network is still an underdeveloped field.
 
-    Recently, a method to calculate the distribution of the entire spectrum has been devised, but since there are still few studies that visualize the spectral distribution of real-world networks, the correspondence between the spectral distribution and the properties of the network has not yet been considered deeply. In this study, we first discuss the quantitative evaluation of spectra and their application methods. For the quantitative evaluation and comparison of spectral distributions, we propose to use the concepts of divergence and distance for discrete probability distributions. As an application method, we also mention a method for fast retrieval of similar spectra using cosine distance. Next, we present the spectral distributions obtained from the synthesized graph and the real-world network. Next, we analyze the obtained spectral distributions and discuss the relationship between the network properties and the spectra. The results show that for sparse networks, the local structure of the network, called motifs, and the distribution of eigenvalues are related. Besides, graphs in which nearby vertices are adjacent to each other have a sharp spectrum, as seen in complex networks. Furthermore, we exemplify that many graphs where vertices are randomly adjacent to each other have a semicircular spectral distribution as seen in Erdős-Rényi random graphs.
+    Firstly, we propose two approximation algorithms to compute the sum of powers of eigenvalues $\sum_{i=0}^{n-1} \lambda_i^k$ that scale to large networks. The sum of powers of eigenvalues is an important property, and in recent years, research on related inequalities has been conducted. However, the conventional simple algorithms for calculating the sum of powers of eigenvalues do not scale to large graphs. Our proposed method makes it possible to calculate the sum of powers of eigenvalues for networks with millions or billions of vertices in a practical time. This makes it possible to use the sum of powers of eigenvalues as a new measure for the network.
 
-    Next, we propose two approximation algorithms to compute the sum of powers of eigenvalues $\sum_{i=0}^{n-1} \lambda_i^k$ that scale to large networks. The sum of powers of eigenvalues is an important property, and in recent years, research on related inequalities has been conducted. However, the conventional simple algorithms for calculating the sum of powers of eigenvalues do not scale to large graphs. Our proposed method makes it possible to calculate the sum of powers of eigenvalues for networks with millions or billions of vertices in a practical time. This makes it possible to use the sum of powers of eigenvalues as a new measure for the network.
+    In this research, we also study the spectral distribution obtained by an algorithm based on a method similar to the proposed method. Recently, a method to calculate the distribution of the entire spectrum has been devised, but since there are still few studies that visualize the spectral distribution of real-world networks, the correspondence between the spectral distribution and the properties of the network has not yet been considered deeply. We first discuss the quantitative evaluation of spectra and their application methods. For the quantitative evaluation and comparison of spectral distributions, we propose to use the concepts of divergence and distance for discrete probability distributions. As an application method, we also mention a method for fast retrieval of similar spectra using cosine distance. Next, we present the spectral distributions obtained from the synthesized graph and the real-world network. Next, we analyze the obtained spectral distributions and discuss the relationship between the network properties and the spectra. The results show that for sparse networks, the local structure of the network, called motifs, and the distribution of eigenvalues are related. Besides, graphs in which nearby vertices are adjacent to each other have a sharp spectrum, as seen in complex networks. Furthermore, we exemplify that many graphs where vertices are randomly adjacent to each other have a semicircular spectral distribution as seen in Erdős-Rényi random graphs.
 
 
 \end{eabstract}
 \begin{jabstract}
     Spectral graph theory ではグラフの性質と固有値の関係について研究されるなど、ネットワークの性質や構造を分析する上でスペクトルは非常に重要な指標となり得る。しかし、大規模ネットワークについては、計算量の問題からスペクトルの一部を利用した分析しか行われていなかった。大規模ネットワークの全てのスペクトルを利用した研究はまだ未発展の分野である。
 
-    近年スペクトル全体の分布を計算する手法が考案されたが、実世界のネットワークのスペクトル分布を可視化した研究はまだ少ないため、スペクトル分布とネットワークの性質の対応関係についてはまだ深く考えられていない。本研究では、はじめにスペクトル分布の定量的評価とその応用方法について議論する。スペクトル分布の定量的な評価や比較のために、離散確率分布に対するダイバージェンスや距離の概念を流用することを提案する。応用方法として cosine distance を用いた類似のスペクトルを高速に検索する手法についても言及する。 次に、合成されたグラフと実世界のネットワークから得られたスペクトル分布を提示する。次に、得られたスペクトル分布を分析し、ネットワークの性質とスペクトルの関係について考察する。 結果として、疎なネットワークについては、モチーフと呼ばれるネットワークの局所的な構造と固有値の分布が関係していることが分かった。 また、近くの頂点同士が隣接するようなグラフは、複雑ネットワークに見られるような鋭いスペクトルを持つ。さらに、頂点同士がランダムに隣接する多くのグラフは、Erdős-Rényi ランダムグラフに見られる半円状のスペクトルになることを例示する。
+    まず、本研究では大規模ネットワークにスケールするような、固有値の累乗の合計値 $\sum_{i=0}^{n-1} \lambda_i^k$ をもとめる近似アルゴリズムを2つ提案する。固有値の累乗の合計値は重要な性質を持っており、近年は関係した不等式の研究なども行われている。しかし、固有値の累乗の合計値を計算する従来の単純なアルゴリズムでは大規模グラフにスケールしなかった。本研究の提案手法により実用的な時間で、数百万や数十億単位の頂点を持つネットワークについて固有値の累乗の合計値を計算することが可能になった。 これにより、ネットワークに対する新たな指標として、固有値の累乗の合計値というものが利用可能となる。
 
-    次に、本研究では、大規模ネットワークにスケールするような、固有値の累乗の合計値 $\sum_{i=0}^{n-1} \lambda_i^k$ をもとめる近似アルゴリズムを2つ提案する。固有値の累乗の合計値は重要な性質を持っており、近年は関係した不等式の研究なども行われている。しかし、固有値の累乗の合計値を計算する従来の単純なアルゴリズムでは大規模グラフにスケールしなかった。本研究の提案手法により実用的な時間で、数百万や数十億単位の頂点を持つネットワークについて固有値の累乗の合計値を計算することが可能になった。 これにより、ネットワークに対する新たな指標として、固有値の累乗の合計値というものが利用可能となる。
+    本研究は、提案手法と同様の手法に基づいたアルゴリズムによって得ることができるスペクトル分布についても研究する。近年スペクトル全体の分布を計算する手法が考案されたが、実世界のネットワークのスペクトル分布を可視化した研究はまだ少ないため、スペクトル分布とネットワークの性質の対応関係についてはまだ深く考えられていない。我々はまず、スペクトル分布の定量的評価とその応用方法について議論する。スペクトル分布の定量的な評価や比較のために、離散確率分布に対するダイバージェンスや距離の概念を流用することを提案する。応用方法として cosine distance を用いた類似のスペクトルを高速に検索する手法についても言及する。 次に、合成されたグラフと実世界のネットワークから得られたスペクトル分布を提示する。次に、得られたスペクトル分布を分析し、ネットワークの性質とスペクトルの関係について考察する。 結果として、疎なネットワークについては、モチーフと呼ばれるネットワークの局所的な構造と固有値の分布が関係していることが分かった。 また、近くの頂点同士が隣接するようなグラフは、複雑ネットワークに見られるような鋭いスペクトルを持つ。さらに、頂点同士がランダムに隣接する多くのグラフは、Erdős-Rényi ランダムグラフに見られる半円状のスペクトルになることを例示する。
+
 
 \end{jabstract}
 \maketitle
@@ -57,6 +58,8 @@ Large-scale networks appear in many places in our daily lives. For example, IP a
 
 \section{Spectra and Graphs}
 Spectral graph theory is one powerful tool for understanding the properties of networks. This theory is based on the fact that the properties of a network and its eigenvalues, when expressed as a matrix, are interrelated. However, when considering eigenvalues for real-world networks, only a subset of the eigenvalues have been analyzed due to computational complexity issues, since the computational complexity of obtaining all the eigenvalues is $O(n^3)$ when the number of vertices is $n$. In recent years, approximation algorithms that use all eigenvalues for analysis have been proposed, but this is still an undeveloped field.
+
+\subsection{Sum of Powers of Eigenvalues}
 
 \subsection{Spectral Distributions}
 Recently, an approximation algorithm for the distribution of eigenvalues that scales to large graphs has been proposed. This has made it possible to visualize the distribution of eigenvalues of various networks in the real world. However, a comprehensive analysis of the synthesized graphs and real-world networks has not yet been done.
@@ -85,10 +88,8 @@ There are fast online search tool for DOS\cite{borysov2018online,geilhufe2018tow
 
 The eigenvalues of adjacency matrix and the number of closed walks are closely related\cite{butler2008eigenvalues}.
 
-\subsection{Sum of Powers of Eigenvalues}
-
 \section{Our Contributions}
-We study the spectral distribution and the sum of powers of eigenvalues as an analysis using all eigenvalues. First, we visualize and comprehensively summarize the spectral distributions for many synthesized graphs and real-world networks, and discuss methods and applications for treating spectral distributions quantitatively. Second, we propose an approximation algorithm for the sum of powers of eigenvalues that scales to large networks. By applying methods such as stochastic trace estimator and stochastic Lanczos quadrature, the sum of powers of eigenvalues can be calculated in a practical time. Experimental results for the analysis of relative errors are also shown.
+We study the spectral distribution and the sum of powers of eigenvalues as an analysis using all eigenvalues. First, we propose an approximation algorithm for the sum of powers of eigenvalues that scales to large networks. By applying methods such as stochastic trace estimator and stochastic Lanczos quadrature, the sum of powers of eigenvalues can be calculated in a practical time. Experimental results for the analysis of relative errors are also shown. Second, we visualize and comprehensively summarize the spectral distributions for many synthesized graphs and real-world networks, and discuss methods and applications for treating spectral distributions quantitatively.
 
 \chapter{Preliminaries}
 \section{General Notation}
@@ -333,7 +334,7 @@ Now, we need to compute $\mathbf{z}_i^{T}f(\mathbf{M})\mathbf{z}_i$. By applying
 
 
 \section{Spectral Distribution}
-In the field of condensed matter physics, the density of states is defined as the distribution of eigenvalues. Since all eigenvalues need to be calculated for the exact solution, the computational complexity becomes $O(n^3)$ when the number of vertices is n. Therefore, it does not scale well for large-scale networks with millions or billions of vertices. Recently, Kun Dong et al. have developed an approximation algorithm for finding the distribution of eigenvalues in a network \cite{dong2019network}. This has made it possible to obtain the distribution of eigenvalues for large graphs in a practical time.
+In the field of condensed matter physics, the density of states is defined as the distribution of eigenvalues. Calculating all the eigenvalues takes $O(n^3)$ when the number of vertices is n, so calculating the exact solution is expensive. Therefore, it does not scale well for large-scale networks with millions or billions of vertices. Recently, Kun Dong et al.\cite{dong2019network} have developed an approximation algorithm for finding the distribution of eigenvalues in a network . This has made it possible to obtain the distribution of eigenvalues for large graphs in a practical time.
 
 First, we define DOS as the spectrum of the entire network. Next, we define LDOS as the local spectrum, and define what the equation looks like when we consider the spectrum of each vertex as its special case.
 \begin{definition}
@@ -356,13 +357,38 @@ First, we define DOS as the spectrum of the entire network. Next, we define LDOS
     where $|q_i(k)|$ is the magnitude of the weight for a $k$-th vertex in the $i$-th eigenvector.
 \end{definition}
 
+\subsection{Kernel Polynomial Method (KPM)}
+To approximate DOS and PDOS, the Kernel Polynomial Method (KPM) \cite{weisse2006kernel} can be used. This method uses a dual basis of orthogonal polynomial basis, and Kun Dong et al.\cite{dong2019network} use Chebyshev polynomials. First, the spectral density is expanded by using the dual Chebyshev basis, and the DOS can be approximated by using the stochastic trace estimator. The PDOS can be obtained by using the diagonal elements of the $m$-th Chebyshev polynomial of ${\mathbf M}$.
+
+When approximating with Chebyshev polynomials, the eigenvalues must be in the interval $[-1,1]$, and the eigenvalues of the normalized adjacency matrix of unweighted graphs are in this interval. For arbitrary matrices ${\mathbf M}$, this condition can be satisfied by using shifting and rescaling as follows:
+\begin{align*}
+    {\mathbf {\widetilde M}} = \frac{2{\mathbf M} - (\lambda_{n-1} + \lambda_0)}{\lambda_{n-1}-\lambda_0}.
+\end{align*}
+
+The Chebyshev polynomials are defined recursively as follows:
+\begin{align*}
+    T_0(x)=1, T_1(x)=x, T_{m+1}(x) = 2xT_m(x)-T_{m-1}(x).
+\end{align*}
+Let $w(x)$ be $2/[1+\delta_{0n}\pi \sqrt{1-x^2}]$. Then,
+\begin{align*}
+    \int_{-1}^{1}w(x)T_m(x)T_n(x)dx = \delta_{mn}
+\end{align*}
+holds, and the Chebyshev polynomials are orthogonal with respect to $w(x)$. Therefore, we can expand DOS and PDOS into a series as follows
+
+\begin{align}
+    \mu(\lambda) &= \sum_{m=1}^{\infty} d_m T^*_m(\lambda) \\
+    \mu_k(\lambda) &=  \sum_{m=1}^{\infty} d_{mk} T^*_m(\lambda) \\
+    d_m &= \int_{-1}^{1}T_m(\lambda)\mu(\lambda)d\lambda = \frac{1}{n}\sum_{i=0}^{n-1}T_{m}(\lambda_i) = \frac{1}{N}\mathrm{tr}(T_m({\mathbf M})) \\
+    d_{mk} &= \int_{-1}^{1}T_m(\lambda)\mu_k(\lambda)d\lambda = \sum_{i=0}^{n-1}|q_i(k)|^2 T_{m}(\lambda_i) = T_m({\mathbf M})_{kk}
+\end{align}
+where $T^*_m = w(x)T(x)$. From the above equation, we need to extract the diagonal elements of T(M) fast in order to calculate DOS and PDOS. This can be done by using stochastic trace estimator \cite{hutchinson1989stochastic} or stochastic diagonal estimator \cite{bekas2007estimator}. The trace can be approximated by Corollary \ref{approxtrace}, and there are various ways to choose random vectors \cite{avron2011randomized}. $diag(T_m({\mathbf M}))$ can be obtained in a similar way.
+
+In practice, it is impossible to expand DOS and PDOS by an infinite number of polynomials, so we must use a finite number of moments. The convergence speed is fast enough so that the number of moments can be small, but such truncation causes Gibbs oscillations. This can be dealt with by using Jackson's smoothing technique \cite{jackson1911genauigkeit,dong2019network}.
 
 
-\chapter{Gallery and Applications of Spectral Distributions}
-\section{Quantitative Evaluation}
-\section{Experiments}
-\subsection{Gallery of DOS/PDOS}
-\subsection{Propaties of Graphs with Similar DOS/PDOS}
+
+
+
 
 \chapter{the Sum of Powers of Eigenvalues of Network (SPENet)}
 Our main purpose is computing sum of k-th powers of eigenvalues $\sum_{i=0}^{n-1} \lambda_i^k$ which we call SPENet. We propose two approximation algorithms (STE and SLQ) based on the stochastic trace estimator and the stochastic Lanczos quadrature. For naive algorithms, the computational complexity of SPENet using full eigendecomposition is $O(n^3)$, while for STE algorithm it is $O(m k n_v)$ and for SLQ algorithm it is $O((ms + ns^2) n_v)$.
@@ -468,6 +494,18 @@ We use 40 real-world small networks\cite{nr}.
 
 \subsection{Approximation Accuracy}
 \subsection{Parameter Sensitivity}
+
+
+
+
+\chapter{Gallery and Applications of Spectral Distributions}
+\section{Quantitative Evaluation}
+\section{Experiments}
+\subsection{Gallery of DOS/PDOS}
+\subsection{Propaties of Graphs with Similar DOS/PDOS}
+
+
+
 
 \chapter{Conclusion}
 
