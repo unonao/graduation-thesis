@@ -2,6 +2,7 @@
 \usepackage{amsmath,amssymb} % mathbb
 \usepackage{amsmath,amsthm} % theorem
 \usepackage{algorithm,algorithmic}
+\usepackage{comment}
 \DeclareMathAlphabet\mathbfcal{OMS}{cmsy}{b}{n}
 \newtheorem{theorem}{Theorem}
 \newtheorem{lemma}{Lemma}
@@ -9,8 +10,8 @@
 \newtheorem{corollary}{Corollary}[theorem]
 % 論文の種類とフォントサイズをオプションに
 %-------------------
-\etitle{Analysis and Approximation Algorithms for Large-Scale Networks Using All Eigenvalues}
-\jtitle{全ての固有値を利用した大規模ネットワークの分析と近似アルゴリズム}
+\etitle{Analysis and Approximation Algorithms for Large-Scale Networks Using Diagonal Elements and All Eigenvalues}
+\jtitle{対角要素と固有値全体を利用した大規模ネットワークの分析と近似アルゴリズム}
 %
 \eauthor{Naoki Murakami}
 \jauthor{村上直輝}
@@ -59,37 +60,12 @@ Large-scale networks appear in many places in our daily lives. For example, IP a
 \section{Spectra and Graphs}
 Spectral graph theory is one powerful tool for understanding the properties of networks. This theory is based on the fact that the properties of a network and its eigenvalues, when expressed as a matrix, are interrelated. However, when considering eigenvalues for real-world networks, only a subset of the eigenvalues have been analyzed due to computational complexity issues, since the computational complexity of obtaining all the eigenvalues is $O(n^3)$ when the number of vertices is $n$. In recent years, approximation algorithms that use all eigenvalues for analysis have been proposed, but this is still an undeveloped field.
 
-\subsection{Sum of Powers of Eigenvalues}
-
-\subsection{Spectral Distributions}
 Recently, an approximation algorithm for the distribution of eigenvalues that scales to large graphs has been proposed. This has made it possible to visualize the distribution of eigenvalues of various networks in the real world. However, a comprehensive analysis of the synthesized graphs and real-world networks has not yet been done.
 
-\subsection{Spectral Distance???}
-
-The Kullback-Leibler Divergence \cite{kullback1951information} is the most popular divergence.
-However, the KLD is assimmetric.
-Several symmetrizations \cite{nielsen2019jensen} were proposed including the jeffreys divergence \cite{jeffreys1946invariant} and the Jensen-Shannon Divergence \cite{lin1991divergence}.
-
-The square root of JS Divergence is called Jensen-Shannnon distance which has been proved to be a valid distance metric \cite{endres2003new}.
-
-Von Neumann entropy,
-Quantum Relative entropy,
-Quentum Jensen-Shannon divergence \cite{briet2009properties, lamberti2008metric}
-
-Inspired by quantum information theory, the concept of von Neumann graph entropy(VNGE) was introduced \cite{braunstein2006laplacian}.
-
-Some approximate algorithms have been developed to compute Von Neumann Graph Entropy\cite{chen2019fast,tsitsulin2020just}.
-
-other network distance metric, NetLSD, was developed \cite{tsitsulin2018netlsd,tsitsulin2020just}.
-
-Motif multiplicity corresponds to eigenvalues multiplicity \cite{mehatari2015effect,dong2019network}.
-
-There are fast online search tool for DOS\cite{borysov2018online,geilhufe2018towards}
-
-The eigenvalues of adjacency matrix and the number of closed walks are closely related\cite{butler2008eigenvalues}.
-
 \section{Our Contributions}
-We study the spectral distribution and the sum of powers of eigenvalues as an analysis using all eigenvalues. First, we propose an approximation algorithm for the sum of powers of eigenvalues that scales to large networks. By applying methods such as stochastic trace estimator and stochastic Lanczos quadrature, the sum of powers of eigenvalues can be calculated in a practical time. Experimental results for the analysis of relative errors are also shown. Second, we visualize and comprehensively summarize the spectral distributions for many synthesized graphs and real-world networks, and discuss methods and applications for treating spectral distributions quantitatively.
+We study the spectral distribution and the sum of powers of eigenvalues as an analysis using all eigenvalues. First, we propose an approximation algorithm for the sum of powers of eigenvalues that scales to large networks. By applying methods such as stochastic trace estimator and stochastic Lanczos quadrature, the sum of powers of eigenvalues can be calculated in a practical time. Experimental results for the analysis of relative errors are also shown.
+
+Second, we discuss the use of the spectral distribution obtained by the method of Kun Dong et al \cite{dong2019network}. Although it is currently used for visualization of the distribution, various concepts of a discrete probability distribution can be used for quantitative evaluation. Next, we show the results of an experiment in which we obtained the spectral distribution for a real-world network. It can be inferred from the experimental results that networks with similar properties have similar spectral distributions. The results of this experiment will be a stepping stone to understanding the properties of networks using spectral distribution.
 
 \chapter{Preliminaries}
 \section{General Notation}
@@ -498,16 +474,53 @@ We use 40 real-world small networks\cite{nr}.
 
 
 
-\chapter{Gallery and Applications of Spectral Distributions}
-\section{Quantitative Evaluation}
+\chapter{Applications and Gallery of Spectral Distributions}
+In this chapter, we discuss applications of the spectral distribution defined in Section 2.5. We then show by experiments how the spectral distributions of various synthesized and real-world graphs look in practice.
+
+\section{Quantitative Evaluation and Application}
+The DOS and PDOS of a network can be approximated by using the Kernel polynomial method as described in Section 2.5.1. However, its usage has not been discussed in-depth, and only the fact that it can be visualized has been emphasized.
+By using this distribution as a discrete probability distribution, it will be possible to evaluate it quantitatively using various concepts such as entropy, divergence, distance.
+
+For each of them, we discuss what advantages and disadvantages they have and compare them with previous studies on similar concepts for networks.
+
+\subsection{Entropy}
+It is possible to calculate the entropy of a spectral distribution expressed as a discrete probability distribution: the entropy of the entire network can be obtained using DOS, and the entropy of each vertex can be obtained using PDOS.
+
+However, Von Neumann graph entropy, a concept similar to the entropy of the entire network, has already been studied \cite{braunstein2006laplacian, chen2019fast,tsitsulin2020just}. It is inspired by the Von Neumann entropy of quantum mechanics and has already been studied not only for applications to divergence and distance but also for applications and properties of the entropy itself. Since there are faster computational methods \cite{chen2019fast,tsitsulin2020just} than those proposed by Kun Dong et al \cite{dong2019network}, there is little advantage in using DOS for entropy .
+On the other hand, the entropy per-vertex may be worth using. By considering the relationship between the size of the entropy of each vertex, it may be possible to calculate the "importance" of each vertex.
+
+
+\subsection{Divergence and Distance}
+By using DOS expressed as a discrete probability distribution, it is possible to define the divergence and distance between networks. For example, Kullback-Leibler divergence \cite{kullback1951information} is famous for its divergence, and since Kullback-Leibler divergence is asymmetric, we can also use the symmetric Jeffreys divergence and Jensen-Shannon divergence \cite{nielsen2019jensen, lin1991divergence, jeffreys1946invariant}. It is also possible to use the Jensen-Shannon distance, which was proved to be a valid distance metric \cite{endres2003new}.
+
+The Von Neumann graph entropy can also be used to define divergence and distance, and various studies have already been conducted on this. In the field of quantum mechanics, divergence and quantum Jensen-Shannon divergence have already been defined \cite{briet2009properties, lamberti2008metric}, and these can be calculated using the Von Neumann graph entropy. However, unlike the method of calculating the divergence and distance using DOS, the divergence and distance obtained via Von Neumann graph entropy cannot be precomputed.
+
+However, the distance called NetLSD has also been defined using the heat kernel, and an approximation algorithm has been established \cite{tsitsulin2018netlsd,tsitsulin2020just}. NetLSD is capable of precomputation and can perform approximate calculations faster than DOS. Therefore, when considering the divergence and distance between networks, there is little advantage in using DOS.
+
+On the other hand, there is an advantage of using PDOS. Usually, the distance between vertices is the length of the shortest path, but with this definition, we can express how similar the properties of the vertices are. This may make it possible to search for vertices with similar properties.
+
+\subsection{Applications}
+
+
 \section{Experiments}
 \subsection{Gallery of DOS/PDOS}
 \subsection{Propaties of Graphs with Similar DOS/PDOS}
 
 
+\begin{comment}
+There are fast online search tool for DOS\cite{borysov2018online,geilhufe2018towards}
+
+
+Motif multiplicity corresponds to eigenvalues multiplicity \cite{mehatari2015effect,dong2019network}.
+
+
+The eigenvalues of adjacency matrix and the number of closed walks are closely related\cite{butler2008eigenvalues}.
+\end{comment}
+
 
 
 \chapter{Conclusion}
+% スペクトル分布の形から性質は推察できる可能性があることを示した。分布の形から定量的に性質を見極めることは難しいし、証明もしていないのでこれからの研究が必要
 
 %-------------------
 \bibliographystyle{plain} % 参考文献
