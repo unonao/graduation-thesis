@@ -468,13 +468,15 @@ There are two main reasons for the error from the exact solution: one is due to 
 Various studies have already been done on the error due to the stochastic trace estimator, such as Haim Avron and Sivan Toledo's work on the error and variance of the trace of a positive semi-definite matrix \cite{avron2011randomized}. The kth power of the Laplacian and normalized Laplacian matrices is a positive semi-definite matrix, while the $k$-th power of the adjacency matrix is a positive semi-definite matrix only when $k$ is even. definite matrix only when $k$ is even.
 
 Let us consider the error due to the Gauss quadrature rule: Suppose $k$ is a positive integer and Lanczos step size is $s$. When $2s-1$ is greater or equal to the degree of $f(x)$, the error of Gauss quadrature rule is zero. The result obtained by the SLQ algorithm is an approximation of the result obtained by the STE algorithm by Gaussian quadrature rule. Therefore, by setting the number of steps s in the SLQ algorithm to a sufficiently large number, the error between the results obtained by the STE algorithm and the results obtained by the SLQ algorithm becomes zero. Also, by reducing the number of steps s to an appropriate value, there will be no significant difference in the computational complexity of the two algorithms while keeping the error at zero.
+If k is not an integer, then the order of the expansion clearly exceeds 2s-1, and the value of the error by the Gauss quadrature rule cannot be determined. The amount of the error can be estimated from (2.2), but it is difficult to obtain it directly.
 
-From the above, it is theoretically possible to obtain some error bounds from existing studies, but the error when running the STE and SLQ algorithms on the adjacency matrix when $k$ is odd is an open problem.
+As described above, it is possible to show the error bound using the contents of previous studies if some conditions are met. However, when k is odd and the STE or SLQ algorithm is applied to the adjacency matrix, or when $k$ is not an integer and the SLQ algorithm is applied, it is open problems to find the error bounds.
 
 \section{Experiments}
 For the SLQ algorithm, we evaluate the error compared to the calculation of the exact solution by experiment: if the step size s of the SLQ algorithm is set to an appropriate value, the difference from the value obtained by the STE algorithm will be zero and the computational complexity will not change significantly, so the STE algorithm is not treated in this experiment. This experiment is performed on a MacBook Pro 2016 with a 2GHz dual-core and 16GB 1867 MHz memory, and we take an average of 10 times for all experiments unless otherwise mentioned.
 
 \subsubsection*{Parameter Settings.}
+Unless otherwise mentioned, the parameters of the SLQ algorithm s=10, Nv = 100, k=4 are used in the experiments for the relative error. In addition, the experiments will show how much the error changes when the parameters are changed.Unless otherwise mentioned, the parameters of the SLQ algorithm s=10, Nv = 100, k=4 are used in the experiments for the relative error. In addition, the experiments will show how much the error changes when the parameters are changed.
 
 \subsubsection*{Datasets.} We use 40 real-world small networks\cite{nr}.
 
@@ -522,8 +524,21 @@ For example, a fast online search algorithm for similar spectra has been propose
 
 \section{Experiments}
 \subsection{Gallery of DOS/PDOS}
+We show the results of DOS and PDOS for synthesized graphs and real-world networks. We use the method proposed by Kun Dong et al. based on the kernel polynomial method (KMP) as described in Section 2.5.1. motif filtering is not used, and the perturbations are smoothed using Jackson damping after calculation using the kernel polynomial method. The perturbations are smoothed using Jackson damping.
+
+If there is a spike in the spectral distribution of the DOS, we zoom in on the DOS so that we can see the lower shape. The red dots mean the values obtained by the KMP-based approximation.
+The PDOS computed for all vertices are sorted and then displayed vertically. Red means that the weight of a part of the spectrum of a vertex is large, while blue means that the weight is small.
+
+\subsubsection*{Parameter Settings.}
+Unless otherwise stated, we use 1000 Chebyshev moments, 20 random vectors, and 51 histogram bins in our experiments.
+
+\subsubsection*{Datasets.}
+% ~の sythesized Graph と、 ~のreal world graph に対して実験する。
+
 
 \subsubsection{Synthesized Graph}
+
+
 \subsubsection{Real-World Network}
 
 \subsection{Propaties of Graphs with Similar DOS/PDOS}
@@ -531,10 +546,33 @@ Motif multiplicity corresponds to eigenvalues multiplicity \cite{mehatari2015eff
 
 
 \chapter{Conclusion}
-% error bounds についての参考文献は提示したが、理論的に求めていない（具体的に提示していない）
-% k が奇数のときに誤差がどのようになるのかの研究が待たれる
+We discussed how to use all the eigenvalues of a large network for analysis and application.
 
-% スペクトル分布の形から性質は推察できる可能性があることを示した。分布の形から定量的に性質を見極めることは難しいし、証明もしていないのでこれからの研究が必要
+First, we proposed the STE algorithm and the SLQ algorithm as algorithms for approximating the sum of the powers of the eigenvalues. These algorithms are the first algorithms for finding SPEs that scale to large graphs. For the Laplacian and normalized Laplacian matrices, good approximations were obtained in most of the experimental cases. For the Laplacian and normalized Laplacian matrices, good approximations were obtained in most experimental cases.
+
+However, when k is an odd number, we found experimentally that the algorithm does not work well for adjacency matrices, such as bipartite graphs or matrices with many closed paths. k is 3, it can be obtained by triangle counting, so it may be better to use another approximation algorithm. In the case of k = 3, it is possible to obtain the result by triangle counting, so it may be better to use another approximation algorithm. There are several types of starting random vectors, and the error bound that can be given depends on which one is chosen. There are some previous studies on the errors generated by stochastic trace estimators, but they do not become positive semi-definite when applied to adjacency matrices with k odd. Also, there is no mention of the error caused by the Gauss quadrature rule when k is a real number. The error bound and variance for these are open problems.
+
+
+Next, the DOS and PDOS of large-scale networks that can be obtained by using the Kernel Polynomial Method are discussed. Although previous studies have shown that the visualization of these values is a great advantage, the specific use of these values is not described in detail. We discussed that for PDOS, quantitative evaluation could be a new evaluation index that would allow comparison among vertices. We also calculated and showed DOS and PDOS for synthesized graphs and real-world networks where the spectral distribution is not yet known. As a result, it can be inferred that networks with a common spectrum would have common properties. This provides a stepping stone for the analysis of networks using spectral distribution.
+
+However, we have not been able to show what the distance between vertices using PDOS means in concrete terms. If we can show some results even experimentally, it will be a clue for the future. Also, the correspondence between the spectral distribution and the nature of the network is only inferred and not formally discussed. It is well known that a random graph has a semicircular spectrum, but it is necessary to show how other shapes correspond to the properties of the network.
+
+\subsection*{Future research}
+To take the analysis of large-scale graphs to the next stage, where only some eigenvalues have been used, it is necessary to conduct research using all eigenvalues.
+
+The following should be done for the sum of powers of eigenvalues.
+\begin{itemize}
+    \item To show the error bounds of the STE/SLQ algorithm.
+    \item To show under what conditions the algorithm does not compute well when k is odd and applied to an adjacency matrix.
+\end{itemize}
+
+For DOS and PDOS, the following are desired
+\begin{itemize}
+    \item To show what other applications are possible by quantitative evaluation of DOS and PDOS.
+    \item To show the meaning of the distance between vertices using PDOS.
+    \item To show the correspondence between the spectral distribution and the properties of the network.
+\end{itemize}
+
 
 %-------------------
 \bibliographystyle{plain} % 参考文献
