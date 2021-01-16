@@ -388,19 +388,6 @@ By using theorem \ref{power_eigenvalues} and \ref{approxtraceUniformed}, we can 
 
 The product of two matrices costs $O(n^3)$, but the product of a vector and a sparse matrix costs only $O(m)$. Therefore, when calculating $\mathbf{z}_i^{T}{\mathbf M}^k\mathbf{z}_i$, we just calculate the product of a vector and a matrix k times, and the inner product of a vector once from the left. From the above, the cost of the STE algorithm will be $O(mkn_v)$.
 
-
-\subsection{SLQ algorithm}
-The second estimation method for SPENet is based on the stochastic Lanczos quadrature(SLQ), which we apply in our setting for the trace of power of matrix $f({\mathbf M})={\mathbf M}^k$. We are interested in the case where ${\mathbf M} = {\mathbf A}, {\mathbf L}, \text{or} {\mathbfcal L}$. In this algorithm, the index of power $k$ must be positve real number.
-
-By using theorem 1 and (2.4), we can estimate SPENet.
-\begin{align}
-    \sum_{i=0}^{n-1} \lambda_i^k &= \mathrm{tr}({\mathbf M}^k)  \nonumber\\
-    &= \mathbb{E}_{p(\mathbf{x})}[\mathbf{x}^{T}{\mathbf M}^k \mathbf{x}] \approx \frac{n}{n_v}\sum_{i=0}^{n_v-1} \mathbf{z}_i^{T}{\mathbf M}^k\mathbf{z}_i \nonumber\\
-    &\approx \frac{n}{n_v} \sum_{i=0}^{n_v-1}\left(\sum_{j=0}^{s-1} (\tau_j^i)^2 (\theta_j^i)^k \right)
-\end{align}
-Since we apply s-step Lanczos algorithm for $\tau_k^i$ and $\theta_k^i$, the orthogonalization cost inside the Lanczos algorithm is $O(ns^2)$ and the cost of the product of a vector and a matrix s times in the Lanczos algorithm is $O(ms)$. From the above, all the computational cost of SLQ algorithm is $O((ms+ns^2)n_v)$.
-
-
 \begin{algorithm}
     \caption{STE algorithm}
     \begin{algorithmic}[1]
@@ -422,12 +409,25 @@ Since we apply s-step Lanczos algorithm for $\tau_k^i$ and $\theta_k^i$, the ort
     \end{algorithmic}
 \end{algorithm}
 
+\subsection{SLQ algorithm}
+The second estimation method for SPENet is based on the stochastic Lanczos quadrature(SLQ), which we apply in our setting for the trace of power of matrix $f({\mathbf M})={\mathbf M}^k$. We are interested in the case where ${\mathbf M} = {\mathbf A}, {\mathbf L}, \text{or} {\mathbfcal L}$. In this algorithm, the index of power $k$ must be positve real number.
+
+By using theorem 1 and (2.4), we can estimate SPENet.
+\begin{align}
+    \sum_{i=0}^{n-1} \lambda_i^k &= \mathrm{tr}({\mathbf M}^k)  \nonumber\\
+    &= \mathbb{E}_{p(\mathbf{x})}[\mathbf{x}^{T}{\mathbf M}^k \mathbf{x}] \approx \frac{n}{n_v}\sum_{i=0}^{n_v-1} \mathbf{z}_i^{T}{\mathbf M}^k\mathbf{z}_i \nonumber\\
+    &\approx \frac{n}{n_v} \sum_{i=0}^{n_v-1}\left(\sum_{j=0}^{s-1} (\tau_j^i)^2 (\theta_j^i)^k \right)
+\end{align}
+Since we apply s-step Lanczos algorithm for $\tau_k^i$ and $\theta_k^i$, the orthogonalization cost inside the Lanczos algorithm is $O(ns^2)$ and the cost of the product of a vector and a matrix s times in the Lanczos algorithm is $O(ms)$. From the above, all the computational cost of SLQ algorithm is $O((ms+ns^2)n_v)$.
+
+
+
 \begin{algorithm}
     \caption{SLQ algorithm}
     \begin{algorithmic}[1]
     \renewcommand{\algorithmicrequire}{\textbf{Input:}}
     \renewcommand{\algorithmicensure}{\textbf{Output:}}
-    \REQUIRE a real symmetric matrix ${\mathbf M} \in {\mathbb R}^{n\times n}$, a positive real number $k$, and $n_v$.
+    \REQUIRE a real symmetric matrix ${\mathbf M} \in {\mathbb R}^{n\times n}$, a positive real number $k$, a positive integer $n_v$ and $s$.
     \ENSURE  Approximate sum of k-th powers of eigenvalues $\sum_{i=0}^{n-1} \lambda_i^k$
      \FOR {$i = 0$ to $n_v-1$}
      \STATE Generate a random vector $\mathbf{x}_i$ with the standard normal distribution.
@@ -463,15 +463,26 @@ If $k$ is a positive real number and ${\mathbf M}={\mathbf A}$, the SPENet $\sum
   \end{table}
 
 \section{Error bounds}
-Suppose $k$ is a positive integer and Lanczos step size is $s$. When $2s-1$ is greater or equal to the degree of $f(x)$, the error of Gauss quadrature rule is zero.
+There are two main reasons for the error from the exact solution: one is due to the stochastic trace estimator and the other is due to the Gauss quadrature rule.
+
+Various studies have already been done on the error due to the stochastic trace estimator, such as Haim Avron and Sivan Toledo's work on the error and variance of the trace of a positive semi-definite matrix \cite{avron2011randomized}. The kth power of the Laplacian and normalized Laplacian matrices is a positive semi-definite matrix, while the $k$-th power of the adjacency matrix is a positive semi-definite matrix only when $k$ is even. definite matrix only when $k$ is even.
+
+Let us consider the error due to the Gauss quadrature rule: Suppose $k$ is a positive integer and Lanczos step size is $s$. When $2s-1$ is greater or equal to the degree of $f(x)$, the error of Gauss quadrature rule is zero. The result obtained by the SLQ algorithm is an approximation of the result obtained by the STE algorithm by Gaussian quadrature rule. Therefore, by setting the number of steps s in the SLQ algorithm to a sufficiently large number, the error between the results obtained by the STE algorithm and the results obtained by the SLQ algorithm becomes zero. Also, by reducing the number of steps s to an appropriate value, there will be no significant difference in the computational complexity of the two algorithms while keeping the error at zero.
+
+From the above, it is theoretically possible to obtain some error bounds from existing studies, but the error when running the STE and SLQ algorithms on the adjacency matrix when $k$ is odd is an open problem.
 
 \section{Experiments}
-We evaluate computational time and variance of SPENet using STE and SLQ algorithm. Additionally, we evaluate its relative error against the exact computation of the eigenvalues where allowed by the graph size. We perform our experiments averating 10 times for all experiments unless stated otherwise.
+For the SLQ algorithm, we evaluate the error compared to the calculation of the exact solution by experiment: if the step size s of the SLQ algorithm is set to an appropriate value, the difference from the value obtained by the STE algorithm will be zero and the computational complexity will not change significantly, so the STE algorithm is not treated in this experiment. This experiment is performed on a MacBook Pro 2016 with a 2GHz dual-core and 16GB 1867 MHz memory, and we take an average of 10 times for all experiments unless otherwise mentioned.
 
-We use 40 real-world small networks\cite{nr}.
-\subsection{Parameter Settings}
+\subsubsection*{Parameter Settings.}
+
+\subsubsection*{Datasets.} We use 40 real-world small networks\cite{nr}.
+
 
 \subsection{Approximation Accuracy}
+
+\subsection{Problem when $k$ is odd}
+
 \subsection{Parameter Sensitivity}
 
 
@@ -484,7 +495,9 @@ In this chapter, we discuss applications of the spectral distribution defined in
 The DOS and PDOS of a network can be approximated by using the Kernel polynomial method as described in Section 2.5.1. However, its usage has not been discussed in-depth, and only the fact that it can be visualized has been emphasized.
 By using this distribution as a discrete probability distribution, it will be possible to evaluate it quantitatively using various concepts such as entropy, divergence, distance.
 
-For each of them, we discuss what advantages and disadvantages they have and compare them with previous studies on similar concepts for networks.
+For each of them, we discuss what advantages and disadvantages they have and compare them with previous studies on similar concepts for networks. As for DOS, even if it becomes possible to evaluate quantitatively by defining entropy, divergence, and distance, similar concepts already exist and can be calculated faster than the method of Kun Dong et al. Therefore, it is not clear at this stage whether there is any advantage in using DOS to evaluate quantitatively.
+
+On the other hand, since there is no similar concept for PDOS, being able to evaluate it quantitatively is a great advantage. In particular, PDOS makes it possible to calculate the distance based on the structure of the network, rather than the shortest distance between vertices.
 
 \subsection{Entropy}
 It is possible to calculate the entropy of a spectral distribution expressed as a discrete probability distribution: the entropy of the entire network can be obtained using DOS, and the entropy of each vertex can be obtained using PDOS.
@@ -503,21 +516,33 @@ However, the distance called NetLSD has also been defined using the heat kernel,
 On the other hand, there is an advantage of using PDOS. Usually, the distance between vertices is the length of the shortest path, but with this definition, we can express how similar the properties of the vertices are. This may make it possible to search for vertices with similar properties.
 
 \subsection{Applications}
-There are fast online search tool for spectral distributions \cite{borysov2018online,geilhufe2018towards}
+The spectral distribution for networks has not been studied yet, but the spectral distribution for materials has already been studied in the field of condensed matter physics and other fields. It is possible to apply ideas from these fields to networks as well.
+
+For example, a fast online search algorithm for similar spectra has been proposed \cite{borysov2018online,geilhufe2018towards}, and since DOS and PDOS are capable of precomputation, the results of the calculation can be stored in a database for fast search of networks with similar spectra. In this case, it is necessary to define the distance between two networks, which can be expressed as a vector by considering DOS as a discrete distribution, and Euclidean distance and cosine distance can be used.
 
 \section{Experiments}
 \subsection{Gallery of DOS/PDOS}
+
+\subsubsection{Synthesized Graph}
+\subsubsection{Real-World Network}
+
 \subsection{Propaties of Graphs with Similar DOS/PDOS}
 Motif multiplicity corresponds to eigenvalues multiplicity \cite{mehatari2015effect,dong2019network}.
 
 
-
-
 \chapter{Conclusion}
+% error bounds についての参考文献は提示したが、理論的に求めていない（具体的に提示していない）
+% k が奇数のときに誤差がどのようになるのかの研究が待たれる
+
 % スペクトル分布の形から性質は推察できる可能性があることを示した。分布の形から定量的に性質を見極めることは難しいし、証明もしていないのでこれからの研究が必要
 
 %-------------------
 \bibliographystyle{plain} % 参考文献
 \bibliography{myref} %
 %-------------------
+
+
+\appendix
+
+
 \end{document}
