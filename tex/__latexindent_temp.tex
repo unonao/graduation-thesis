@@ -3,6 +3,9 @@
 \usepackage{amsmath,amsthm} % theorem
 \usepackage{algorithm,algorithmic}
 \usepackage{comment}
+\usepackage[dvipdfmx]{graphicx}
+
+
 \DeclareMathAlphabet\mathbfcal{OMS}{cmsy}{b}{n}
 \newtheorem{theorem}{Theorem}
 \newtheorem{lemma}{Lemma}
@@ -476,18 +479,78 @@ As described above, it is possible to show the error bound using the contents of
 For the SLQ algorithm, we evaluate the error compared to the calculation of the exact solution by experiment: if the step size s of the SLQ algorithm is set to an appropriate value, the difference from the value obtained by the STE algorithm will be zero and the computational complexity will not change significantly, so the STE algorithm is not treated in this experiment. This experiment is performed on a MacBook Pro 2016 with a 2GHz dual-core and 16GB 1867 MHz memory, and we take an average of 10 times for all experiments unless otherwise mentioned.
 
 \subsubsection*{Parameter Settings.}
-Unless otherwise mentioned, the parameters of the SLQ algorithm s=10, Nv = 100, k=4 are used in the experiments for the relative error. In addition, the experiments will show how much the error changes when the parameters are changed.Unless otherwise mentioned, the parameters of the SLQ algorithm s=10, Nv = 100, k=4 are used in the experiments for the relative error. In addition, the experiments will show how much the error changes when the parameters are changed.
+Unless otherwise mentioned, the parameters of the SLQ algorithm s=10, Nv = 100, k=4 are used in the experiments for the relative error. In addition, the experiments will show how much the error changes when the parameters are changed.
 
-\subsubsection*{Datasets.} We use 40 real-world small networks\cite{nr}.
-
+\subsubsection*{Datasets.}
+We use 40 real-world small networks \cite{nr}. Detailed data can be found in table \ref{tab:data_spe}. Networks with a small number of vertices are used so that accurate SPENet values can be calculated for comparison with approximate values by the SQL algorithm.
 
 \subsection{Approximation Accuracy}
 
-\subsection{Problem when $k$ is odd}
+\begin{figure}[htbp]
+    \begin{center}
+      \begin{tabular}{c}
+          % 1
+        \begin{minipage}{0.5\hsize}
+          \begin{center}
+            \includegraphics[clip, width=7cm]{./figure/plot_each_graph_k3.png}
+            \hspace{1.6cm} k=3
+          \end{center}
+        \end{minipage}
+          % 2
+        \begin{minipage}{0.5\hsize}
+          \begin{center}
+            \includegraphics[clip, width=7cm]{./figure/plot_each_graph_k4.png}
+            \hspace{1.6cm} k=4
+          \end{center}
+        \end{minipage}
+
+      \end{tabular}
+      \caption{Relative error of SPENet obtained by SQL algorithm.}
+      \label{fig:error_each_graph}
+    \end{center}
+  \end{figure}
+
+We experiment to see how accurately the SQL algorithm can approximate the data. We calculate the SPENet for each of the adjacency matrix, Laplacian matrix, and normalized Laplacian matrix for 40 real-world networks, and illustrate the relative error between the exact values and the values obtained by the SQL algorithm. Figure \ref{fig:error_each_graph} show the results. The detailed values of the relative errors between the exact values of SPENet and the values obtained by the SQL algorithm can be found in Table \ref{tab:rel_error_k3}, \ref{tab:rel_error_k4}.
+
+For the Laplacian and normalized laplacian matrices, the relative error does not change significantly when k is changed. We also conduct experiments with $k = 3.5$ and $4.5$, and the results are similar. However, for the adjacency matrix, the relative error for $k=3$ and $k=4$ differed greatly. This is obviously related to whether ${\mathbf A}^k$ is positive semi-definite or not. For some graphs, the value of the exact solution is 0, and the relative error cannot be defined (Table \ref{tab:rel_error_k3}).
 
 \subsection{Parameter Sensitivity}
 
+\begin{figure}[htbp]
+    \begin{center}
+      \begin{tabular}{c}
+          % 1
 
+        \begin{minipage}{0.33\hsize}
+            \begin{center}
+              \includegraphics[clip, width=4.5cm]{./figure/plot_param_nv.png}
+              \hspace{1.6cm} (a) Number of random starting vectors $n_v$
+            \end{center}
+        \end{minipage}
+
+        \begin{minipage}{0.33\hsize}
+          \begin{center}
+            \includegraphics[clip, width=4.5cm]{./figure/plot_param_s.png}
+            \hspace{1.6cm} (b) Number of Lanczos iterations $s$
+          \end{center}
+        \end{minipage}
+
+        \begin{minipage}{0.33\hsize}
+          \begin{center}
+            \includegraphics[clip, width=4.5cm]{./figure/plot_param_k.png}
+            \hspace{1.6cm} (c) Power $k$
+          \end{center}
+        \end{minipage}
+
+      \end{tabular}
+      \caption{Parameter sensitivity of SLQ algorithm with (a) different number of starting vectors $n_v$, (b) different number of Lanczos iterations $s$ (when $k=4.5$), and (c) different number of power $k$. }
+      \label{fig:param_sensitivity}
+    \end{center}
+  \end{figure}
+
+We investigate how the relative error changes when the parameters change: the number of random starting vectors $n_v$, the step size of the Lanczos algorithm $s$, and power $k$. We calculate the relative error and take the average for 40 real-world networkswith respect to the number of random starting vectors $n_v$, the number of Lanczos iterations $s$ and power $k$ and show the results in the Figure \ref{fig:param_sensitivity}.
+
+There are two sources of error: the stochastic trace estimator and the Gauss quadrature rule. In the experiment in Figure \ref{fig:param_sensitivity}(b), we set $k=4.5$ in order to consider the effect of Lanczos iterations $s$ on the error derived from the Gauss quadrature rule. If $k$ is an integer, the error due to the Gauss quadrature rule becomes 0 when $k \leq 2s-1$. Figure \ref{fig:param_sensitivity}(b) shows that a small value of iterations is sufficient, and the error due to the Gauss quadrature rule is almost negligible if the value is above a certain level. Figure \ref{fig:param_sensitivity}(b) shows that a small value of iterations is sufficient, and the error due to the Gauss quadrature rule is almost negligible for a certain value.
 
 
 \chapter{Applications and Gallery of Spectral Distributions}
@@ -579,8 +642,168 @@ For DOS and PDOS, the following are desired
 \bibliography{myref} %
 %-------------------
 
-
 \appendix
+\chapter{Data Source and Characteristics}
+\begin{table}[htb]
+    \begin{center}
+      \scalebox{0.75}{
+      \begin{tabular}{l | c c c c c}
+        Graph & $|V|$ & $|E|$ & AVg. deg. & Density & weighted/unweighted  \\ \hline
+        bio-celegans & 453 & 2025 & 8.94 & 9.89e-03 & unweighted\\
+        bio-celegans-dir & 453 & 2040 & 9.01 & 9.96e-03 & unweighted\\
+        bio-diseasome & 516 & 1188 & 4.60 & 4.47e-03 & unweighted\\
+        ENZYMES\_g295 & 123 & 139 & 2.26 & 9.26e-03 & unweighted\\
+        ENZYMES\_g296 & 125 & 141 & 2.26 & 9.10e-03 & unweighted\\
+        ENZYMES\_g297 & 121 & 149 & 2.46 & 1.03e-02 & unweighted\\
+        ia-crime-moreno & 829 & 1475 & 3.56 & 2.15e-03 & unweighted\\
+        ia-email-univ & 1133 & 5451 & 9.62 & 4.25e-03 & unweighted\\
+        ia-enron-only & 143 & 623 & 8.71 & 3.07e-02 & unweighted\\
+        ia-fb-messages & 1266 & 6451 & 10.19 & 4.03e-03 & unweighted\\
+        ia-infect-dublin & 410 & 2765 & 13.49 & 1.65e-02 & unweighted\\
+        ia-infect-hyper & 113 & 2196 & 38.87 & 1.74e-01 & unweighted\\
+        adjnoun & 112 & 425 & 7.59 & 3.42e-02 & unweighted\\
+        bcspwr03 & 118 & 297 & 5.03 & 2.15e-02 & unweighted\\
+        bibd\_9\_5 & 126 & 1217 & 19.32 & 7.73e-02 & unweighted\\
+        can\_144 & 144 & 720 & 10.00 & 3.50e-02 & unweighted\\
+        polbooks & 105 & 441 & 8.40 & 4.04e-02 & unweighted\\
+        flower\_4\_1 & 129 & 380 & 5.89 & 2.30e-02 & unweighted\\
+        fs-adjnoun\_adj\_copperfield & 112 & 425 & 7.59 & 3.42e-02 & unweighted\\
+        GD06\_theory & 101 & 190 & 3.76 & 1.88e-02 & unweighted\\
+        GD96\_b & 111 & 193 & 3.48 & 1.58e-02 & unweighted\\
+        GD98\_b & 121 & 132 & 2.18 & 9.09e-03 & unweighted\\
+        GD98\_c & 112 & 168 & 3.00 & 1.35e-02 & unweighted\\
+        GD99\_c & 105 & 120 & 2.29 & 1.10e-02 & unweighted\\
+        gent113 & 113 & 639 & 11.31 & 5.05e-02 & unweighted\\
+        bio-CE-GT & 924 & 3239 & 7.01 & 3.80e-03 & weighted\\
+        bio-CE-LC & 1387 & 1648 & 2.38 & 8.57e-04 & weighted\\
+        bio-DM-LC & 658 & 1129 & 3.43 & 2.61e-03 & weighted\\
+        bio-SC-TS & 636 & 3959 & 12.45 & 9.80e-03 & weighted\\
+        eco-florida & 128 & 2075 & 32.42 & 1.28e-01 & weighted\\
+        eco-foodweb-baydry & 128 & 2106 & 32.91 & 1.30e-01 & weighted\\
+        gre\_115 & 115 & 382 & 6.64 & 2.91e-02 & weighted\\
+        gre\_185 & 185 & 835 & 9.03 & 2.45e-02 & weighted\\
+        IG5-7 & 136 & 549 & 8.07 & 2.99e-02 & weighted\\
+        jazz & 198 & 2742 & 27.70 & 7.03e-02 & weighted\\
+        misc-football & 115 & 612 & 10.64 & 4.67e-02 & weighted\\
+        rw136 & 136 & 373 & 5.49 & 2.03e-02 & weighted\\
+        TF10 & 107 & 579 & 10.82 & 5.10e-02 & weighted\\
+        Trefethen\_150 & 150 & 1095 & 14.60 & 4.90e-02 & weighted\\
+        Trefethen\_200b & 199 & 1536 & 15.44 & 3.90e-02 & weighted\\
+      \end{tabular}
+      }
+      \caption{Characteristics of 40 small real-world networks used in Chapter 3 which come from NETWORK REPOSITORY; number of vertices $|V|$, number of edges $|E|$, average node degree, density of graph $|E|/ \binom{|V|}{2}$, weighted or unweighted graph}
+      \label{tab:data_spe}
+    \end{center}
+  \end{table}
+
+\chapter{Detailed Experimental Results on SPENet}
+
+\begin{table}[htb]
+    \begin{center}
+      \scalebox{0.80}{
+      \begin{tabular}{l | c c | c c | c c }
+             & \multicolumn{2}{c}{${\mathbf A}$} & \multicolumn{2}{c}{${\mathbf L}$} & \multicolumn{2}{c}{${\mathbfcal L}$} \\
+        Graph & exact & rel. error & exact & rel. error & exact & rel. error  \\ \hline
+        bio-celegans & 1.970e+04 & 0.12352 & 2.106e+07 & 0.06977 & 5.931e+02 & 0.00302\\
+        bio-celegans-dir & 2.130e+04 & 0.15158 & 2.106e+07 & 0.09613 & 5.825e+02 & 0.00403\\
+        bio-diseasome & 8.160e+03 & 0.03805 & 4.305e+05 & 0.04023 & 8.243e+02 & 0.00559\\
+        ENZYMES\_g295 & 1.200e+01 & 0.51855 & 4.238e+03 & 0.01685 & 2.880e+02 & 0.00933\\
+        ENZYMES\_g296 & 1.200e+01 & 0.83381 & 4.050e+03 & 0.01630 & 2.931e+02 & 0.01071\\
+        ENZYMES\_g297 & 5.400e+01 & 0.21166 & 5.458e+03 & 0.02121 & 2.710e+02 & 0.00949\\
+        ia-crime-moreno & 1.640e+02 & 0.73894 & 2.284e+05 & 0.00732 & 1.431e+03 & 0.00475\\
+        ia-email-univ & 3.206e+04 & 0.03573 & 6.076e+06 & 0.01340 & 1.496e+03 & 0.00352\\
+        ia-enron-only & 5.334e+03 & 0.05443 & 3.260e+05 & 0.02250 & 1.929e+02 & 0.00604\\
+        ia-fb-messages & 1.495e+04 & 0.26510 & 1.793e+07 & 0.02107 & 1.644e+03 & 0.00211\\
+        ia-infect-dublin & 4.268e+04 & 0.04542 & 2.653e+06 & 0.01041 & 5.074e+02 & 0.00514\\
+        ia-infect-hyper & 1.012e+05 & 0.08505 & 1.201e+07 & 0.01640 & 1.204e+02 & 0.00355\\
+        adjnoun & 1.704e+03 & 0.13554 & 3.067e+05 & 0.03379 & 1.532e+02 & 0.01010\\
+        bcspwr03 & 1.330e+03 & 0.01962 & 1.052e+04 & 0.02238 & 8.858e+01 & 0.01124\\
+        bibd\_9\_5 & 1.734e+04 & 0.08087 & 2.941e+06 & 0.02195 & 1.379e+02 & 0.00534\\
+        can\_144 & 9.072e+03 & 0.02465 & 1.348e+05 & 0.00642 & 1.274e+02 & 0.00321\\
+        polbooks & 3.360e+03 & 0.07925 & 1.942e+05 & 0.01643 & 1.388e+02 & 0.00502\\
+        flower\_4\_1 & 2.960e+02 & 0.22451 & 4.469e+04 & 0.01172 & 1.888e+02 & 0.01103\\
+        fs-adjnoun\_adj\_copperfield & 1.704e+03 & 0.12304 & 3.067e+05 & 0.04755 & 1.532e+02 & 0.01067\\
+        GD06\_theory & 0.000e+00 & inf & 8.252e+04 & 0.05384 & 1.297e+02 & 0.01430\\
+        GD96\_b & 0.000e+00 & inf & 1.705e+05 & 0.04754 & 1.643e+02 & 0.00865\\
+        GD98\_b & 0.000e+00 & inf & 9.006e+03 & 0.04821 & 2.525e+02 & 0.01202\\
+        GD98\_c & 0.000e+00 & inf & 6.048e+03 & 0.01085 & 2.240e+02 & 0.01085\\
+        GD99\_c & 1.200e+01 & 0.47025 & 4.188e+03 & 0.01764 & 2.336e+02 & 0.01331\\
+        gent113 & 5.718e+03 & 0.06876 & 2.759e+05 & 0.01604 & 9.869e+01 & 0.01053\\
+        bio-CE-GT & 2.892e+05 & 0.13453 & 1.462e+08 & 0.03521 & 1.247e+03 & 0.00370\\
+        bio-CE-LC & 2.756e+04 & 0.11485 & 1.754e+07 & 0.07303 & 2.628e+03 & 0.00551\\
+        bio-DM-LC & 4.865e+04 & 0.46453 & 2.852e+07 & 0.04627 & 1.338e+03 & 0.00463\\
+        bio-SC-TS & 1.211e+07 & 0.10717 & 8.366e+08 & 0.01198 & 1.149e+03 & 0.00299\\
+        eco-florida & 5.750e+07 & 0.31274 & 3.990e+09 & 0.07063 & 1.410e+02 & 0.00527\\
+        eco-foodweb-baydry & 1.343e+07 & 0.83741 & 1.751e+09 & 0.08539 & 1.406e+02 & 0.00497\\
+        gre\_115 & 6.026e+01 & 0.01424 & 1.452e+02 & 0.00824 & 5.337e+01 & 0.01071\\
+        gre\_185 & 5.860e+01 & 0.01398 & 3.152e+02 & 0.01621 & 1.511e+02 & 0.01107\\
+        IG5-7 & 0.000e+00 & inf & 2.173e+06 & 0.03258 & 1.826e+02 & 0.00755\\
+        jazz & 8.592e+05 & 0.11688 & 8.523e+07 & 0.01249 & 2.221e+02 & 0.00566\\
+        misc-football & 4.920e+03 & 0.04891 & 1.789e+05 & 0.00721 & 1.437e+02 & 0.00653\\
+        rw136 & 1.689e+01 & 0.12035 & 7.461e+02 & 0.01435 & 2.336e+02 & 0.01304\\
+        TF10 & 1.132e+04 & 0.05180 & 6.611e+05 & 0.01038 & 1.382e+02 & 0.00976\\
+        Trefethen\_150 & 2.164e+10 & 0.01076 & 3.739e+05 & 0.00711 & 2.241e+00 & 0.05102\\
+        Trefethen\_200b & 8.051e+10 & 0.00708 & 5.962e+05 & 0.00356 & 1.553e+00 & 0.05127\\
+      \end{tabular}
+      }
+      \caption{The relative error between the exact value of SPENet and the value obtained by the SLQ algorithm when $k=3$, $Nv = 100$, $s= 10$. The relative error is the average of 10 results.}
+      \label{tab:rel_error_k3}
+    \end{center}
+  \end{table}
+
+
+\begin{table}[htb]
+    \begin{center}
+      \scalebox{0.80}{
+      \begin{tabular}{l | c c | c c | c c }
+             & \multicolumn{2}{c}{${\mathbf A}$} & \multicolumn{2}{c}{${\mathbf L}$} & \multicolumn{2}{c}{${\mathbfcal L}$} \\
+        Graph & exact & rel. error & exact & rel. error & exact & rel. error  \\ \hline
+        bio-celegans & 7.231e+05 & 0.10165 & 3.903e+09 & 0.09142 & 7.305e+02 & 0.00376\\
+        bio-celegans-dir & 7.400e+05 & 0.12676 & 3.903e+09 & 0.12592 & 7.121e+02 & 0.00490\\
+        bio-diseasome & 8.139e+04 & 0.04701 & 1.251e+07 & 0.06481 & 1.128e+03 & 0.00689\\
+        ENZYMES\_g295 & 1.162e+03 & 0.01531 & 2.045e+04 & 0.02080 & 4.911e+02 & 0.01160\\
+        ENZYMES\_g296 & 1.150e+03 & 0.01407 & 1.869e+04 & 0.02107 & 5.004e+02 & 0.01078\\
+        ENZYMES\_g297 & 1.450e+03 & 0.01923 & 2.962e+04 & 0.02715 & 4.530e+02 & 0.01049\\
+        ia-crime-moreno & 3.480e+04 & 0.01244 & 3.337e+06 & 0.01188 & 2.127e+03 & 0.00558\\
+        ia-email-univ & 7.453e+05 & 0.02937 & 2.157e+08 & 0.02051 & 1.873e+03 & 0.00475\\
+        ia-enron-only & 7.669e+04 & 0.04794 & 7.964e+06 & 0.03969 & 2.428e+02 & 0.00760\\
+        ia-fb-messages & 1.218e+06 & 0.06120 & 1.188e+09 & 0.03189 & 2.050e+03 & 0.00258\\
+        ia-infect-dublin & 8.518e+05 & 0.04651 & 7.534e+07 & 0.01554 & 5.974e+02 & 0.00643\\
+        ia-infect-hyper & 4.883e+06 & 0.08284 & 7.556e+08 & 0.02045 & 1.269e+02 & 0.00463\\
+        adjnoun & 4.320e+04 & 0.06417 & 1.046e+07 & 0.04831 & 1.971e+02 & 0.01300\\
+        bcspwr03 & 5.436e+03 & 0.02216 & 7.290e+04 & 0.03299 & 1.020e+02 & 0.01529\\
+        bibd\_9\_5 & 6.324e+05 & 0.05986 & 1.257e+08 & 0.02347 & 1.507e+02 & 0.00868\\
+        can\_144 & 7.646e+04 & 0.02932 & 1.709e+06 & 0.00855 & 1.329e+02 & 0.00442\\
+        polbooks & 4.824e+04 & 0.07557 & 3.853e+06 & 0.01953 & 1.708e+02 & 0.00665\\
+        flower\_4\_1 & 9.484e+03 & 0.02650 & 4.010e+05 & 0.01381 & 2.562e+02 & 0.01270\\
+        fs-adjnoun\_adj\_copperfield & 4.320e+04 & 0.05895 & 1.046e+07 & 0.06645 & 1.971e+02 & 0.01309\\
+        GD06\_theory & 8.840e+03 & 0.03902 & 1.640e+06 & 0.05468 & 1.637e+02 & 0.02272\\
+        GD96\_b & 1.443e+04 & 0.05902 & 7.043e+06 & 0.06453 & 2.303e+02 & 0.01194\\
+        GD98\_b & 1.812e+03 & 0.02810 & 7.851e+04 & 0.06398 & 4.118e+02 & 0.01475\\
+        GD98\_c & 1.680e+03 & 0.01447 & 2.890e+04 & 0.01255 & 3.567e+02 & 0.01255\\
+        GD99\_c & 1.136e+03 & 0.01994 & 2.102e+04 & 0.02195 & 3.913e+02 & 0.01650\\
+        gent113 & 1.087e+05 & 0.05440 & 5.333e+06 & 0.02310 & 1.090e+02 & 0.01618\\
+        bio-CE-GT & 2.126e+07 & 0.08734 & 3.670e+10 & 0.05054 & 1.564e+03 & 0.00461\\
+        bio-CE-LC & 2.606e+06 & 0.02000 & 2.345e+09 & 0.09681 & 4.175e+03 & 0.00680\\
+        bio-DM-LC & 1.866e+07 & 0.06872 & 3.716e+09 & 0.05626 & 2.186e+03 & 0.00549\\
+        bio-SC-TS & 2.650e+09 & 0.11070 & 1.870e+11 & 0.01229 & 1.767e+03 & 0.00434\\
+        eco-florida & 1.564e+11 & 0.04700 & 4.221e+12 & 0.08246 & 1.552e+02 & 0.00962\\
+        eco-foodweb-baydry & 6.110e+10 & 0.04625 & 1.553e+12 & 0.10027 & 1.546e+02 & 0.00915\\
+        gre\_115 & 6.711e+01 & 0.01706 & 2.164e+02 & 0.01267 & 5.662e+01 & 0.01705\\
+        gre\_185 & 7.057e+01 & 0.01469 & 5.120e+02 & 0.02223 & 1.845e+02 & 0.01453\\
+        IG5-7 & 1.894e+06 & 0.05269 & 1.275e+08 & 0.03817 & 2.348e+02 & 0.01136\\
+        jazz & 5.872e+07 & 0.12467 & 9.929e+09 & 0.01878 & 2.431e+02 & 0.00742\\
+        misc-football & 5.780e+04 & 0.03688 & 2.280e+06 & 0.00948 & 1.688e+02 & 0.00799\\
+        rw136 & 8.680e+01 & 0.01732 & 1.652e+03 & 0.01809 & 3.390e+02 & 0.01601\\
+        TF10 & 3.425e+05 & 0.02770 & 1.518e+07 & 0.01370 & 1.752e+02 & 0.01412\\
+        Trefethen\_150 & 1.498e+13 & 0.01296 & 5.616e+06 & 0.00902 & 1.561e+00 & 0.06509\\
+        Trefethen\_200b & 7.826e+13 & 0.00896 & 9.494e+06 & 0.00417 & 9.466e-01 & 0.06762\\
+      \end{tabular}
+      }
+      \caption{The relative error between the exact value of SPENet and the value obtained by the SLQ algorithm when $k=4$, $Nv = 100$, $s= 10$. The relative error is the average of 10 results.}
+      \label{tab:rel_error_k4}
+    \end{center}
+  \end{table}
 
 
 \end{document}
