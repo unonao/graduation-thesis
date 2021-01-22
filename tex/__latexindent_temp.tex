@@ -4,7 +4,7 @@
 \usepackage{algorithm,algorithmic}
 \usepackage{comment}
 \usepackage[dvipdfmx]{graphicx}
-
+\usepackage{subfig}
 
 \DeclareMathAlphabet\mathbfcal{OMS}{cmsy}{b}{n}
 \newtheorem{theorem}{Theorem}
@@ -38,7 +38,7 @@
 
     まず、本研究では大規模ネットワークにスケールするような、固有値の累乗の合計値 $\sum_{i=0}^{n-1} \lambda_i^k$ をもとめる近似アルゴリズムを2つ提案する。固有値の累乗の合計値は重要な性質を持っており、近年は関係した不等式の研究なども行われている。しかし、固有値の累乗の合計値を計算する従来の単純なアルゴリズムでは大規模グラフにスケールしなかった。本研究の提案手法により実用的な時間で、数百万や数十億単位の頂点を持つネットワークについて固有値の累乗の合計値を計算することが可能になった。 これにより、ネットワークに対する新たな指標として、固有値の累乗の合計値というものが利用可能となる。
 
-    本研究は、提案手法と同様の手法に基づいたアルゴリズムによって得ることができるスペクトル分布についても研究する。近年スペクトル全体の分布を計算する手法が考案されたが、実世界のネットワークのスペクトル分布を可視化した研究はまだ少ないため、スペクトル分布とネットワークの性質の対応関係についてはまだ深く考えられていない。我々はまず、スペクトル分布の定量的評価とその応用方法について議論する。スペクトル分布の定量的な評価や比較のために、離散確率分布に対するダイバージェンスや距離の概念を流用することを提案する。応用方法として cosine distance を用いた類似のスペクトルを高速に検索する手法についても言及する。 次に、合成されたグラフと実世界のネットワークから得られたスペクトル分布を提示する。次に、得られたスペクトル分布を分析し、ネットワークの性質とスペクトルの関係について考察する。 結果として、疎なネットワークについては、モチーフと呼ばれるネットワークの局所的な構造と固有値の分布が関係していることが分かった。 また、近くの頂点同士が隣接するようなグラフは、複雑ネットワークに見られるような鋭いスペクトルを持つ。さらに、頂点同士がランダムに隣接する多くのグラフは、Erdős-Rényi ランダムグラフに見られる半円状のスペクトルになることを例示する。
+    本研究は、提案手法と同様の手法に基づいたアルゴリズムによって得ることができるスペクトル分布についても研究する。近年スペクトル全体の分布を計算する手法が考案されたが、実世界のネットワークのスペクトル分布を可視化した研究はまだ少ないため、スペクトル分布とネットワークの性質の対応関係についてはまだ深く考えられていない。我々はまず、スペクトル分布の定量的評価とその応用方法について議論する。スペクトル分布の定量的な評価や比較のために、離散確率分布に対するダイバージェンスや距離の概念を流用することを提案する。応用方法として cosine distance を用いた類似のスペクトルを高速に検索する手法についても言及する。 次に、合成されたグラフと実世界のネットワークから得られたスペクトル分布を提示する。そして得られたスペクトル分布を分析し、ネットワークの性質とスペクトルの関係について考察する。 結果として、疎なネットワークについては、モチーフと呼ばれるネットワークの局所的な構造と固有値の分布が関係していることが分かった。 また、近くの頂点同士が隣接するようなグラフは、複雑ネットワークに見られるような鋭いスペクトルを持つ。さらに、頂点同士がランダムに隣接する多くのグラフは、Erdős-Rényi ランダムグラフに見られる半円状のスペクトルになることを例示する。
 
 
 \end{jabstract}
@@ -339,6 +339,10 @@ First, we define DOS as the spectrum of the entire network. Next, we define LDOS
     where $|q_i(k)|$ is the magnitude of the weight for a $k$-th vertex in the $i$-th eigenvector.
 \end{definition}
 
+
+\subsection{Motif Multiplicity}
+Motif multiplicity corresponds to eigenvalues multiplicity \cite{mehatari2015effect,dong2019network}.
+
 \subsection{Kernel Polynomial Method (KPM)}
 To approximate DOS and PDOS, the Kernel Polynomial Method (KPM) \cite{weisse2006kernel} can be used. This method uses a dual basis of orthogonal polynomial basis, and Kun Dong et al.\cite{dong2019network} use Chebyshev polynomials. First, the spectral density is expanded by using the dual Chebyshev basis, and the DOS can be approximated by using the stochastic trace estimator. The PDOS can be obtained by using the diagonal elements of the $m$-th Chebyshev polynomial of ${\mathbf M}$.
 
@@ -369,10 +373,7 @@ In practice, it is impossible to expand DOS and PDOS by an infinite number of po
 
 
 
-
-
-
-\chapter{the Sum of Powers of Eigenvalues of Network (SPENet)}
+\chapter{Sum of Powers of Eigenvalues of Network (SPENet)}
 Our main purpose is computing sum of k-th powers of eigenvalues $\sum_{i=0}^{n-1} \lambda_i^k$ which we call SPENet. We propose two approximation algorithms (STE and SLQ) based on the stochastic trace estimator and the stochastic Lanczos quadrature. For naive algorithms, the computational complexity of SPENet using full eigendecomposition is $O(n^3)$, while for STE algorithm it is $O(m k n_v)$ and for SLQ algorithm it is $O((ms + ns^2) n_v)$.
 
 Since the laplacian matrix ${\mathbf L}$ and the normalized laplacian matrix ${\mathbfcal L}$ have zero eigenvalues, we are interested in the case that index of power $k$ is positive. When we consider the case that ${\mathbf M} = {\mathbf A}$, $k$ must be positive integer or zero because ${\mathbf A}$ have negative eigenvalues.
@@ -478,32 +479,29 @@ As described above, it is possible to show the error bound using the contents of
 \section{Experiments}
 For the SLQ algorithm, we evaluate the error compared to the calculation of the exact solution by experiment: if the step size s of the SLQ algorithm is set to an appropriate value, the difference from the value obtained by the STE algorithm will be zero and the computational complexity will not change significantly, so the STE algorithm is not treated in this experiment. This experiment is performed on a MacBook Pro 2016 with a 2GHz dual-core and 16GB 1867 MHz memory, and we take an average of 10 times for all experiments unless otherwise mentioned.
 
-\subsubsection*{Parameter Settings.}
+\subsubsection*{Parameter Settings}
 Unless otherwise mentioned, the parameters of the SLQ algorithm s=10, Nv = 100, k=4 are used in the experiments for the relative error. In addition, the experiments will show how much the error changes when the parameters are changed.
 
-\subsubsection*{Datasets.}
-We use 40 real-world small networks \cite{nr}. Detailed data can be found in table \ref{tab:data_spe}. Networks with a small number of vertices are used so that accurate SPENet values can be calculated for comparison with approximate values by the SQL algorithm.
+\subsubsection*{Datasets}
+We use 40 real-world small networks \cite{nr}, and show detailed data in table \ref{tab:data_spe}. Networks with a small number of vertices are used so that accurate SPENet values can be calculated for comparison with approximate values by the SQL algorithm.
 
 \subsection{Approximation Accuracy}
 
 \begin{figure}[htbp]
     \begin{center}
       \begin{tabular}{c}
-          % 1
         \begin{minipage}{0.5\hsize}
           \begin{center}
             \includegraphics[clip, width=7cm]{./figure/plot_each_graph_k3.png}
             \hspace{1.6cm} k=3
           \end{center}
         \end{minipage}
-          % 2
         \begin{minipage}{0.5\hsize}
           \begin{center}
             \includegraphics[clip, width=7cm]{./figure/plot_each_graph_k4.png}
             \hspace{1.6cm} k=4
           \end{center}
         \end{minipage}
-
       \end{tabular}
       \caption{Relative error of SPENet obtained by SQL algorithm.}
       \label{fig:error_each_graph}
@@ -519,29 +517,24 @@ For the Laplacian and normalized laplacian matrices, the relative error does not
 \begin{figure}[htbp]
     \begin{center}
       \begin{tabular}{c}
-          % 1
-
         \begin{minipage}{0.33\hsize}
             \begin{center}
               \includegraphics[clip, width=4.5cm]{./figure/plot_param_nv.png}
               \hspace{1.6cm} (a) Number of random starting vectors $n_v$
             \end{center}
         \end{minipage}
-
         \begin{minipage}{0.33\hsize}
           \begin{center}
             \includegraphics[clip, width=4.5cm]{./figure/plot_param_s.png}
             \hspace{1.6cm} (b) Number of Lanczos iterations $s$
           \end{center}
         \end{minipage}
-
         \begin{minipage}{0.33\hsize}
           \begin{center}
             \includegraphics[clip, width=4.5cm]{./figure/plot_param_k.png}
             \hspace{1.6cm} (c) Power $k$
           \end{center}
         \end{minipage}
-
       \end{tabular}
       \caption{Parameter sensitivity of SLQ algorithm with (a) different number of starting vectors $n_v$, (b) different number of Lanczos iterations $s$ (when $k=4.5$), and (c) different number of power $k$. }
       \label{fig:param_sensitivity}
@@ -553,10 +546,11 @@ We investigate how the relative error changes when the parameters change: the nu
 There are two sources of error: the stochastic trace estimator and the Gauss quadrature rule. In the experiment in Figure \ref{fig:param_sensitivity}(b), we set $k=4.5$ in order to consider the effect of Lanczos iterations $s$ on the error derived from the Gauss quadrature rule. If $k$ is an integer, the error due to the Gauss quadrature rule becomes 0 when $k \leq 2s-1$. Figure \ref{fig:param_sensitivity}(b) shows that a small value of iterations is sufficient, and the error due to the Gauss quadrature rule is almost negligible if the value is above a certain level. Figure \ref{fig:param_sensitivity}(b) shows that a small value of iterations is sufficient, and the error due to the Gauss quadrature rule is almost negligible for a certain value.
 
 
-\chapter{Applications and Gallery of Spectral Distributions}
-In this chapter, we discuss applications of the spectral distribution defined in Section 2.5. We then show by experiments how the spectral distributions of various synthesized and real-world graphs look in practice.
 
-\section{Quantitative Evaluation and Application}
+
+\chapter{Quantitative Evaluation and Application of DOS and PDOS}
+In this chapter, we discuss quantitative evaluation and application of the spectral distribution.
+
 The DOS and PDOS of a network can be approximated by using the Kernel polynomial method as described in Section 2.5.1. However, its usage has not been discussed in-depth, and only the fact that it can be visualized has been emphasized.
 By using this distribution as a discrete probability distribution, it will be possible to evaluate it quantitatively using various concepts such as entropy, divergence, distance.
 
@@ -564,14 +558,14 @@ For each of them, we discuss what advantages and disadvantages they have and com
 
 On the other hand, since there is no similar concept for PDOS, being able to evaluate it quantitatively is a great advantage. In particular, PDOS makes it possible to calculate the distance based on the structure of the network, rather than the shortest distance between vertices.
 
-\subsection{Entropy}
+\section{Entropy}
 It is possible to calculate the entropy of a spectral distribution expressed as a discrete probability distribution: the entropy of the entire network can be obtained using DOS, and the entropy of each vertex can be obtained using PDOS.
 
 However, Von Neumann graph entropy, a concept similar to the entropy of the entire network, has already been studied \cite{braunstein2006laplacian, chen2019fast,tsitsulin2020just}. It is inspired by the Von Neumann entropy of quantum mechanics and has already been studied not only for applications to divergence and distance but also for applications and properties of the entropy itself. Since there are faster computational methods \cite{chen2019fast,tsitsulin2020just} than those proposed by Kun Dong et al \cite{dong2019network}, there is little advantage in using DOS for entropy .
 On the other hand, the entropy per-vertex may be worth using. By considering the relationship between the size of the entropy of each vertex, it may be possible to calculate the "importance" of each vertex.
 
 
-\subsection{Divergence and Distance}
+\section{Divergence and Distance}
 By using DOS expressed as a discrete probability distribution, it is possible to define the divergence and distance between networks. For example, Kullback-Leibler divergence \cite{kullback1951information} is famous for its divergence, and since Kullback-Leibler divergence is asymmetric, we can also use the symmetric Jeffreys divergence and Jensen-Shannon divergence \cite{nielsen2019jensen, lin1991divergence, jeffreys1946invariant}. It is also possible to use the Jensen-Shannon distance, which was proved to be a valid distance metric \cite{endres2003new}.
 
 The Von Neumann graph entropy can also be used to define divergence and distance, and various studies have already been conducted on this. In the field of quantum mechanics, divergence and quantum Jensen-Shannon divergence have already been defined \cite{briet2009properties, lamberti2008metric}, and these can be calculated using the Von Neumann graph entropy. However, unlike the method of calculating the divergence and distance using DOS, the divergence and distance obtained via Von Neumann graph entropy cannot be precomputed.
@@ -580,32 +574,53 @@ However, the distance called NetLSD has also been defined using the heat kernel,
 
 On the other hand, there is an advantage of using PDOS. Usually, the distance between vertices is the length of the shortest path, but with this definition, we can express how similar the properties of the vertices are. This may make it possible to search for vertices with similar properties.
 
-\subsection{Applications}
+\section{Applications}
 The spectral distribution for networks has not been studied yet, but the spectral distribution for materials has already been studied in the field of condensed matter physics and other fields. It is possible to apply ideas from these fields to networks as well.
 
 For example, a fast online search algorithm for similar spectra has been proposed \cite{borysov2018online,geilhufe2018towards}, and since DOS and PDOS are capable of precomputation, the results of the calculation can be stored in a database for fast search of networks with similar spectra. In this case, it is necessary to define the distance between two networks, which can be expressed as a vector by considering DOS as a discrete distribution, and Euclidean distance and cosine distance can be used.
 
-\section{Experiments}
-\subsection{Gallery of DOS/PDOS}
-We show the results of DOS and PDOS for synthesized graphs and real-world networks. We use the method proposed by Kun Dong et al. based on the kernel polynomial method (KMP) as described in Section 2.5.1. motif filtering is not used, and the perturbations are smoothed using Jackson damping after calculation using the kernel polynomial method. The perturbations are smoothed using Jackson damping.
-
-If there is a spike in the spectral distribution of the DOS, we zoom in on the DOS so that we can see the lower shape. The red dots mean the values obtained by the KMP-based approximation.
-The PDOS computed for all vertices are sorted and then displayed vertically. Red means that the weight of a part of the spectrum of a vertex is large, while blue means that the weight is small.
-
-\subsubsection*{Parameter Settings.}
-Unless otherwise stated, we use 1000 Chebyshev moments, 20 random vectors, and 51 histogram bins in our experiments.
-
-\subsubsection*{Datasets.}
-% ~の sythesized Graph と、 ~のreal world graph に対して実験する。
 
 
-\subsubsection{Synthesized Graph}
+\chapter{Gallery of DOS and PDOS}
+In this chapter, We show the spectral distributions (DOS and PDOS) of various synthesized and real-world graphs. All the results can be seen in Appendix C. We then discuss propaties of graphs with similar DOS/PDOS.
+
+\section{Methods}
+We show the results of DOS and PDOS for 66 synthesized graphs and 28 real-world networks in Appendix C. We use the method proposed by Kun Dong et al \cite{dong2019network} based on the kernel polynomial method (KMP) as described in Section 2.5.1., motif filtering is not used, and the perturbations are smoothed using Jackson damping after calculation using the kernel polynomial method.
+
+The red dots mean the values obtained by the KMP-based approximation. The PDOS computed for all vertices are sorted and then displayed vertically. Red means that the weight of a part of the spectrum of a vertex is large, while blue means that the weight is small.
+
+\subsubsection*{Parameter Settings}
+We use 1000 Chebyshev moments, 20 random vectors, and 51 histogram bins in our experiments.
+
+\subsubsection*{Datasets}
+We generate 66 synthesized graphs by NetworkX library \cite{SciPyProceedings_11} and SNAP software library \cite{leskovec2016snap}, and use 28 real-world networks from NETWORK REPOSITORY \cite{nr}. We show characteristics of real-world networks in Table \ref{tab:data_dos_pdos}.
 
 
-\subsubsection{Real-World Network}
+\section{Discussion}
 
-\subsection{Propaties of Graphs with Similar DOS/PDOS}
-Motif multiplicity corresponds to eigenvalues multiplicity \cite{mehatari2015effect,dong2019network}.
+From the results in Appendix C, graphs with similar DOS/PDOS is likely to have similar properties. For example, DOS of all road networks are similar to each other (see Figure \ref{fig:road}).
+
+There are characteristic DOS that are often seen, such as
+\begin{itemize}
+  \item DOS with spikes caused by motifs (e.g. Figure \ref{fig:circular_ladder, fig:balanced})
+  \item DOS which is bowl-shaped (e.g. Figure \ref{fig:circular_ladder}(c)(d), \ref{fig:road} )
+  \item DOS which is semi-circular shape (e.g. Figure \ref{fig:random}(d), \ref{fig:barabasi}(d))
+  \item DOS which is sharp near the center or negative-side. (e.g. Figure \ref{fig:random_geometric}, \ref{fig:forest_fire})
+\end{itemize}
+and so on.
+
+Motif is an important factor for DOS analysis. Since motifs corresponds to some eigenvalues, there are spikes in DOS of graph which have many motifs. Therefore, it is possible to know by spikes that there is a certain local structure called a motif.
+
+Also, shape of DOS seems to be related to degree of graph. If average degree of graph is very small (about 1~2), there are many motifs in the graph and soem spikes in DOS. If average degree is slightly small (about 2~4), DOS tend to be bowl-shaped like road networks. DOS with a large average degree tend to have a centralized spectrum.
+
+If graph has centralized DOS, it is categorized into mainly two types:
+\begin{itemize}
+  \item DOS which is semi-circular shape
+  \item DOS which is sharp near the center.
+\end{itemize}
+Graphs where vertices are randomly adjacent to each other have a semicircular spectral distribution as seen in Erdős-Rényi random graphs. Graphs in which nearby vertices are adjacent to each other have a sharp spectrum, as seen in complex networks.
+
+
 
 
 \chapter{Conclusion}
@@ -693,6 +708,46 @@ For DOS and PDOS, the following are desired
       }
       \caption{Characteristics of 40 small real-world networks used in Chapter 3 which come from NETWORK REPOSITORY; number of vertices $|V|$, number of edges $|E|$, average node degree, density of graph $|E|/ \binom{|V|}{2}$, weighted or unweighted graph}
       \label{tab:data_spe}
+    \end{center}
+  \end{table}
+
+  \begin{table}[htb]
+    \begin{center}
+      \scalebox{1.0}{
+      \begin{tabular}{l | c c c c c}
+        Graph & $|V|$ & $|E|$ & AVg. deg. & Density & category  \\ \hline
+        ca-Erdos992 & 5094 & 7515 & 2.95 & 2.90e-04 & collaboration\\
+        ca-GrQc & 4158 & 13422 & 6.46 & 7.77e-04 & collaboration\\
+        ca-CondMat & 21363 & 91286 & 8.55 & 2.00e-04 & collaboration\\
+        ca-AstroPh & 17903 & 196972 & 22.00 & 6.15e-04 & collaboration\\
+        ia-reality & 6809 & 7680 & 2.26 & 1.66e-04 & interaction\\
+        ia-wiki-Talk & 92117 & 360767 & 7.83 & 4.25e-05 & interaction\\
+        ia-fb-messages & 1266 & 6451 & 10.19 & 4.03e-03 & interaction\\
+        ia-enron-large & 33696 & 180811 & 10.73 & 1.59e-04 & interaction\\
+        power-US-Grid & 4941 & 6594 & 2.67 & 2.70e-04 & power\\
+        power-bcspwr09 & 1723 & 4117 & 4.78 & 1.39e-03 & power\\
+        power-bcspwr10 & 5300 & 13571 & 5.12 & 4.83e-04 & power\\
+        power-eris1176 & 1176 & 9864 & 16.78 & 7.14e-03 & power\\
+        road-luxembourg-osm & 114599 & 119666 & 2.09 & 9.11e-06 & road\\
+        road-minnesota & 2642 & 3303 & 2.50 & 4.73e-04 & road\\
+        road-usroads & 129164 & 165435 & 2.56 & 9.92e-06 & road\\
+        road-roadNet-PA & 1087562 & 1541514 & 2.83 & 1.30e-06 & road\\
+        soc-douban & 154908 & 327162 & 4.22 & 1.36e-05 & social\\
+        soc-epinions & 26588 & 100120 & 7.53 & 1.42e-04 & social\\
+        soc-gowalla & 196591 & 950327 & 9.67 & 2.46e-05 & social\\
+        soc-slashdot & 70068 & 358647 & 10.24 & 7.31e-05 & social\\
+        tech-as-caida2007 & 26475 & 53381 & 4.03 & 7.62e-05 & technological\\
+        tech-internet-as & 40164 & 85123 & 4.24 & 5.28e-05 & technological\\
+        tech-p2p-gnutella & 62561 & 147878 & 4.73 & 3.78e-05 & technological\\
+        tech-WHOIS & 7476 & 56943 & 15.23 & 1.02e-03 & technological\\
+        web-edu & 3031 & 6474 & 4.27 & 7.05e-04 & web\\
+        web-sk-2005 & 121422 & 334419 & 5.51 & 2.27e-05 & web\\
+        web-indochina-2004 & 11358 & 47606 & 8.38 & 3.69e-04 & web\\
+        web-spam & 4767 & 37375 & 15.68 & 1.65e-03 & web\\
+      \end{tabular}
+      }
+      \caption{Characteristics of 28 real-world networks used in Chapter 4 which come from NETWORK REPOSITORY; number of vertices $|V|$, number of edges $|E|$, average node degree, density of graph $|E|/ \binom{|V|}{2}$, category of network}
+      \label{tab:data_dos_pdos}
     \end{center}
   \end{table}
 
@@ -804,6 +859,415 @@ For DOS and PDOS, the following are desired
       \label{tab:rel_error_k4}
     \end{center}
   \end{table}
+
+
+\chapter{Gallery of DOS and PDOS}
+
+
+
+\begin{figure}[htbp]
+  \setlength\tabcolsep{0pt}
+  \hspace{-3.0cm}
+  \begin{tabular}{cccc}
+    \includegraphics[width=45mm]{figure/grid_graph_dim[100,100]txt_dos.png} &
+    \includegraphics[width=45mm]{figure/grid_graph_dim[40,40,40]txt_dos.png} &
+    \includegraphics[width=45mm]{figure/grid_graph_dim[9,9,9,9]txt_dos.png} &
+    \includegraphics[width=45mm]{figure/grid_graph_dim[8,8,8,8,8]txt_dos.png} \\
+    \includegraphics[width=45mm]{figure/grid_graph_dim[100,100]txt_pdos.png} &
+    \includegraphics[width=45mm]{figure/grid_graph_dim[40,40,40]txt_pdos.png} &
+    \includegraphics[width=45mm]{figure/grid_graph_dim[9,9,9,9]txt_pdos.png} &
+    \includegraphics[width=45mm]{figure/grid_graph_dim[8,8,8,8,8]txt_pdos.png} \\
+    (a) 2d, n=100 & (b) 3d, n=40& (c) 4d, n=9 & (d) 5d, n=8\\ [6pt]
+    \includegraphics[width=45mm]{figure/grid_graph_dim[7,7,7,7,7,7]txt_dos.png} &
+    \includegraphics[width=45mm]{figure/grid_graph_dim[6,6,6,6,6,6,6]txt_dos.png} &
+    \includegraphics[width=45mm]{figure/grid_graph_dim[5,5,5,5,5,5,5,5]txt_dos.png} &
+    \includegraphics[width=45mm]{figure/grid_graph_dim[4,4,4,4,4,4,4,4,4]txt_dos.png} \\
+    \includegraphics[width=45mm]{figure/grid_graph_dim[7,7,7,7,7,7]txt_pdos.png} &
+    \includegraphics[width=45mm]{figure/grid_graph_dim[6,6,6,6,6,6,6]txt_pdos.png} &
+    \includegraphics[width=45mm]{figure/grid_graph_dim[5,5,5,5,5,5,5,5]txt_pdos.png} &
+    \includegraphics[width=45mm]{figure/grid_graph_dim[4,4,4,4,4,4,4,4,4]txt_pdos.png} \\
+    (e) 6d, n=7 & (f) 7d, n=6& (g) 8d, n=5 & (h) 9d, n=4\\ [6pt]
+  \end{tabular}
+  \caption{DOS(top) and PDOS(bottom) of {\bf high dimention grid graph} generated by NetworkX library \cite{SciPyProceedings_11}. The size in each dimension is $n$.}
+  \label{fig:grid}
+\end{figure}
+
+
+\begin{figure}[htbp]
+  \setlength\tabcolsep{0pt}
+  \hspace{-3.0cm}
+  \begin{tabular}{cccc}
+    \includegraphics[width=45mm]{figure/grid_graph_deleted_dim(100,100)_pdel00txt_dos.png} &
+    \includegraphics[width=45mm]{figure/grid_graph_deleted_dim(100,100)_pdel02txt_dos.png} &
+    \includegraphics[width=45mm]{figure/grid_graph_deleted_dim(100,100)_pdel04txt_dos.png} &
+    \includegraphics[width=45mm]{figure/grid_graph_deleted_dim(100,100)_pdel06txt_dos.png} \\
+    \includegraphics[width=45mm]{figure/grid_graph_deleted_dim(100,100)_pdel00txt_pdos.png} &
+    \includegraphics[width=45mm]{figure/grid_graph_deleted_dim(100,100)_pdel02txt_pdos.png} &
+    \includegraphics[width=45mm]{figure/grid_graph_deleted_dim(100,100)_pdel04txt_pdos.png} &
+    \includegraphics[width=45mm]{figure/grid_graph_deleted_dim(100,100)_pdel06txt_pdos.png} \\
+    (a) 2d, n=100, p=0.0 & (b)2d, n=100, p=0.2 &(c) 2d, n=100, p=0.4  & (d) 2d, n=100, p=0.6 \\ [6pt]
+    \includegraphics[width=45mm]{figure/grid_graph_deleted_dim(40,40,40)_pdel00txt_dos.png} &
+    \includegraphics[width=45mm]{figure/grid_graph_deleted_dim(40,40,40)_pdel02txt_dos.png} &
+    \includegraphics[width=45mm]{figure/grid_graph_deleted_dim(40,40,40)_pdel04txt_dos.png} &
+    \includegraphics[width=45mm]{figure/grid_graph_deleted_dim(40,40,40)_pdel06txt_dos.png} \\
+    \includegraphics[width=45mm]{figure/grid_graph_deleted_dim(40,40,40)_pdel00txt_pdos.png} &
+    \includegraphics[width=45mm]{figure/grid_graph_deleted_dim(40,40,40)_pdel02txt_pdos.png} &
+    \includegraphics[width=45mm]{figure/grid_graph_deleted_dim(40,40,40)_pdel04txt_pdos.png} &
+    \includegraphics[width=45mm]{figure/grid_graph_deleted_dim(40,40,40)_pdel06txt_pdos.png} \\
+    (e) 3d, n=40, p=0.0 & (f) 3d, n=40, p=0.2 &(g) 3d, n=40, p=0.4  & (h) 3d, n=40, p=0.6 \\
+  \end{tabular}
+  \caption{DOS(top) and PDOS(bottom) of {\bf grid graph (whose edges are randomly deleted)} generated by NetworkX library \cite{SciPyProceedings_11}.  The size in each dimension is $n$. Each edge is deleted with probability p.}
+  \label{fig:grid_deleted}
+\end{figure}
+
+
+\begin{figure}[htbp]
+    \setlength\tabcolsep{0pt}
+    \hspace{-3.0cm}
+    \begin{tabular}{cccc}
+      \includegraphics[width=45mm]{figure/circular_graph_3000_1.txt_dos.png} &
+      \includegraphics[width=45mm]{figure/circular_graph_3000_2.txt_dos.png} &
+      \includegraphics[width=45mm]{figure/circular_graph_3000_3.txt_dos.png} &
+      \includegraphics[width=45mm]{figure/circular_graph_3000_4.txt_dos.png}  \\
+      \includegraphics[width=45mm]{figure/circular_graph_3000_1.txt_pdos.png} &
+      \includegraphics[width=45mm]{figure/circular_graph_3000_2.txt_pdos.png} &
+      \includegraphics[width=45mm]{figure/circular_graph_3000_3.txt_pdos.png} &
+      \includegraphics[width=45mm]{figure/circular_graph_3000_4.txt_pdos.png}  \\
+      (a) OutDegree=1 & (b) OutDegree=2 & (c) OutDegree=3 & (d) OutDegree=4\\ [6pt]
+    \end{tabular}
+    \caption{DOS(top) and PDOS(bottom) of {\bf Circular Graph} generated by SNAP software library \cite{leskovec2016snap}. The synthesized graph have one edge from each node to each of the subsequent OutDegree nodes. The number of vertices in all graphs is 3000.}
+    \label{fig:circular}
+\end{figure}
+
+
+\begin{figure}[htbp]
+  \setlength\tabcolsep{0pt}
+  \hspace{-3.0cm}
+  \begin{tabular}{cccc}
+    \includegraphics[width=45mm]{figure/circular_ladder_graph_n3000txt_dos.png} &
+    \includegraphics[width=45mm]{figure/circular_ladder_graph_deleted_n3000_pdel01txt_dos.png} &
+    \includegraphics[width=45mm]{figure/circular_ladder_graph_deleted_n3000_pdel02txt_dos.png} &
+    \includegraphics[width=45mm]{figure/circular_ladder_graph_deleted_n3000_pdel03txt_dos.png} \\
+    \includegraphics[width=45mm]{figure/circular_ladder_graph_n3000txt_pdos.png} &
+    \includegraphics[width=45mm]{figure/circular_ladder_graph_deleted_n3000_pdel01txt_pdos.png} &
+    \includegraphics[width=45mm]{figure/circular_ladder_graph_deleted_n3000_pdel02txt_pdos.png} &
+    \includegraphics[width=45mm]{figure/circular_ladder_graph_deleted_n3000_pdel03txt_pdos.png} \\
+    (a) p=0.0 & (b) p=0.1 & (c) p=0.2 & (d) p=0.3\\ [6pt]
+  \end{tabular}
+  \caption{DOS(top) and PDOS(bottom) of {\bf circular ladder graph (whose edges are randomly deleted)} generated by SNAP software library \cite{leskovec2016snap}. Each edge is deleted with probability p. The number of vertices in all graphs is 3000.}
+  \label{fig:circular_ladder}
+\end{figure}
+
+
+
+\begin{figure}[htbp]
+  \setlength\tabcolsep{0pt}
+  \hspace{-1.0cm}
+  \begin{tabular}{cccc}
+    \includegraphics[width=47mm]{figure/balanced_tree_r2_h10txt_dos.png} &
+    \includegraphics[width=47mm]{figure/balanced_tree_r3_h8txt_dos.png} &
+    \includegraphics[width=47mm]{figure/balanced_tree_r4_h7txt_dos.png} \\
+    \includegraphics[width=47mm]{figure/balanced_tree_r2_h10txt_pdos.png} &
+    \includegraphics[width=47mm]{figure/balanced_tree_r3_h8txt_pdos.png} &
+    \includegraphics[width=47mm]{figure/balanced_tree_r4_h7txt_pdos.png} \\
+    (a) r=2, h=10 & (b) r=3, h=8& (c) r=4, h=7\\ [6pt]
+  \end{tabular}
+  \caption{DOS(top) and PDOS(bottom) of {\bf balanced tree} generated by NetworkX library \cite{SciPyProceedings_11}. Each node have $r$ children, Height of the tree is $h$.}
+  \label{fig:balanced}
+\end{figure}
+
+\begin{figure}[htbp]
+  \setlength\tabcolsep{0pt}
+  \hspace{-3.0cm}
+  \begin{tabular}{cccc}
+    \includegraphics[width=45mm]{figure/gnm_random_graph_n10000_m10000txt_dos.png} &
+    \includegraphics[width=45mm]{figure/gnm_random_graph_n10000_m15000txt_dos.png} &
+    \includegraphics[width=45mm]{figure/gnm_random_graph_n10000_m20000txt_dos.png} &
+    \includegraphics[width=45mm]{figure/gnm_random_graph_n10000_m100000txt_dos.png} \\
+    \includegraphics[width=45mm]{figure/gnm_random_graph_n10000_m10000txt_pdos.png} &
+    \includegraphics[width=45mm]{figure/gnm_random_graph_n10000_m15000txt_pdos.png} &
+    \includegraphics[width=45mm]{figure/gnm_random_graph_n10000_m20000txt_pdos.png} &
+    \includegraphics[width=45mm]{figure/gnm_random_graph_n10000_m100000txt_pdos.png} \\
+    (a) m=10000 & (b) m=15000 & (c) m=100000 & (d) m=100000 \\ [6pt]
+  \end{tabular}
+  \caption{DOS(top) and PDOS(bottom) of {\bf random graph} generated by NetworkX library \cite{SciPyProceedings_11}. The number of vertices in all graphs is 3000. The number of edges $m$.}
+  \label{fig:random}
+\end{figure}
+
+\begin{figure}[htbp]
+  \setlength\tabcolsep{0pt}
+  \hspace{-3.0cm}
+  \begin{tabular}{cccc}
+    \includegraphics[width=45mm]{figure/random_regular_graph_d3_n5000txt_dos.png} &
+    \includegraphics[width=45mm]{figure/random_regular_graph_d4_n5000txt_dos.png} &
+    \includegraphics[width=45mm]{figure/random_regular_graph_d8_n5000txt_dos.png} &
+    \includegraphics[width=45mm]{figure/random_regular_graph_d15_n5000txt_dos.png} \\
+    \includegraphics[width=45mm]{figure/random_regular_graph_d3_n5000txt_pdos.png} &
+    \includegraphics[width=45mm]{figure/random_regular_graph_d4_n5000txt_pdos.png} &
+    \includegraphics[width=45mm]{figure/random_regular_graph_d8_n5000txt_pdos.png} &
+    \includegraphics[width=45mm]{figure/random_regular_graph_d15_n5000txt_pdos.png} \\
+    (a) d=3 & (b) d=4& (c) d=8 & (e) d=15\\ [6pt]
+  \end{tabular}
+  \caption{DOS(top) and PDOS(bottom) of {\bf random d-regular graph} generated by NetworkX library \cite{SciPyProceedings_11}. The number of vertices in all graphs is 5000. }
+  \label{fig:random_regular}
+\end{figure}
+
+
+\begin{figure}[htbp]
+  \setlength\tabcolsep{0pt}
+  \hspace{-3.0cm}
+  \begin{tabular}{cccc}
+    \includegraphics[width=45mm]{figure/random_geometric_graph_n3000_radius002_dim2txt_dos.png} &
+    \includegraphics[width=45mm]{figure/random_geometric_graph_n3000_radius003_dim2txt_dos.png} &
+    \includegraphics[width=45mm]{figure/random_geometric_graph_n3000_radius004_dim2txt_dos.png} &
+    \includegraphics[width=45mm]{figure/random_geometric_graph_n3000_radius005_dim2txt_dos.png} \\
+    \includegraphics[width=45mm]{figure/random_geometric_graph_n3000_radius002_dim2txt_pdos.png} &
+    \includegraphics[width=45mm]{figure/random_geometric_graph_n3000_radius003_dim2txt_pdos.png} &
+    \includegraphics[width=45mm]{figure/random_geometric_graph_n3000_radius004_dim2txt_pdos.png} &
+    \includegraphics[width=45mm]{figure/random_geometric_graph_n3000_radius005_dim2txt_pdos.png} \\
+    (a) 2d, r=0.02 & (b) 2d, r=0.03& (c) 2d, r=0.04 & (d) 2d, r=0.05\\ [6pt]
+    \includegraphics[width=45mm]{figure/random_geometric_graph_n3000_radius008_dim3txt_dos.png} &
+    \includegraphics[width=45mm]{figure/random_geometric_graph_n3000_radius01_dim3txt_dos.png} &
+    \includegraphics[width=45mm]{figure/random_geometric_graph_n3000_radius012_dim3txt_dos.png} &
+    \includegraphics[width=45mm]{figure/random_geometric_graph_n3000_radius014_dim3txt_dos.png} \\
+    \includegraphics[width=45mm]{figure/random_geometric_graph_n3000_radius008_dim3txt_pdos.png} &
+    \includegraphics[width=45mm]{figure/random_geometric_graph_n3000_radius01_dim3txt_pdos.png} &
+    \includegraphics[width=45mm]{figure/random_geometric_graph_n3000_radius012_dim3txt_pdos.png} &
+    \includegraphics[width=45mm]{figure/random_geometric_graph_n3000_radius014_dim3txt_pdos.png} \\
+    (e) 3d, r=0.08 & (f) 3d, r=0.10& (g) 3d, r=0.12 & (h) 3d, r=0.14\\ [6pt]
+    \includegraphics[width=45mm]{figure/random_geometric_graph_n3000_radius05_dim10txt_dos.png} &
+    \includegraphics[width=45mm]{figure/random_geometric_graph_n3000_radius055_dim10txt_dos.png} &
+    \includegraphics[width=45mm]{figure/random_geometric_graph_n3000_radius065_dim10txt_dos.png} &
+    \includegraphics[width=45mm]{figure/random_geometric_graph_n3000_radius07_dim10txt_dos.png} \\
+    \includegraphics[width=45mm]{figure/random_geometric_graph_n3000_radius05_dim10txt_pdos.png} &
+    \includegraphics[width=45mm]{figure/random_geometric_graph_n3000_radius055_dim10txt_pdos.png} &
+    \includegraphics[width=45mm]{figure/random_geometric_graph_n3000_radius065_dim10txt_pdos.png} &
+    \includegraphics[width=45mm]{figure/random_geometric_graph_n3000_radius07_dim10txt_pdos.png} \\
+    (i) 10d, r=0.50 & (j) 10d, r=0.55& (k) 10d, r=0.65 & (l) 10d, r=0.70\\ [6pt]
+  \end{tabular}
+  \caption{DOS(top) and PDOS(bottom) of {\bf random geometric graph} generated by NetworkX library \cite{SciPyProceedings_11}. The nodes are placed uniformly at random in the unit cube, and two nodes are adjacent if the distance is less than $r$. The number of vertices in all graphs is 3000.  }
+  \label{fig:random_geometric}
+\end{figure}
+
+\begin{figure}[htbp]
+  \setlength\tabcolsep{0pt}
+  \hspace{-3.0cm}
+  \begin{tabular}{cccc}
+    \includegraphics[width=45mm]{figure/barabasi_albert_graph_n3000_m2txt_dos.png} &
+    \includegraphics[width=45mm]{figure/barabasi_albert_graph_n3000_m3txt_dos.png} &
+    \includegraphics[width=45mm]{figure/barabasi_albert_graph_n3000_m4txt_dos.png} &
+    \includegraphics[width=45mm]{figure/barabasi_albert_graph_n3000_m5txt_dos.png} \\
+    \includegraphics[width=45mm]{figure/barabasi_albert_graph_n3000_m2txt_pdos.png} &
+    \includegraphics[width=45mm]{figure/barabasi_albert_graph_n3000_m3txt_pdos.png} &
+    \includegraphics[width=45mm]{figure/barabasi_albert_graph_n3000_m4txt_pdos.png} &
+    \includegraphics[width=45mm]{figure/barabasi_albert_graph_n3000_m5txt_pdos.png} \\
+    (a) m=2 & (b) m=3 & (c) m=4 & (d) m=5\\ [6pt]
+  \end{tabular}
+  \caption{DOS(top) and PDOS(bottom) of {\bf Barabási-Albert scale free model} \cite{barabasi1999emergence} generated by NetworkX library \cite{SciPyProceedings_11}. The number of edges attached per vertex is $m$. The number of vertices in all graphs is 3000.}
+  \label{fig:barabasi}
+\end{figure}
+
+
+\begin{figure}[htbp]
+  \setlength\tabcolsep{0pt}
+  \hspace{-3.0cm}
+  \begin{tabular}{cccc}
+    \includegraphics[width=45mm]{figure/powerlaw_cluster_graph_n3000_m5_p01txt_dos.png} &
+    \includegraphics[width=45mm]{figure/powerlaw_cluster_graph_n3000_m5_p03txt_dos.png} &
+    \includegraphics[width=45mm]{figure/powerlaw_cluster_graph_n3000_m5_p05txt_dos.png} &
+    \includegraphics[width=45mm]{figure/powerlaw_cluster_graph_n3000_m5_p08txt_dos.png} \\
+    \includegraphics[width=45mm]{figure/powerlaw_cluster_graph_n3000_m5_p01txt_pdos.png} &
+    \includegraphics[width=45mm]{figure/powerlaw_cluster_graph_n3000_m5_p03txt_pdos.png} &
+    \includegraphics[width=45mm]{figure/powerlaw_cluster_graph_n3000_m5_p05txt_pdos.png} &
+    \includegraphics[width=45mm]{figure/powerlaw_cluster_graph_n3000_m5_p08txt_pdos.png} \\
+    (a) p=0.1 & (b) p=0.3 & (c) p=0.5 & (d) p=0.8\\ [6pt]
+  \end{tabular}
+  \caption{DOS(top) and PDOS(bottom) of {\bf powerlaw cluster graph} proposed by Holme and Kim \cite{holme2002growing} generated by NetworkX library \cite{SciPyProceedings_11}. The number of vertices in all graphs is 3000. The number of edges attached per vertex is 5. The probability of adding a triangle after adding a random edge is $p$}
+  \label{fig:powerlow_cluster}
+\end{figure}
+
+\begin{figure}[htbp]
+  \setlength\tabcolsep{0pt}
+  \hspace{-3.0cm}
+  \begin{tabular}{cccc}
+    \includegraphics[width=45mm]{figure/scale-free_geometric_3000_5_000txt_dos.png} &
+    \includegraphics[width=45mm]{figure/scale-free_geometric_3000_5_002txt_dos.png} &
+    \includegraphics[width=45mm]{figure/scale-free_geometric_3000_5_004txt_dos.png} &
+    \includegraphics[width=45mm]{figure/scale-free_geometric_3000_5_006txt_dos.png} \\
+    \includegraphics[width=45mm]{figure/scale-free_geometric_3000_5_000txt_pdos.png} &
+    \includegraphics[width=45mm]{figure/scale-free_geometric_3000_5_002txt_pdos.png} &
+    \includegraphics[width=45mm]{figure/scale-free_geometric_3000_5_004txt_pdos.png} &
+    \includegraphics[width=45mm]{figure/scale-free_geometric_3000_5_006txt_pdos.png} \\
+    (a) $\beta=0.00$ & (b) $\beta=0.02$ & (c) $\beta=0.04$ & (d) $\beta=0.06$\\ [6pt]
+  \end{tabular}
+  \caption{DOS(top) and PDOS(bottom) of {\bf Geometric Preferential Attachment model} by Flexman, Frieze and Vera \cite{flaxman2006geometric} generated by SNAP software library \cite{leskovec2016snap}. The radius is $r = n^{\beta - \frac{1}{2}}ln(n)$. The number of vertices in all graphs is 3000.}
+  \label{fig:geo_scale_free}
+\end{figure}
+
+\begin{figure}[htbp]
+  \setlength\tabcolsep{0pt}
+  \hspace{-1.0cm}
+  \begin{tabular}{cccc}
+    \includegraphics[width=45mm]{figure/small_world_5000_5_0001txt_dos.png} &
+    \includegraphics[width=45mm]{figure/small_world_5000_5_0010txt_dos.png} &
+    \includegraphics[width=45mm]{figure/small_world_5000_5_0100txt_dos.png} \\
+    \includegraphics[width=45mm]{figure/small_world_5000_5_0001txt_pdos.png} &
+    \includegraphics[width=45mm]{figure/small_world_5000_5_0010txt_pdos.png} &
+    \includegraphics[width=45mm]{figure/small_world_5000_5_0100txt_pdos.png} \\
+    (a) $p=0.001$ & (b) $p=0.010$ & (c) $p=0.100$ \\ [6pt]
+  \end{tabular}
+  \caption{DOS(top) and PDOS(bottom) of {\bf small world model} by Watts and Strogatz \cite{watts1998collective} generated by SNAP software library \cite{leskovec2016snap}. The number of vertices in all graphs is 3000. The degree of each node is 10. The probability of rewriting edge is $p$.}
+  \label{fig:small_world}
+\end{figure}
+
+
+
+
+\begin{figure}[htbp]
+  \setlength\tabcolsep{0pt}
+  \hspace{-3.0cm}
+  \begin{tabular}{cccc}
+    \includegraphics[width=45mm]{figure/forest_fire_5000_030_030txt_dos.png} &
+    \includegraphics[width=45mm]{figure/forest_fire_5000_035_030txt_dos.png} &
+    \includegraphics[width=45mm]{figure/forest_fire_5000_040_030txt_dos.png} &
+    \includegraphics[width=45mm]{figure/forest_fire_5000_045_030txt_dos.png} \\
+    \includegraphics[width=45mm]{figure/forest_fire_5000_030_030txt_pdos.png} &
+    \includegraphics[width=45mm]{figure/forest_fire_5000_035_030txt_pdos.png} &
+    \includegraphics[width=45mm]{figure/forest_fire_5000_040_030txt_pdos.png} &
+    \includegraphics[width=45mm]{figure/forest_fire_5000_045_030txt_pdos.png} \\
+    (a) FwdProb=0.30 & (b) FwdProb=0.35 & (c) FwdProb=0.40 & (d) FwdProb=0.45\\ [6pt]
+  \end{tabular}
+  \caption{DOS(top) and PDOS(bottom) of {\bf Forest Fire model} \cite{leskovec2007graph} generated by SNAP software library \cite{leskovec2016snap}. FwdProb is forward probability of an edge, and each backward probability of an edge is 0.3. The number of vertices in all graphs is 5000.}
+  \label{fig:forest_fire}
+\end{figure}
+
+
+\begin{figure}[htbp]
+  \setlength\tabcolsep{0pt}
+  \hspace{-3.0cm}
+  \begin{tabular}{cccc}
+    \includegraphics[width=45mm]{figure/ca-Erdos992mtx_dos.png} &
+    \includegraphics[width=45mm]{figure/ca-GrQcmtx_dos.png} &
+    \includegraphics[width=45mm]{figure/ca-CondMatmtx_dos.png} &
+    \includegraphics[width=45mm]{figure/ca-AstroPhmtx_dos.png} \\
+    \includegraphics[width=45mm]{figure/ca-Erdos992mtx_pdos.png} &
+    \includegraphics[width=45mm]{figure/ca-GrQcmtx_pdos.png} &
+    \includegraphics[width=45mm]{figure/ca-CondMatmtx_pdos.png} &
+    \includegraphics[width=45mm]{figure/ca-AstroPhmtx_pdos.png} \\
+    (a) ca-Erdos992 & (b) ca-GrQc & (c)ca-CondMat  & (d) ca-AstroPh\\ [6pt]
+  \end{tabular}
+  \caption{collaboration network}
+  \label{fig:collaboration }
+\end{figure}
+
+\begin{figure}[htbp]
+  \setlength\tabcolsep{0pt}
+  \hspace{-3.0cm}
+  \begin{tabular}{cccc}
+    \includegraphics[width=45mm]{figure/ia-realitymtx_dos.png} &
+    \includegraphics[width=45mm]{figure/ia-wiki-Talkmtx_dos.png} &
+    \includegraphics[width=45mm]{figure/ia-fb-messagesmtx_dos.png} &
+    \includegraphics[width=45mm]{figure/ia-enron-largemtx_dos.png} \\
+    \includegraphics[width=45mm]{figure/ia-realitymtx_pdos.png} &
+    \includegraphics[width=45mm]{figure/ia-wiki-Talkmtx_pdos.png} &
+    \includegraphics[width=45mm]{figure/ia-fb-messagesmtx_pdos.png} &
+    \includegraphics[width=45mm]{figure/ia-enron-largemtx_pdos.png} \\
+    (a) ia-reality & (b) ia-wiki-Talk & (c)ia-fb-messages  & (d) ia-enron-large\\ [6pt]
+  \end{tabular}
+  \caption{interaction}
+  \label{fig:interaction }
+\end{figure}
+
+\begin{figure}[htbp]
+  \setlength\tabcolsep{0pt}
+  \hspace{-3.0cm}
+  \begin{tabular}{cccc}
+    \includegraphics[width=45mm]{figure/power-US-Gridmtx_dos.png} &
+    \includegraphics[width=45mm]{figure/power-bcspwr09mtx_dos.png} &
+    \includegraphics[width=45mm]{figure/power-bcspwr10mtx_dos.png} &
+    \includegraphics[width=45mm]{figure/power-eris1176mtx_dos.png} \\
+    \includegraphics[width=45mm]{figure/power-US-Gridmtx_pdos.png} &
+    \includegraphics[width=45mm]{figure/power-bcspwr09mtx_pdos.png} &
+    \includegraphics[width=45mm]{figure/power-bcspwr10mtx_pdos.png} &
+    \includegraphics[width=45mm]{figure/power-eris1176mtx_pdos.png} \\
+    (a) power-US-Grid & (b) power-bcspwr09 & (c)power-bcspwr10  & (d) power-eris1176\\ [6pt]
+  \end{tabular}
+  \caption{power network}
+  \label{fig:power }
+\end{figure}
+
+\begin{figure}[htbp]
+  \setlength\tabcolsep{0pt}
+  \hspace{-3.0cm}
+  \begin{tabular}{cccc}
+    \includegraphics[width=45mm]{figure/road-luxembourg-osmmtx_dos.png} &
+    \includegraphics[width=45mm]{figure/road-minnesotamtx_dos.png} &
+    \includegraphics[width=45mm]{figure/road-usroadsmtx_dos.png} &
+    \includegraphics[width=45mm]{figure/road-roadNet-PAmtx_dos.png} \\
+    \includegraphics[width=45mm]{figure/road-luxembourg-osmmtx_pdos.png} &
+    \includegraphics[width=45mm]{figure/road-minnesotamtx_pdos.png} &
+    \includegraphics[width=45mm]{figure/road-usroadsmtx_pdos.png} &
+    \includegraphics[width=45mm]{figure/road-roadNet-PAmtx_pdos.png} \\
+    (a) road-luxembourg-osm & (b) road-minnesota & (c)road-usroads  & (d) road-roadNet-PA\\ [6pt]
+  \end{tabular}
+  \caption{road network  }
+  \label{fig:road}
+\end{figure}
+
+\begin{figure}[htbp]
+  \setlength\tabcolsep{0pt}
+  \hspace{-3.0cm}
+  \begin{tabular}{cccc}
+    \includegraphics[width=45mm]{figure/soc-doubanmtx_dos.png} &
+    \includegraphics[width=45mm]{figure/soc-epinionsmtx_dos.png} &
+    \includegraphics[width=45mm]{figure/soc-gowallamtx_dos.png} &
+    \includegraphics[width=45mm]{figure/soc-slashdotmtx_dos.png} \\
+    \includegraphics[width=45mm]{figure/soc-doubanmtx_pdos.png} &
+    \includegraphics[width=45mm]{figure/soc-epinionsmtx_pdos.png} &
+    \includegraphics[width=45mm]{figure/soc-gowallamtx_pdos.png} &
+    \includegraphics[width=45mm]{figure/soc-slashdotmtx_pdos.png} \\
+    (a) soc-douban & (b) soc-epinions & (c)soc-gowalla  & (d) soc-slashdot\\ [6pt]
+  \end{tabular}
+  \caption{ social network }
+  \label{fig:social}
+\end{figure}
+
+
+\begin{figure}[htbp]
+  \setlength\tabcolsep{0pt}
+  \hspace{-3.0cm}
+  \begin{tabular}{cccc}
+    \includegraphics[width=45mm]{figure/tech-as-caida2007mtx_dos.png} &
+    \includegraphics[width=45mm]{figure/tech-internet-asmtx_dos.png} &
+    \includegraphics[width=45mm]{figure/tech-p2p-gnutellamtx_dos.png} &
+    \includegraphics[width=45mm]{figure/tech-WHOISmtx_dos.png} \\
+    \includegraphics[width=45mm]{figure/tech-as-caida2007mtx_pdos.png} &
+    \includegraphics[width=45mm]{figure/tech-internet-asmtx_pdos.png} &
+    \includegraphics[width=45mm]{figure/tech-p2p-gnutellamtx_pdos.png} &
+    \includegraphics[width=45mm]{figure/tech-WHOISmtx_pdos.png} \\
+    (a) tech-as-caida2007 & (b) tech-internet-as & (c)tech-p2p-gnutella  & (d) tech-WHOIS\\ [6pt]
+  \end{tabular}
+  \caption{technological network }
+  \label{fig:technological  }
+\end{figure}
+
+\begin{figure}[htbp]
+  \setlength\tabcolsep{0pt}
+  \hspace{-3.0cm}
+  \begin{tabular}{cccc}
+    \includegraphics[width=45mm]{figure/web-edumtx_dos.png} &
+    \includegraphics[width=45mm]{figure/web-sk-2005mtx_dos.png} &
+    \includegraphics[width=45mm]{figure/web-indochina-2004mtx_dos.png} &
+    \includegraphics[width=45mm]{figure/web-spammtx_dos.png} \\
+    \includegraphics[width=45mm]{figure/web-edumtx_pdos.png} &
+    \includegraphics[width=45mm]{figure/web-sk-2005mtx_pdos.png} &
+    \includegraphics[width=45mm]{figure/web-indochina-2004mtx_pdos.png} &
+    \includegraphics[width=45mm]{figure/web-spammtx_pdos.png} \\
+    (a) web-edu & (b) web-sk-2005 & (c)web-indochina-2004  & (d) web-spam\\ [6pt]
+  \end{tabular}
+  \caption{web graph  }
+  \label{fig:web  }
+  \end{figure}
 
 
 \end{document}

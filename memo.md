@@ -1,5 +1,164 @@
 # 様々なことメモ
 
+## DOS と PDOS に用いるグラフについて
+重みなし無向グラフとして全て扱う。
+
+Networkx : https://networkx.org/documentation/stable/reference/generators.html
+SNAP : https://snap.stanford.edu/snappy/doc/reference/generators.html
+
+```
+# SNAP GenCircle (https://snap.stanford.edu/snappy/doc/reference/GenCircle.html)
+[
+  "/Users/murakaminaoki/git/research/pyDOS/data/gen_model/circular_graph_3000_1.txt",
+  "/Users/murakaminaoki/git/research/pyDOS/data/gen_model/circular_graph_3000_2.txt",
+  "/Users/murakaminaoki/git/research/pyDOS/data/gen_model/circular_graph_3000_3.txt",
+  "/Users/murakaminaoki/git/research/pyDOS/data/gen_model/circular_graph_3000_4.txt"
+]
+
+# circular ladder graph
+[
+  "/Users/murakaminaoki/git/research/pyDOS/data/generated_graphs/circular_ladder_graph_n3000.txt",
+  "/Users/murakaminaoki/git/research/pyDOS/data/generated_graphs/circular_ladder_graph_deleted_n3000_pdel0.1.txt",
+  "/Users/murakaminaoki/git/research/pyDOS/data/generated_graphs/circular_ladder_graph_deleted_n3000_pdel0.2.txt",
+  "/Users/murakaminaoki/git/research/pyDOS/data/generated_graphs/circular_ladder_graph_deleted_n3000_pdel0.3.txt",
+]
+
+# high dimention grid graph
+[
+"/Users/murakaminaoki/git/research/pyDOS/data/generated_graphs/grid_graph_dim[100, 100].txt",
+"/Users/murakaminaoki/git/research/pyDOS/data/generated_graphs/grid_graph_dim[40, 40, 40].txt",
+"/Users/murakaminaoki/git/research/pyDOS/data/generated_graphs/grid_graph_dim[9, 9, 9, 9].txt",
+"/Users/murakaminaoki/git/research/pyDOS/data/generated_graphs/grid_graph_dim[8, 8, 8, 8, 8].txt",
+"/Users/murakaminaoki/git/research/pyDOS/data/generated_graphs/grid_graph_dim[7, 7, 7, 7, 7, 7].txt",
+"/Users/murakaminaoki/git/research/pyDOS/data/generated_graphs/grid_graph_dim[6, 6, 6, 6, 6, 6, 6].txt",
+"/Users/murakaminaoki/git/research/pyDOS/data/generated_graphs/grid_graph_dim[5, 5, 5, 5, 5, 5, 5, 5].txt",
+"/Users/murakaminaoki/git/research/pyDOS/data/generated_graphs/grid_graph_dim[4, 4, 4, 4, 4, 4, 4, 4, 4].txt",
+]
+
+# NetworkX 2d grid deleted(randomly)
+[
+  "/Users/murakaminaoki/git/research/pyDOS/data/generated_graphs/grid_graph_deleted_dim(100, 100)_pdel0.0.txt",
+  "/Users/murakaminaoki/git/research/pyDOS/data/generated_graphs/grid_graph_deleted_dim(100, 100)_pdel0.2.txt",
+  "/Users/murakaminaoki/git/research/pyDOS/data/generated_graphs/grid_graph_deleted_dim(100, 100)_pdel0.4.txt",
+  "/Users/murakaminaoki/git/research/pyDOS/data/generated_graphs/grid_graph_deleted_dim(100, 100)_pdel0.6.txt",
+]
+# NetworkX 3d grid deleted(randomly)
+[
+  "/Users/murakaminaoki/git/research/pyDOS/data/generated_graphs/grid_graph_deleted_dim(40, 40, 40)_pdel0.0.txt",
+  "/Users/murakaminaoki/git/research/pyDOS/data/generated_graphs/grid_graph_deleted_dim(40, 40, 40)_pdel0.2.txt",
+  "/Users/murakaminaoki/git/research/pyDOS/data/generated_graphs/grid_graph_deleted_dim(40, 40, 40)_pdel0.4.txt",
+  "/Users/murakaminaoki/git/research/pyDOS/data/generated_graphs/grid_graph_deleted_dim(40, 40, 40)_pdel0.6.txt",
+]
+
+
+# balanced tree
+[
+  "/Users/murakaminaoki/git/research/pyDOS/data/generated_graphs/balanced_tree_r2_h10.txt",
+  "/Users/murakaminaoki/git/research/pyDOS/data/generated_graphs/balanced_tree_r3_h8.txt",
+  "/Users/murakaminaoki/git/research/pyDOS/data/generated_graphs/balanced_tree_r4_h7.txt"
+]
+
+# NetworkX random graph
+[
+  "/Users/murakaminaoki/git/research/pyDOS/data/generated_graphs/gnm_random_graph_n10000_m10000.txt",
+  "/Users/murakaminaoki/git/research/pyDOS/data/generated_graphs/gnm_random_graph_n10000_m15000.txt",
+  "/Users/murakaminaoki/git/research/pyDOS/data/generated_graphs/gnm_random_graph_n10000_m20000.txt",
+  "/Users/murakaminaoki/git/research/pyDOS/data/generated_graphs/gnm_random_graph_n10000_m100000.txt",
+]
+
+# random regular graph
+[
+  "/Users/murakaminaoki/git/research/pyDOS/data/generated_graphs/random_regular_graph_d3_n5000.txt",
+  "/Users/murakaminaoki/git/research/pyDOS/data/generated_graphs/random_regular_graph_d4_n5000.txt",
+  "/Users/murakaminaoki/git/research/pyDOS/data/generated_graphs/random_regular_graph_d8_n5000.txt",
+  "/Users/murakaminaoki/git/research/pyDOS/data/generated_graphs/random_regular_graph_d15_n5000.txt",
+]
+
+# random geometric graph 2d
+[
+"/Users/murakaminaoki/git/research/pyDOS/data/generated_graphs/random_geometric_graph_n3000_radius0.02_dim2.txt",
+"/Users/murakaminaoki/git/research/pyDOS/data/generated_graphs/random_geometric_graph_n3000_radius0.03_dim2.txt",
+"/Users/murakaminaoki/git/research/pyDOS/data/generated_graphs/random_geometric_graph_n3000_radius0.04_dim2.txt",
+"/Users/murakaminaoki/git/research/pyDOS/data/generated_graphs/random_geometric_graph_n3000_radius0.05_dim2.txt",
+
+]
+
+# random geometric graph 3d
+[
+"/Users/murakaminaoki/git/research/pyDOS/data/generated_graphs/random_geometric_graph_n3000_radius0.08_dim3.txt",
+"/Users/murakaminaoki/git/research/pyDOS/data/generated_graphs/random_geometric_graph_n3000_radius0.1_dim3.txt",
+"/Users/murakaminaoki/git/research/pyDOS/data/generated_graphs/random_geometric_graph_n3000_radius0.12_dim3.txt",
+"/Users/murakaminaoki/git/research/pyDOS/data/generated_graphs/random_geometric_graph_n3000_radius0.14_dim3.txt",
+
+]
+
+# random geometric graph 10d
+[
+"/Users/murakaminaoki/git/research/pyDOS/data/generated_graphs/random_geometric_graph_n3000_radius0.5_dim10.txt",
+"/Users/murakaminaoki/git/research/pyDOS/data/generated_graphs/random_geometric_graph_n3000_radius0.55_dim10.txt",
+"/Users/murakaminaoki/git/research/pyDOS/data/generated_graphs/random_geometric_graph_n3000_radius0.65_dim10.txt",
+"/Users/murakaminaoki/git/research/pyDOS/data/generated_graphs/random_geometric_graph_n3000_radius0.7_dim10.txt",
+
+]
+
+
+# NetworkX soft random geometric
+
+# SNAP scale-free(barabasi_albert)
+[
+  "/Users/murakaminaoki/git/research/pyDOS/data/generated_graphs/barabasi_albert_graph_n3000_m2.txt",
+  "/Users/murakaminaoki/git/research/pyDOS/data/generated_graphs/barabasi_albert_graph_n3000_m3.txt",
+  "/Users/murakaminaoki/git/research/pyDOS/data/generated_graphs/barabasi_albert_graph_n3000_m4.txt",
+  "/Users/murakaminaoki/git/research/pyDOS/data/generated_graphs/barabasi_albert_graph_n3000_m5.txt",
+]
+
+# SNAP scale-free geometric
+[
+  "/Users/murakaminaoki/git/research/pyDOS/data/gen_model/scale-free_geometric_3000_5_0.00.txt",
+  "/Users/murakaminaoki/git/research/pyDOS/data/gen_model/scale-free_geometric_3000_5_0.02.txt",
+  "/Users/murakaminaoki/git/research/pyDOS/data/gen_model/scale-free_geometric_3000_5_0.04.txt",
+  "/Users/murakaminaoki/git/research/pyDOS/data/gen_model/scale-free_geometric_3000_5_0.06.txt",
+
+]
+
+# SNAP small_world
+[
+  "/Users/murakaminaoki/git/research/pyDOS/data/gen_model/small_world_5000_5_0.001.txt",
+  "/Users/murakaminaoki/git/research/pyDOS/data/gen_model/small_world_5000_5_0.010.txt",
+  "/Users/murakaminaoki/git/research/pyDOS/data/gen_model/small_world_5000_5_0.100.txt"
+]
+
+# NetworkX navigable small world
+
+# NetworkX powerlaw cluster
+[
+  "/Users/murakaminaoki/git/research/pyDOS/data/generated_graphs/powerlaw_cluster_graph_n3000_m5_p0.1.txt",
+  "/Users/murakaminaoki/git/research/pyDOS/data/generated_graphs/powerlaw_cluster_graph_n3000_m5_p0.3.txt",
+  "/Users/murakaminaoki/git/research/pyDOS/data/generated_graphs/powerlaw_cluster_graph_n3000_m5_p0.5.txt",
+  "/Users/murakaminaoki/git/research/pyDOS/data/generated_graphs/powerlaw_cluster_graph_n3000_m5_p0.8.txt",
+
+]
+# NetworkX random internet as graph
+
+# SNAP forest fire
+[
+  "/Users/murakaminaoki/git/research/pyDOS/data/gen_model/forest_fire_5000_0.30_0.30.txt",
+  "/Users/murakaminaoki/git/research/pyDOS/data/gen_model/forest_fire_5000_0.35_0.30.txt",
+  "/Users/murakaminaoki/git/research/pyDOS/data/gen_model/forest_fire_5000_0.40_0.30.txt",
+  "/Users/murakaminaoki/git/research/pyDOS/data/gen_model/forest_fire_5000_0.45_0.30.txt"
+  ]
+
+
+# others
+[
+  "/Users/murakaminaoki/git/research/pyDOS/data/generated_graphs/barbell_graph_Km100_Pm1000.txt",
+  "/Users/murakaminaoki/git/research/pyDOS/data/generated_graphs/triangular_lattice_graph_m100_n100.txt",
+  "/Users/murakaminaoki/git/research/pyDOS/data/generated_graphs/hexagonal_lattice_graph_m100_n100.txt",
+
+]
+
+```
+
 ## 注意
 
 ・bibtex だけでは不十分。資料を見て参考文献の表記法を確認すること
@@ -9,76 +168,3 @@
 ・作成したモデルの検証が可能（実際のモデルと比較して良いモデルにできているのか？）
 . In particular, evaluating similarity between graphs is crucial to network analysis and
 graph-based anomaly detection (Papadimitriou et al., 2010;　 Akoglu et al., 2015; Ranshous et al., 2015).
-
-## 流れ
-
-従来研究
-・VNGE: 前処理ができない
-・NetLSD: 前処理ができても、指標が複雑で意味を捉えにくい
-
-スペクトルを用いた計算法
-従来手法とは異なる方法の計算。
-→ 前計算が可能。cos dist なら検索が早い（これは NetLSD は L2 ノルムを用いているが、これにも適用可能？）
-
-## VNGE
-
-the von Neumann graph entropy (VNGE) (Braunstein et al., 2006; Passerini & Severini,
-2008; 2009) facilitates the measure of (quantum) JensenShannon divergence and distance (Endres & Schindelin,
-2003; Briet & Harremo ¨ es¨ , 2009) between graphs.
-
-## original contribution(もっと洗練させる
-
-先行研究でのネットワークの距離を計算する手法は、「スケールしない」or「大規模グラフにも適応可能だが、グラフの距離を同時に複数計算するのに時間がかかる」という欠点がありました。
-
-今回はその欠点を解消する、以下の利点を持つネットワークの距離の計算手法を、材料科学の分野の手法を元にして提案しています。
-
-- 大規模ネットワークのサイズにスケールする
-- あらかじめ DOS(固有値の分布)を前計算しておけば、ネットワーク間の距離の複数計算や、類似した DOS を持つネットワークの検索が高速に行える
-
-また、大規模ネットワークの DOS の計算方法は近年計算手法が考案されたばかりで、応用方法などは多くありません。
-
-今回の手法の提案によって、ネットワークの DOS が有用であることの 1 つの例示になると言えます。
-
-## 論文
-
-- [Braunstein, S. L., Ghosh, S., and Severini, 2006]
-
-  - 量子力学の文脈で使われていた Von Neumann entropy をグラフに応用した論文として紹介しています。
-    （VNGE という用語自体が出てくるのはもう少し後の論文だと思います。）
-
-- [De Domenico et al., 2015]
-
-  - Kullback–Liebler divergence を用いて定義される Jensen-Shannon divergence を von Neumann entropy で表現した論文として用いています。
-    （こちらは発表資料から参考文献として抜けていたみたいです。申し訳ありません）
-
-  - > その論文には若干違和感を感じます。理由は、
-    > Shannon entropy ---> von Neumann entropy
-    > KL-divergence ---> quantum divergence
-    > (or, relative entropy)
-    > と量子情報分野では拡張されているからです。quantum divergence で Jensen 流にすることはできるわけで。このあたり、その論文ではどう書かれてるでしょうか。
-
-  - De Domenico, Manlio, Vincenzo Nicosia, Alexandre Arenas, and Vito Latora. "Structural reducibility of multilayer networks." Nature communications 6, no. 1 (2015): 1-9.
-
-- [Dominik M. Endres and Johannes E. Schindelin, 2003]
-
-  - Jensen-Shannon divergence の平方根が、距離を表現するものとして適切な指標であることを証明しています。
-  - 前述の Jensen-Shannon divergence の式と、後述の Von Neumann Graph Entropy の近似計算アルゴリズムを用いることで、2 つのグラフ間の距離が計算できることが分かります。
-  - > 情報理論では、KL-divergence の次に、Hellinger distance というのがよく知られてます。ある意味、Hellinger distance は L_1 norm 的です。それと関係あるでしょうか？
-
-- [Chen, Pin-Yu, Lingfei Wu, Sijia Liu, and Indika Rajapakse, 2019] & [Tsitsulin, Anton, Marina Munkhoeva, and Bryan Perozzi, 2020]
-
-  - 大規模グラフにスケールするような、Von Neumann Graph Entropy の近似計算アルゴリズムについての紹介です。
-  - > この研究あったのですね。density matrix で marginal distribution 的なものを考えると、submodular function が出てきます。平石さんは submodular function をよく知っています。この関数の submodularit は Lieb, Ruskai という物理の有名な研究者がいて、一方 combinatorial optimization では submodular function の minimization は関数計算をオラクルとすると多項式時間でできます（最大化は NP-hard で、一方で greedy algorithm が定数近似値比の近似アルゴリズムになります）。そういうことで、計算法にかつて興味があったのですが、その答えが今井はようやくでわかりました
-
-- [Geilhufe, R.M., Borysov, S.S., Kalpakchi, D. and Balatsky, A.V., 2018.]
-  - materials science で使用された DOS 応用方法の紹介と、その手法の流用を提案するために用いました。論文中では DOS のデータベースから、類似した DOS を持つ結晶を検索する方法について述べています。
-
-## 参考
-
-Spectral Graph Theory については、有名な本の著者の Fan Chung の Web ページ
-http://www.math.ucsd.edu/~fan/
-で、下の方にある some talks for general audience のもの
-http://www.math.ucsd.edu/~fan/talks/jmm1.pdf
-http://www.math.ucsd.edu/~fan/talks/graph.pdf
-を一度見て、感じ（page rank, random
-walk などへの展開も含め）をつかんでおくとよいかもしれません。
