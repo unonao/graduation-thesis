@@ -25,27 +25,27 @@
 %-------------------
 \begin{document}
 \begin{eabstract}
-    Spectral graph theory studies the relationship between the properties of graphs and eigenvalues. Spectra, or eigenvalues, are useful for analyzing the properties and structure of networks. However, since computing the full eigendecomposition is expensive, large networks have been analyzed using part of the spectrum. Research using the overall spectra of a large-scale network is still an underdeveloped field.
+  Spectral graph theory studies the relationship between the properties of graphs and eigenvalues. Spectra, or eigenvalues, are useful for analyzing the properties and structure of networks. However, since computing the full eigendecomposition is expensive, large-scale networks were analyzed using part of the spectrum. Research using the overall spectra of a large-scale network is still an underdeveloped field.
 
-    Firstly, we propose two approximation algorithms to compute the sum of powers of eigenvalues $\sum_{i=0}^{n-1} \lambda_i^k$ that scale to large networks. The sum of powers of eigenvalues is an important property, and in recent years, research on related inequalities has been conducted. However, the conventional simple algorithms for calculating the sum of powers of eigenvalues do not scale to large graphs. Our proposed method makes it possible to calculate the sum of powers of eigenvalues for networks with millions or billions of vertices in a practical time. This makes it possible to use the sum of powers of eigenvalues as a new measure for the network.
+  Firstly, we propose two approximation algorithms to compute the sum of powers of eigenvalues $\sum_{i=0}^{n-1} \lambda_i^k$ that scale to large networks. The sum of powers of eigenvalues has an important property, and in recent years, research on inequalities related to the value has been conducted. However, the conventional simple algorithms for calculating the sum of powers of eigenvalues do not scale to large graphs. Our proposed method makes it possible to calculate it for networks with millions or billions of vertices in a practical time. This makes it possible to use the sum of powers of eigenvalues as a new measure for the network. For an adjacency matrix, the value means the number of closed walks with length $k$.
 
-    In this research, we also study the spectral distribution obtained by an algorithm based on a method similar to the proposed method. Recently, a method to calculate the distribution of the entire spectrum has been devised, but since there are still few studies that visualize the spectral distribution of real-world networks, the correspondence between the spectral distribution and the properties of the network has not yet been considered deeply. We first discuss the quantitative evaluation of spectra and their application methods. For the quantitative evaluation and comparison of spectral distributions, we propose to use the concepts of divergence and distance for discrete probability distributions. As an application method, we also mention a method for fast retrieval of similar spectra using cosine distance. Next, we present the spectral distributions obtained from the synthesized graph and the real-world network. Next, we analyze the obtained spectral distributions and discuss the relationship between the network properties and the spectra. The results show that for sparse networks, the local structure of the network, called motifs, and the distribution of eigenvalues are related. Besides, graphs in which nearby vertices are adjacent to each other have a sharp spectrum, as seen in complex networks. Furthermore, we exemplify that many graphs where vertices are randomly adjacent to each other have a semicircular spectral distribution as seen in Erdős-Rényi random graphs.
+  In this research, we also study the spectral distribution obtained by an algorithm based on an approximation technique similar to the proposed ones. Recently, a method to calculate the distribution of the entire spectrum was developed. However, there are still few studies that visualize the spectral distribution of real-world networks. Therefore, the relationship between a spectral distribution and the properties of a network has not yet been considered deeply. We present the spectral distributions obtained from synthesized graphs and real-world networks with a total of over 90. This is the first study to visualize so many spectral distributions of graphs. We analyze the obtained spectral distributions and discuss the relationship between the network properties and the spectra. The results show that a graph with similar spectral distributions tends to have similar properties. Besides, a graph in which nearby vertices are adjacent to each other has a sharp spectrum, as seen in complex networks. Furthermore, we exemplify that many graphs where vertices are randomly adjacent to each other have a semicircular spectral distribution as seen in Erdős-Rényi random graphs. Next, we discuss the quantitative evaluation of spectra and their application methods. For the quantitative evaluation and comparison of spectral distributions, we propose to use spectral distributions as discrete probability distributions. This allows us to use the concepts of discrete probability distributions such as entropy, divergence, and distance. As applications, there is a fast retrieval method of similar spectra using cosine distance and we may be able to use the discrete probability distributions as feature vectors for deep learning on graphs.
+
 
 
 \end{eabstract}
 \begin{jabstract}
-    Spectral graph theory ではグラフの性質と固有値の関係について研究されるなど、ネットワークの性質や構造を分析する上でスペクトルは非常に重要な指標となり得る。しかし、大規模ネットワークについては、計算量の問題からスペクトルの一部を利用した分析しか行われていなかった。大規模ネットワークの全てのスペクトルを利用した研究はまだ未発展の分野である。
+  Spectral graph theory ではグラフの性質と固有値の関係について研究されるなど、ネットワークの性質や構造を分析する上でスペクトルは非常に重要な指標となり得る。しかし、大規模ネットワークについては、計算量の問題からスペクトルの一部を利用した分析しか行われていなかった。大規模ネットワークの全てのスペクトルを利用した研究はまだ未発展の分野である。
 
-    まず、本研究では大規模ネットワークにスケールするような、固有値の累乗の合計値 $\sum_{i=0}^{n-1} \lambda_i^k$ をもとめる近似アルゴリズムを2つ提案する。固有値の累乗の合計値は重要な性質を持っており、近年は関係した不等式の研究なども行われている。しかし、固有値の累乗の合計値を計算する従来の単純なアルゴリズムでは大規模グラフにスケールしなかった。本研究の提案手法により実用的な時間で、数百万や数十億単位の頂点を持つネットワークについて固有値の累乗の合計値を計算することが可能になった。 これにより、ネットワークに対する新たな指標として、固有値の累乗の合計値というものが利用可能となる。
+  まず、本研究では大規模ネットワークにスケールするような、固有値の累乗の合計値 $\sum_{i=0}^{n-1} \lambda_i^k$ をもとめる近似アルゴリズムを2つ提案する。固有値の累乗の合計値は重要な性質を持っており、近年は関係した不等式の研究なども行われている。しかし、固有値の累乗の合計値を計算する従来の単純なアルゴリズムでは大規模グラフにスケールしなかった。本研究の提案手法により実用的な時間で、数百万や数十億単位の頂点を持つネットワークについてこの値を計算することが可能になった。 これにより、ネットワークに対する新たな指標として、固有値の累乗の合計値というものが利用可能となる。隣接行列について計算すると、この値は長さkの閉じた歩の数になる。
 
-    本研究は、提案手法と同様の手法に基づいたアルゴリズムによって得ることができるスペクトル分布についても研究する。近年スペクトル全体の分布を計算する手法が考案されたが、実世界のネットワークのスペクトル分布を可視化した研究はまだ少ないため、スペクトル分布とネットワークの性質の対応関係についてはまだ深く考えられていない。我々はまず、スペクトル分布の定量的評価とその応用方法について議論する。スペクトル分布の定量的な評価や比較のために、離散確率分布に対するダイバージェンスや距離の概念を流用することを提案する。応用方法として cosine distance を用いた類似のスペクトルを高速に検索する手法についても言及する。 次に、合成されたグラフと実世界のネットワークから得られたスペクトル分布を提示する。そして得られたスペクトル分布を分析し、ネットワークの性質とスペクトルの関係について考察する。 結果として、疎なネットワークについては、モチーフと呼ばれるネットワークの局所的な構造と固有値の分布が関係していることが分かった。 また、近くの頂点同士が隣接するようなグラフは、複雑ネットワークに見られるような鋭いスペクトルを持つ。さらに、頂点同士がランダムに隣接する多くのグラフは、Erdős-Rényi ランダムグラフに見られる半円状のスペクトルになることを例示する。
-
+  本研究は、提案手法と同様の近似に基づいたアルゴリズムによって得ることができるスペクトル分布についても研究する。近年スペクトル全体の分布を計算する手法が考案されたが、実世界のネットワークのスペクトル分布を可視化した研究はまだ少ないため、スペクトル分布とネットワークの性質の対応関係についてはまだ深く考えられていない。我々はまず、合計90以上もの合成されたグラフと実世界のネットワークから得られたスペクトル分布を提示する。本研究はこれだけ多くのグラフとネットワークに対してスペクトルを提示した初めての研究である。得られたスペクトル分布を分析し、ネットワークの性質とスペクトルの関係について考察する。結果として、似た性質を持つグラフは、似たような形のスペクトルになる傾向があることが分かった。近くの頂点同士が隣接するようなグラフは、複雑ネットワークに見られるような鋭いスペクトルを持つことが多い。さらに、頂点同士がランダムに隣接する多くのグラフは、Erdős-Rényi ランダムグラフに見られる半円状のスペクトルになることを例示する。次に、スペクトル分布の定量的評価とその応用方法について議論する。スペクトル分布の定量的な評価や比較のために、離散確率分布に変換して扱うことを提案する。これによりエントロピーや距離の概念を流用することで定量的評価が可能になる。また、応用方法として cosine distance を用いた類似のスペクトルを高速に検索する手法や、特徴ベクトルとしてグラフに対する深層学習に利用できる可能性がある。
 
 \end{jabstract}
 \maketitle
 
 \begin{acknowledge}
-    First of all, I would like to express my gratitude to Professor Imai for his support in my research and writing this paper. His advice and insights were very helpful not only in the content of my research, but also in how to proceed with my research. I am also grateful to Assist. Prof. Hiraishi for taking care of me. Finally, I would like to thank all members of Imai Laboratry.
+  First of all, I would like to express my gratitude to Professor Imai for his support in my research and writing this paper. His advice and insights were very helpful not only in the details of my research but also in how to proceed with my research. I am also grateful to Assist. Prof. Hiraishi for taking care of me. Finally, I would like to thank all members of Imai Laboratory.
 \end{acknowledge}
 
 \frontmatter %% 前付け
@@ -58,27 +58,56 @@
 
 \chapter{Introduction}
 \section{Large-Scale Network}
-Large-scale networks appear in many places in our daily lives. For example, IP address networks, map graphs, web graphs, and so on. Algorithms that have been used in the past do not scale to the huge networks that appear in the real world. Therefore, research is being done to develop algorithms that can be applied to large-scale networks and to elucidate the properties of large-scale networks.
+Large-scale networks appear in many places in our daily lives. For example, networks linked by chemical reactions, electrical power grids, neural networks , the World Wide Web, and so on. Naive algorithms for small graphs do not scale to the huge networks that appear in the real world. Therefore, research is being done to develop algorithms that can be applied to large-scale networks and to understand the properties of large-scale networks.
+
+Complex networks, which are large and complex real-world networks, are getting attention. There are three well-known properties of complex networks: small worlds, high clustering coefficient, power-law degree distributions. A network is called a small-world network if there is a short path between any two nodes. This property was tested by Stanley Milgram \cite{milgram1967small} and he found that the average path length between most pairs of people in the United States is about 6. The clustering coefficient is the value that represents the rate of friends who are friends with each other. If a degree distribution $P(d)$ of a network, where $d$ is a degree, has a power-law tail $P(d) \sim d^{-\gamma}$, the network is called a scale-free network. From empirical results, it is found that the degree distribution of most real-world networks is different from a Poisson distribution \cite{albert2002statistical}.
+
+Based on the above and other properties, many researchers proposed graph models regarding real-world networks.  Watts and Strogatz \cite{watts1998collective} proposed a small-worlds network model. Barabási and Albert \cite{barabasi1999emergence} firstly mentioned the power-law degree distribution in real-world networks. After the above models based on well-known properties were proposed, the forest-fire model that focuses on how networks evolve over time was proposed \cite{leskovec2007graph}.
 
 \section{Spectra and Graphs}
-Spectral graph theory is one powerful tool for understanding the properties of networks. This theory is based on the fact that the properties of a network and its eigenvalues, when expressed as a matrix, are interrelated. However, when considering eigenvalues for real-world networks, only a subset of the eigenvalues have been analyzed due to computational complexity issues, since the computational complexity of obtaining all the eigenvalues is $O(n^3)$ when the number of vertices is $n$. In recent years, approximation algorithms that use all eigenvalues for analysis have been proposed, but this is still an undeveloped field.
+Spectral graph theory is one powerful tool for understanding the properties of networks. This theory is based on the fact that the properties of a network and its matrix eigenvalues are interrelated.
+The second-largest eigenvalue has implications for the convergence rate of the standard PageRank \cite{page1999pagerank} algorithm, which uses the power method \cite{haveliwala2003second}.
+Several spectral clustering methods use the part of the eigenvectors or eigenvalues of matrix \cite{ng2002spectral}.
+In geometry and graph theory, the Cheeger constant, or isoperimetric number, is defined by using the bisecting cut of a graph \cite{cheeger1969lower, mohar1989isoperimetric}. The Cheeger inequality, which represents the relation between the Cheeger constant and the first non-trivial smallest eigenvalues, is often used for providing some bounding the eigenvalues of the graph \cite{chung1997spectral}.
 
-The eigenvalues of adjacency matrix and the number of closed walks are closely related\cite{butler2008eigenvalues}.
+However, when considering eigenvalues for real-world networks, only a part of the eigenvalues have been analyzed due to computational complexity issues, since the computational complexity of obtaining all the eigenvalues is $O(n^3)$ when the number of vertices is $n$. In recent years, approximation algorithms for von Neumann graph entropy \cite{chen2019fast, tsitsulin2020just}, NetLSD \cite{tsitsulin2018netlsd,tsitsulin2020just}, and DOS/PDOS \cite{dong2019network}, which are difined using all eigenvalues of matrix, have been proposed. These algorithms are based on some approximation techniques using diagonal elements of matrices such as stochastic trace estimator\cite{hutchinson1989stochastic} and stochastic Lanczos estimator\cite{ ubaru2017fast}. Although we have these approximation algorithms, applications of these values were not well studied.
 
-Recently, an approximation algorithm for the distribution of eigenvalues that scales to large graphs has been proposed. This has made it possible to visualize the distribution of eigenvalues of various networks in the real world. However, a comprehensive analysis of the synthesized graphs and real-world networks has not yet been done.
+There are other studies of graphs using all eigenvalues. For example, the sum of the $\beta$-th powers of the non-zero Laplacian eigenvalues of G: $\sum_{i=1}^{n-1}\mu_i^\beta$, and the sum of the $\beta$-th powers of the non-zero normalized Laplacian eigenvalues of G: $\sum_{i=1}^{n-1}\lambda_i^\beta$ have been studied where $\mu_0, \mu_1, ..., \mu_{n-1}$ are the eigenvalues of Laplacian matrix and $\lambda_0, \lambda_1, ..., \lambda_{n-1}$ are the eigenvalues of normalized Laplacian matrix \cite{zhou2008sum, li2018bounding}. Similarly, the sum of the $k$-th powers of the eigenvalues of adjacency matrix means the number of closed walks whose length is $k$ \cite{butler2008eigenvalues}. However, fast algorithm for sum of powers of eigenvalues was not developed.
 
 
 \section{Our Contributions}
-We study the spectral distribution and the sum of powers of eigenvalues as an analysis using all eigenvalues. First, we propose an approximation algorithm for the sum of powers of eigenvalues that scales to large networks. By applying methods such as stochastic trace estimator and stochastic Lanczos quadrature, the sum of powers of eigenvalues can be calculated in a practical time. Experimental results for the analysis of relative errors are also shown.
+We study the sum of powers of eigenvalues and the spectral distributions as analysis using all eigenvalues. First, we propose an approximation algorithm for the sum of powers of eigenvalues that scales to large networks. By applying approximation techniques such as stochastic trace estimator and stochastic Lanczos quadrature, we can calculate the sum of powers of eigenvalues in a practical time. Experimental results for the analysis of relative errors are also shown.
 
-Second, we discuss the use of the spectral distribution obtained by the method of Kun Dong et al \cite{dong2019network}. Although it is currently used for visualization of the distribution, various concepts of a discrete probability distribution can be used for quantitative evaluation. Next, we show the results of an experiment in which we obtained the spectral distribution for a real-world network. It can be inferred from the experimental results that networks with similar properties have similar spectral distributions. The results of this experiment will be a stepping stone to understanding the properties of networks using spectral distribution.
+Second, we present the spectral distributions of 66 synthesized graphs and 28 real-world networks calculated by the method of Kun Dong et al \cite{dong2019network}. This is the first study to visualize so many spectral distributions of graphs. We show the results of an experiment in which we obtained the spectral distribution for real-world networks. It can be inferred from the experimental results that networks with similar properties have similar spectral distributions. The results of this experiment will be a stepping stone to understanding the properties of networks using spectral distributions. Then, we discuss the use of spectral distributions. Although it is currently used for visualization of the distribution, various concepts of a discrete probability distribution can be used for quantitative evaluation.
 
 \chapter{Preliminaries}
 \section{General Notation}
+\begin{table}[htb]
+  \begin{center}
+    \begin{tabular}{l l}
+      \bf{Symbol} & \bf{Description} \\ \hline
+      $n \in \mathbb{N}$ & $|V|$:the number of vertices \\
+      $m \in \mathbb{N}$ & $|E|$:the number of edges \\ \hline
+      ${\mathbf M} \in \mathbb{R}^{n\times n}$ & Real symmetric matrix which can be ${\mathbf A}$, ${\mathbf L}$, or ${\mathbfcal L}$\\
+      ${\mathbf D} \in \mathbb{R}^{n\times n}$ & Diagonal matrix of a graph $G$ \\
+      ${\mathbf A} \in \mathbb{R}^{n\times n}$ & Adjacency matrix of a graph $G$ \\
+      ${\mathbfcal A} \in \mathbb{R}^{n\times n}$ & Normalized Adjacency matrix of a graph $G$ \\
+      ${\mathbf L} \in \mathbb{R}^{n\times n}$ & Laplacian matrix of a graph $G$ \\
+      ${\mathbfcal L} \in \mathbb{R}^{n\times n}$ & Normalized Laplacian matrix of a graph $G$ \\
+      \hline
+      $n_v \in \mathbb{R}^+$ & Number of SLQ random vectors \\
+      $s \in \mathbb{R}^+$ & Number of Lanczos algorithm steps\\
+      ${\mathbf x} \in \mathbb{R}^n$ & Random vector which satisfies $\mathbb{E}_{p(\mathbf{x})}[\mathbf{xx^T}] = \mathbf{I}$\\
+      \hline
+    \end{tabular}
+    \caption{Summary of notion}
+    \label{tab:notion}
+  \end{center}
+\end{table}
 
-Let $G=(V,E,w)$ be a wighted undirected graph where $V=(v_0, v_2, ..., v_{n-1})$ is a set of vertices, $E \subseteq V\times V$ is a set of undirected edges, and $w: E \rightarrow \mathbb{R}$ is a weight function. The adjacency matrix ${\mathbf A}$ is a $n \times n$ matrix of $G$, (i.e., $ A_{ij}= w(v_i ,u_i)$ ).
+Let $G=(V,E,w)$ be a wighted undirected graph where $V=(v_0, v_2, ..., v_{n-1})$ is a set of vertices, $E \subseteq V\times V$ is a set of undirected edges, and $w: E \rightarrow \mathbb{R}$ is a nonnegative weight function. The adjacency matrix ${\mathbf A}$ is a $n \times n$ matrix of $G$, (i.e., $ A_{ij}= w(v_i ,u_i)$ ).
 
-The laplacian matrix ${\mathbf L}$ and the normalized laplacian matrix ${\mathbfcal L}$ are defined by the weight function $w$ and the degree $d_v:=\sum_{u} w(u,v)$.
+The Laplacian matrix ${\mathbf L}$ and the normalized Laplacian matrix ${\mathbfcal L}$ are defined by the weight function $w$ and the degree $d_v:=\sum_{u} w(u,v)$.
 \[
     L(u,v) = \begin{cases}
         d_v - w(u,v) & \text{if $u=v$}, \\
@@ -94,63 +123,49 @@ The laplacian matrix ${\mathbf L}$ and the normalized laplacian matrix ${\mathbf
         \end{cases}
 \]
 
-Let ${\mathbf M}$ denote a real symmetric matrix that can be ${\mathbf A}$, ${\mathbf L}$, or ${\mathbfcal L}$.
-\begin{table}[htb]
-    \begin{center}
-      \begin{tabular}{l l}
-        \bf{Symbol} & \bf{Description} \\ \hline
-        $n \in \mathbb{N}$ & $|V|$:the number of vertices \\
-        $m \in \mathbb{N}$ & $|E|$:the number of edges \\ \hline
-        ${\mathbf M} \in \mathbb{R}^{n\times n}$ & Real symmetric matrix which can be ${\mathbf A}$, ${\mathbf L}$, or ${\mathbfcal L}$\\
-        ${\mathbf A} \in \mathbb{R}^{n\times n}$ & Adjacency matrix of a graph $G$ \\
-        ${\mathbf L} \in \mathbb{R}^{n\times n}$ & Laplacian matrix of a graph $G$ \\
-        ${\mathbfcal L} \in \mathbb{R}^{n\times n}$ & Normalized Laplacian matrix of a graph $G$ \\
-        \hline
-        $n_v \in \mathbb{R}^+$ & Number of SLQ random vectors \\
-        $s \in \mathbb{R}^+$ & Number of Lanczos algorithm steps\\
-        ${\mathbf x} \in \mathbb{R}^n$ & Random vector which satisfies $\mathbb{E}_{p(\mathbf{x})}[\mathbf{xx^T}] = \mathbf{I}$\\
-        \hline
-      \end{tabular}
-      \caption{Summary of notion}
-      \label{tab:notion}
-    \end{center}
-  \end{table}
-
-\section{The Laplacian and Eigenvalues}
-The relationship between graphs and eigenvalues has been studied in spectral graph theory. A particular focus has been on eigenvalues of normalized laplacian matrices, and Fan Chung has written a comprehensive textbook on the subject\cite{chung1997spectral}, but there are also studies on laplacian matrices.
-
-Let ${\mathbf D}$ denote the diagonal matrix, such that
+Let ${\mathbf D}$ denote the diagonal matrix, and ${\mathbfcal A}$ denote the normalized adjacency matrix such that
 \begin{align*}
     \mathbf{D}(u,v) = \begin{cases}
         d_v & \text{if $u=v$}, \\
         0   & \text{otherwise.}
         \end{cases}
 \end{align*}
-
-There are some relationships among the adjacency matrix, laplacian matrix, and  normalized laplacian matrix.
-
-By definitions, we can write
 \begin{align*}
-    \mathbfcal{L} &= \mathbf{D}^{-\frac{1}{2}}\mathbf{L}\mathbf{D}^{-\frac{1}{2}}\\
-        &= \mathbf{I} - \mathbf{D}^{-\frac{1}{2}}\mathbf{A}\mathbf{D}^{-\frac{1}{2}}
+    {\mathbfcal A} = \mathbf{D}^{-\frac{1}{2}}\mathbf{A}\mathbf{D}^{-\frac{1}{2}}
 \end{align*}
 
 
+There are some relationships among the adjacency matrix, Laplacian matrix, and  normalized Laplacian matrix.
+Let ${\mathbf M}$ denote a real symmetric matrix that can be ${\mathbf A}$, ${\mathbf L}$, or ${\mathbfcal L}$.
+
+\section{The Laplacian and Eigenvalues}
+The relationship between graphs and eigenvalues has been studied in spectral graph theory. A particular focus has been on eigenvalues of normalized Laplacian matrices, and Fan Chung has written a comprehensive textbook on the subject \cite{chung1997spectral}, but there are also studies on Laplacian matrices.
+
+By definitions, we can write
+\begin{align}
+    \mathbfcal{L} &= \mathbf{D}^{-\frac{1}{2}}\mathbf{L}\mathbf{D}^{-\frac{1}{2}}\\
+        &= \mathbf{I} - \mathbf{D}^{-\frac{1}{2}}\mathbf{A}\mathbf{D}^{-\frac{1}{2}} \\
+        &= \mathbf{I} - {\mathbfcal A}
+\end{align}
+
+If G is unweighted, the eigenvalues of normalized Laplacian matrix $\mathbfcal{L}$ always lie in the range between 0 and 2 inclusive \cite{chung1997spectral}. From (2.3) and the above, we find that the range of the eigenvalues of normalized adjacency matrix ${\mathbfcal A}$ is $[-1,1]$.
+
+We can generalize the case where G is unweighted to consider the case where G is weighted and has no negative edges.
 \begin{theorem}
     If G has no negative edges, $\mathbf{L}$ and $\mathbfcal{L}$ are positive semi-definite.
 \end{theorem}
 \begin{proof}
-    For all $\mathbf{x} \in \mathbb{R}^n$,
+    For all $\mathbf{z} \in \mathbb{R}^n$,
     \begin{align*}
-        \mathbf{x}^T \mathbf{L} \mathbf{x} = \sum_{(u,v) \in E} w(u,v)(x_u - x_v)^2 \geq 0
+        \mathbf{z}^T \mathbf{L} \mathbf{z} = \sum_{(u,v) \in E} w(u,v)(z_u - z_v)^2 \geq 0
     \end{align*}
     \begin{align*}
-        \mathbf{x}^T \mathbfcal{L} \mathbf{x} = \sum_{(u,v) \in E} w(u,v)\left(\frac{x_u}{\sqrt{d_u}} - \frac{x_v}{\sqrt{d_v}}\right)^2 \geq 0
+        \mathbf{z}^T \mathbfcal{L} \mathbf{z} = \sum_{(u,v) \in E} w(u,v)\left(\frac{z_u}{\sqrt{d_u}} - \frac{z_v}{\sqrt{d_v}}\right)^2 \geq 0
     \end{align*}
 \end{proof}
 
-\section{Matrix and Spectra}
-Firstly, we define some concepts regarding matrix and its eigenvalues and prove some theorems which are used later.
+\section{Function and Spectra}
+We define some concepts regarding function and eigenvalues and prove some theorems which are used later.
 \begin{definition}
     Let $\lambda_0 \leq \lambda_2 \leq ... \leq \lambda_{n-1}$ be the eigenvalues of a n-dimensional matrix $\mathbf{M}$. The spectrum $\sigma(\mathbf{M})$ of $\mathbf{M}$ is the set of its overall eigenvalues.
     \[\sigma(\mathbf{M}) := \{\lambda_i | i=0,1,...,n-1\}\]
@@ -188,9 +203,9 @@ Firstly, we define some concepts regarding matrix and its eigenvalues and prove 
     By applying theorem \ref{power_eigenvalues} to each degree, we can get $f(\mathbf{M}) = \mathbf{Q}f(\mathbf{\Lambda})\mathbf{Q}^T$.
 \end{proof}
 
-\section{Approximation Methods for Matrix Traces and Bilinear Forms}
+\section{Approximation for Matrix Traces and Bilinear Forms}
 \subsection{Stochastic Trace Estimator} \label{STE}
-For trace estimation of large implicit matrices, we can use randomized estimator described by Hunchinson \cite{hutchinson1989stochastic, adams2018estimating}.
+For trace estimation of large implicit matrices $\mathbf{M}$, we can use randomized estimator described by Hunchinson \cite{hutchinson1989stochastic, adams2018estimating}.
 \begin{theorem}
     \label{Hunchinson}
     (Proposition 4.1 \cite{adams2018estimating}) Let ${\mathbf A} \in \mathbb{R}^{n\times n}$ be a square matrix and $\mathbf{x} \in \mathbb{R}^n$ be a random vector such that $\mathbb{E}_{p(\mathbf{x})}[\mathbf{xx^T}] = \mathbf{I}$. Then $\mathbb{E}_{p(\mathbf{x})}[\mathbf{x}^{T}\mathbf{M}\mathbf{x}] = \mathrm{tr}(\mathbf{M})$.
@@ -300,6 +315,7 @@ Now, the bilinear form $\mathbf{z}^{T}f(\mathbf{M})\mathbf{z}$ is reformed as
     &\tau_k = \mathbf{Y}_{0,k} = \mathbf{e}_1^T \mathbf{y}_k, ~ \theta_k= \Theta_{k,k}, ~ \mathbf{T}=\mathbf{Y}\mathbf{\Theta}\mathbf{Y}^T
 \end{align}
 
+
 \subsection{Stochastic Lanczos Quadrature(SLQ)}
 There is a method called stochastic Lanczos quadrature(SLQ) \cite{ubaru2017fast}, for approximate computing of the trace of functions of large matrices. Firstly, the stochastic trace estimator is used for approximating the trace. Next, the estimation method we discussed in the section \ref{bilinear} is applied.
 
@@ -308,7 +324,7 @@ The stochastic trace estimator has been explained in the previous section.
     \mathrm{tr}(f(\mathbf{M})) =\mathbb{E}_{p(\mathbf{x})}[\mathbf{x}^{T}f(\mathbf{M})\mathbf{x}] \approx \frac{n}{n_v}\sum_{i=0}^{n_v-1} \mathbf{z}_i^{T}f(\mathbf{M})\mathbf{z}_i
 \end{align}
 
-Now, we need to compute $\mathbf{z}_i^{T}f(\mathbf{M})\mathbf{z}_i$. By applying (2.1) to the stochastic trace estimator (2.3), we get Stochastic Lanczos Quadrature estimator:
+Now, we need to compute $\mathbf{z}_i^{T}f(\mathbf{M})\mathbf{z}_i$. By applying (2.4) to the stochastic trace estimator (2.6), (2.7), we get Stochastic Lanczos Quadrature estimator:
 \begin{align}
     \mathrm{tr}(f(\mathbf{M})) \approx \frac{n}{n_v} \sum_{i=0}^{n_v-1}\left(\sum_{k=0}^{s-1} (\tau_k^i)^2 f(\theta_k^i) \right)
 \end{align}
@@ -340,8 +356,8 @@ First, we define DOS as the spectrum of the entire network. Next, we define LDOS
 \end{definition}
 
 
-\subsection{Motif Multiplicity}
-Motif multiplicity corresponds to eigenvalues multiplicity \cite{mehatari2015effect,dong2019network}.
+\subsection{Motif and Multiplicity}
+Some local structures of graphs correspond to some eigenvalues of normalized Laplacian matrix $\mathbfcal{L}$. These local structures are called motifs and some correspondence between motifs and eigenvalues are proved \cite{banerjee2008spectrum, mehatari2015effect}. Some common motifs in real-world networks are presented by Kun Dong et al \cite{dong2019network}. Many motifs often appear in graphs whose average degree is small, and these motif multiplicity result in certain spikes in DOS.
 
 \subsection{Kernel Polynomial Method (KPM)}
 To approximate DOS and PDOS, the Kernel Polynomial Method (KPM) \cite{weisse2006kernel} can be used. This method uses a dual basis of orthogonal polynomial basis, and Kun Dong et al.\cite{dong2019network} use Chebyshev polynomials. First, the spectral density is expanded by using the dual Chebyshev basis, and the DOS can be approximated by using the stochastic trace estimator. The PDOS can be obtained by using the diagonal elements of the $m$-th Chebyshev polynomial of ${\mathbf M}$.
@@ -350,6 +366,7 @@ When approximating with Chebyshev polynomials, the eigenvalues must be in the in
 \begin{align*}
     {\mathbf {\widetilde M}} = \frac{2{\mathbf M} - (\lambda_{n-1} + \lambda_0)}{\lambda_{n-1}-\lambda_0}.
 \end{align*}
+If G is unweighted, the simple example that satisfies this condition is normalized adjacency matrix ${\mathbfcal A}$.
 
 The Chebyshev polynomials are defined recursively as follows:
 \begin{align*}
@@ -376,7 +393,7 @@ In practice, it is impossible to expand DOS and PDOS by an infinite number of po
 \chapter{Sum of Powers of Eigenvalues of Network (SPENet)}
 Our main purpose is computing sum of k-th powers of eigenvalues $\sum_{i=0}^{n-1} \lambda_i^k$ which we call SPENet. We propose two approximation algorithms (STE and SLQ) based on the stochastic trace estimator and the stochastic Lanczos quadrature. For naive algorithms, the computational complexity of SPENet using full eigendecomposition is $O(n^3)$, while for STE algorithm it is $O(m k n_v)$ and for SLQ algorithm it is $O((ms + ns^2) n_v)$.
 
-Since the laplacian matrix ${\mathbf L}$ and the normalized laplacian matrix ${\mathbfcal L}$ have zero eigenvalues, we are interested in the case that index of power $k$ is positive. When we consider the case that ${\mathbf M} = {\mathbf A}$, $k$ must be positive integer or zero because ${\mathbf A}$ have negative eigenvalues.
+Since the Laplacian matrix ${\mathbf L}$ and the normalized Laplacian matrix ${\mathbfcal L}$ have zero eigenvalues, we are interested in the case that index of power $k$ is positive. When we consider the case that ${\mathbf M} = {\mathbf A}$, $k$ must be positive integer or zero because ${\mathbf A}$ have negative eigenvalues.
 
 
 \section{Algorithms}
@@ -416,7 +433,7 @@ The product of two matrices costs $O(n^3)$, but the product of a vector and a sp
 \subsection{SLQ algorithm}
 The second estimation method for SPENet is based on the stochastic Lanczos quadrature(SLQ), which we apply in our setting for the trace of power of matrix $f({\mathbf M})={\mathbf M}^k$. We are interested in the case where ${\mathbf M} = {\mathbf A}, {\mathbf L}, \text{or} {\mathbfcal L}$. In this algorithm, the index of power $k$ must be positve real number.
 
-By using theorem 1 and (2.4), we can estimate SPENet.
+By using theorem 1 and (2.9), we can estimate SPENet.
 \begin{align}
     \sum_{i=0}^{n-1} \lambda_i^k &= \mathrm{tr}({\mathbf M}^k)  \nonumber\\
     &= \mathbb{E}_{p(\mathbf{x})}[\mathbf{x}^{T}{\mathbf M}^k \mathbf{x}] \approx \frac{n}{n_v}\sum_{i=0}^{n_v-1} \mathbf{z}_i^{T}{\mathbf M}^k\mathbf{z}_i \nonumber\\
@@ -448,7 +465,7 @@ Since we apply s-step Lanczos algorithm for $\tau_k^i$ and $\theta_k^i$, the ort
 
 
 \section{Conditions of $k$}
-In SLQ algorithm, we can generalize the index of power $k$. If ${\mathbf M}$ is positive definite, we can use not only a positive integer but also a positive real number as $k$. This is because that $f(x)=x^k$ is analytic inside a closed interval $[\lambda_0, \lambda_{n-1}]$. However the function $f(x)=x^k$ have a singularity at zero and the laplacian matrix ${\mathbf L}$ and the normalized laplacian matrix ${\mathbfcal L}$ are positive semi-definite matrix, which have $\lambda_0 = 0$.
+In SLQ algorithm, we can generalize the index of power $k$. If ${\mathbf M}$ is positive definite, we can use not only a positive integer but also a positive real number as $k$. This is because that $f(x)=x^k$ is analytic inside a closed interval $[\lambda_0, \lambda_{n-1}]$. However the function $f(x)=x^k$ have a singularity at zero and the Laplacian matrix ${\mathbf L}$ and the normalized Laplacian matrix ${\mathbfcal L}$ are positive semi-definite matrix, which have $\lambda_0 = 0$.
 
 To overcome the issue mentioned above, we can use {\it shifting the spectrum} proposed by Shashanka Ubaru, Jie Chen, and Yousef Saad\cite{ubaru2017fast}. The idea is shifting the eigenvalues by replacing ${\mathbf M}$ with ${\mathbf M}+\delta{\mathbf I}$. The shifted matrix have the eigenvalues in the interval $[\lambda_0 + \delta, \lambda_{n-1}+ \delta]$. Hence we can obtaing the approximation error bounds of SLQ algorithm and find that SLQ algorithm is practically useful.
 
@@ -462,7 +479,7 @@ If $k$ is a positive real number and ${\mathbf M}={\mathbf A}$, the SPENet $\sum
         $k\in \mathbb{R}_{\geq 0}$&  undefined  & SLQ  &  SLQ \\
       \end{tabular}
       \caption{Conditions under which the algorithms can be used}
-      \label{tab:notion}
+      \label{tab:conditions_k}
     \end{center}
   \end{table}
 
@@ -472,7 +489,7 @@ There are two main reasons for the error from the exact solution: one is due to 
 Various studies have already been done on the error due to the stochastic trace estimator, such as Haim Avron and Sivan Toledo's work on the error and variance of the trace of a positive semi-definite matrix \cite{avron2011randomized}. The kth power of the Laplacian and normalized Laplacian matrices is a positive semi-definite matrix, while the $k$-th power of the adjacency matrix is a positive semi-definite matrix only when $k$ is even. definite matrix only when $k$ is even.
 
 Let us consider the error due to the Gauss quadrature rule: Suppose $k$ is a positive integer and Lanczos step size is $s$. When $2s-1$ is greater or equal to the degree of $f(x)$, the error of Gauss quadrature rule is zero. The result obtained by the SLQ algorithm is an approximation of the result obtained by the STE algorithm by Gaussian quadrature rule. Therefore, by setting the number of steps s in the SLQ algorithm to a sufficiently large number, the error between the results obtained by the STE algorithm and the results obtained by the SLQ algorithm becomes zero. Also, by reducing the number of steps s to an appropriate value, there will be no significant difference in the computational complexity of the two algorithms while keeping the error at zero.
-If k is not an integer, then the order of the expansion clearly exceeds 2s-1, and the value of the error by the Gauss quadrature rule cannot be determined. The amount of the error can be estimated from (2.2), but it is difficult to obtain it directly.
+If k is not an integer, then the order of the expansion clearly exceeds 2s-1, and the value of the error by the Gauss quadrature rule cannot be determined. The amount of the error can be estimated from (2.5), but it is difficult to obtain it directly.
 
 As described above, it is possible to show the error bound using the contents of previous studies if some conditions are met. However, when k is odd and the STE or SLQ algorithm is applied to the adjacency matrix, or when $k$ is not an integer and the SLQ algorithm is applied, it is open problems to find the error bounds.
 
@@ -510,7 +527,7 @@ We use 40 real-world small networks \cite{nr}, and show detailed data in table \
 
 We experiment to see how accurately the SQL algorithm can approximate the data. We calculate the SPENet for each of the adjacency matrix, Laplacian matrix, and normalized Laplacian matrix for 40 real-world networks, and illustrate the relative error between the exact values and the values obtained by the SQL algorithm. Figure \ref{fig:error_each_graph} show the results. The detailed values of the relative errors between the exact values of SPENet and the values obtained by the SQL algorithm can be found in Table \ref{tab:rel_error_k3}, \ref{tab:rel_error_k4}.
 
-For the Laplacian and normalized laplacian matrices, the relative error does not change significantly when k is changed. We also conduct experiments with $k = 3.5$ and $4.5$, and the results are similar. However, for the adjacency matrix, the relative error for $k=3$ and $k=4$ differed greatly. This is obviously related to whether ${\mathbf A}^k$ is positive semi-definite or not. For some graphs, the value of the exact solution is 0, and the relative error cannot be defined (Table \ref{tab:rel_error_k3}).
+For the Laplacian and normalized Laplacian matrices, the relative error does not change significantly when k is changed. We also conduct experiments with $k = 3.5$ and $4.5$, and the results are similar. However, for the adjacency matrix, the relative error for $k=3$ and $k=4$ differed greatly. This is obviously related to whether ${\mathbf A}^k$ is positive semi-definite or not. For some graphs, the value of the exact solution is 0, and the relative error cannot be defined (Table \ref{tab:rel_error_k3}).
 
 \subsection{Parameter Sensitivity}
 
@@ -548,44 +565,11 @@ There are two sources of error: the stochastic trace estimator and the Gauss qua
 
 
 
-\chapter{Quantitative Evaluation and Application of DOS and PDOS}
-In this chapter, we discuss quantitative evaluation and application of the spectral distribution.
-
-The DOS and PDOS of a network can be approximated by using the Kernel polynomial method as described in Section 2.5.1. However, its usage has not been discussed in-depth, and only the fact that it can be visualized has been emphasized.
-By using this distribution as a discrete probability distribution, it will be possible to evaluate it quantitatively using various concepts such as entropy, divergence, distance.
-
-For each of them, we discuss what advantages and disadvantages they have and compare them with previous studies on similar concepts for networks. As for DOS, even if it becomes possible to evaluate quantitatively by defining entropy, divergence, and distance, similar concepts already exist and can be calculated faster than the method of Kun Dong et al. Therefore, it is not clear at this stage whether there is any advantage in using DOS to evaluate quantitatively.
-
-On the other hand, since there is no similar concept for PDOS, being able to evaluate it quantitatively is a great advantage. In particular, PDOS makes it possible to calculate the distance based on the structure of the network, rather than the shortest distance between vertices.
-
-\section{Entropy}
-It is possible to calculate the entropy of a spectral distribution expressed as a discrete probability distribution: the entropy of the entire network can be obtained using DOS, and the entropy of each vertex can be obtained using PDOS.
-
-However, Von Neumann graph entropy, a concept similar to the entropy of the entire network, has already been studied \cite{braunstein2006laplacian, chen2019fast,tsitsulin2020just}. It is inspired by the Von Neumann entropy of quantum mechanics and has already been studied not only for applications to divergence and distance but also for applications and properties of the entropy itself. Since there are faster computational methods \cite{chen2019fast,tsitsulin2020just} than those proposed by Kun Dong et al \cite{dong2019network}, there is little advantage in using DOS for entropy .
-On the other hand, the entropy per-vertex may be worth using. By considering the relationship between the size of the entropy of each vertex, it may be possible to calculate the "importance" of each vertex.
-
-
-\section{Divergence and Distance}
-By using DOS expressed as a discrete probability distribution, it is possible to define the divergence and distance between networks. For example, Kullback-Leibler divergence \cite{kullback1951information} is famous for its divergence, and since Kullback-Leibler divergence is asymmetric, we can also use the symmetric Jeffreys divergence and Jensen-Shannon divergence \cite{nielsen2019jensen, lin1991divergence, jeffreys1946invariant}. It is also possible to use the Jensen-Shannon distance, which was proved to be a valid distance metric \cite{endres2003new}.
-
-The Von Neumann graph entropy can also be used to define divergence and distance, and various studies have already been conducted on this. In the field of quantum mechanics, divergence and quantum Jensen-Shannon divergence have already been defined \cite{briet2009properties, lamberti2008metric}, and these can be calculated using the Von Neumann graph entropy. However, unlike the method of calculating the divergence and distance using DOS, the divergence and distance obtained via Von Neumann graph entropy cannot be precomputed.
-
-However, the distance called NetLSD has also been defined using the heat kernel, and an approximation algorithm has been established \cite{tsitsulin2018netlsd,tsitsulin2020just}. NetLSD is capable of precomputation and can perform approximate calculations faster than DOS. Therefore, when considering the divergence and distance between networks, there is little advantage in using DOS.
-
-On the other hand, there is an advantage of using PDOS. Usually, the distance between vertices is the length of the shortest path, but with this definition, we can express how similar the properties of the vertices are. This may make it possible to search for vertices with similar properties.
-
-\section{Applications}
-The spectral distribution for networks has not been studied yet, but the spectral distribution for materials has already been studied in the field of condensed matter physics and other fields. It is possible to apply ideas from these fields to networks as well.
-
-For example, a fast online search algorithm for similar spectra has been proposed \cite{borysov2018online,geilhufe2018towards}, and since DOS and PDOS are capable of precomputation, the results of the calculation can be stored in a database for fast search of networks with similar spectra. In this case, it is necessary to define the distance between two networks, which can be expressed as a vector by considering DOS as a discrete distribution, and Euclidean distance and cosine distance can be used.
-
-
-
-\chapter{Gallery of DOS and PDOS}
-In this chapter, We show the spectral distributions (DOS and PDOS) of various synthesized and real-world graphs. All the results can be seen in Appendix C. We then discuss propaties of graphs with similar DOS/PDOS.
+\chapter{Gallery and Analysis of DOS and PDOS}
+In this chapter, We show the spectral distributions (DOS and PDOS) of various synthesized and real-world graphs. All the results can be seen in Appendix C. We then discuss propaties of graphs with similar DOS/PDOS and discuss how to analyze quantitatively.
 
 \section{Methods}
-We show the results of DOS and PDOS for 66 synthesized graphs and 28 real-world networks in Appendix C. We use the method proposed by Kun Dong et al \cite{dong2019network} based on the kernel polynomial method (KMP) as described in Section 2.5.1., motif filtering is not used, and the perturbations are smoothed using Jackson damping after calculation using the kernel polynomial method.
+We show the results of DOS and PDOS for 66 synthesized graphs and 28 real-world networks in Appendix C. We use the method proposed by Kun Dong et al \cite{dong2019network} based on the kernel polynomial method (KMP) as described in Section 2.5.1., all graphs are expressed as undirected and unweighted, we use normalized adjacency matrix, motif filtering is not used, and the perturbations are smoothed using Jackson damping after calculation using the kernel polynomial method.
 
 The red dots mean the values obtained by the KMP-based approximation. The PDOS computed for all vertices are sorted and then displayed vertically. Red means that the weight of a part of the spectrum of a vertex is large, while blue means that the weight is small.
 
@@ -597,12 +581,12 @@ We generate 66 synthesized graphs by NetworkX library \cite{SciPyProceedings_11}
 
 
 \section{Discussion}
-
+\subsection{Analysis of DOS and PDOS}
 From the results in Appendix C, graphs with similar DOS/PDOS is likely to have similar properties. For example, DOS of all road networks are similar to each other (see Figure \ref{fig:road}).
 
 There are characteristic DOS that are often seen, such as
 \begin{itemize}
-  \item DOS with spikes caused by motifs (e.g. Figure \ref{fig:circular_ladder, fig:balanced})
+  \item DOS with spikes caused by motifs (e.g. Figure \ref{fig:circular_ladder}, \ref{fig:balanced})
   \item DOS which is bowl-shaped (e.g. Figure \ref{fig:circular_ladder}(c)(d), \ref{fig:road} )
   \item DOS which is semi-circular shape (e.g. Figure \ref{fig:random}(d), \ref{fig:barabasi}(d))
   \item DOS which is sharp near the center or negative-side. (e.g. Figure \ref{fig:random_geometric}, \ref{fig:forest_fire})
@@ -611,7 +595,7 @@ and so on.
 
 Motif is an important factor for DOS analysis. Since motifs corresponds to some eigenvalues, there are spikes in DOS of graph which have many motifs. Therefore, it is possible to know by spikes that there is a certain local structure called a motif.
 
-Also, shape of DOS seems to be related to degree of graph. If average degree of graph is very small (about 1~2), there are many motifs in the graph and soem spikes in DOS. If average degree is slightly small (about 2~4), DOS tend to be bowl-shaped like road networks. DOS with a large average degree tend to have a centralized spectrum.
+Also, shape of DOS seems to be related to degree of graph. If average degree of graph is very small (about 1\~2), there are many motifs in the graph and soem spikes in DOS. If average degree is slightly small (about 2\~4), DOS tend to be bowl-shaped like road networks. DOS with a large average degree tend to have a centralized spectrum.
 
 If graph has centralized DOS, it is categorized into mainly two types:
 \begin{itemize}
@@ -622,18 +606,46 @@ Graphs where vertices are randomly adjacent to each other have a semicircular sp
 
 
 
+\subsection{Quantitative Evaluation and Application}
+The DOS and PDOS of a network can be approximated by using the Kernel polynomial method as described in Section 2.5.1. , and we show many DOS and PDOS of various graphs in Appendix C. However, its usage has not been discussed in-depth, and only the fact that it can be visualized has been emphasized.
+By using this distribution as a discrete probability distribution, it will be possible to evaluate it quantitatively using various concepts such as entropy, divergence, distance.
+
+For each of them, we discuss what advantages and disadvantages they have and compare them with previous studies on similar concepts for networks. As for DOS, even if it becomes possible to evaluate quantitatively by defining entropy, divergence, and distance, similar concepts already exist and can be calculated faster than the method of Kun Dong et al. Therefore, it is not clear at this stage whether there is any advantage in using DOS to evaluate quantitatively.
+
+On the other hand, since there is no similar concept for PDOS, being able to evaluate it quantitatively is a great advantage. In particular, PDOS makes it possible to calculate the distance based on the structure of the network, rather than the shortest distance between vertices.
+
+\subsubsection{Entropy}
+It is possible to calculate the entropy of a spectral distribution expressed as a discrete probability distribution: the entropy of the entire network can be obtained using DOS, and the entropy of each vertex can be obtained using PDOS.
+
+However, Von Neumann graph entropy, a concept similar to the entropy of the entire network, has already been studied \cite{braunstein2006laplacian, chen2019fast,tsitsulin2020just}. It is inspired by the Von Neumann entropy of quantum mechanics and has already been studied not only for applications to divergence and distance but also for applications and properties of the entropy itself. Since there are faster computational methods \cite{chen2019fast,tsitsulin2020just} than those proposed by Kun Dong et al \cite{dong2019network}, there is little advantage in using DOS for entropy .
+On the other hand, the entropy per-vertex may be worth using. By considering the relationship between the size of the entropy of each vertex, it may be possible to calculate the "importance" of each vertex.
+
+
+\subsubsection{Divergence and Distance}
+By using DOS expressed as a discrete probability distribution, it is possible to define the divergence and distance between networks. For example, Kullback-Leibler divergence \cite{kullback1951information} is famous for its divergence, and since Kullback-Leibler divergence is asymmetric, we can also use the symmetric Jeffreys divergence and Jensen-Shannon divergence \cite{nielsen2019jensen, lin1991divergence, jeffreys1946invariant}. It is also possible to use the Jensen-Shannon distance, which was proved to be a valid distance metric \cite{endres2003new}.
+
+The Von Neumann graph entropy can also be used to define divergence and distance, and various studies have already been conducted on this. In the field of quantum mechanics, divergence and quantum Jensen-Shannon divergence have already been defined \cite{briet2009properties, lamberti2008metric}, and these can be calculated using the Von Neumann graph entropy. However, unlike the method of calculating the divergence and distance using DOS, the divergence and distance obtained via Von Neumann graph entropy cannot be precomputed.
+
+However, the distance called NetLSD has also been defined using the heat kernel, and an approximation algorithm has been established \cite{tsitsulin2018netlsd,tsitsulin2020just}. NetLSD is capable of precomputation and can perform approximate calculations faster than DOS. Therefore, when considering the divergence and distance between networks, there is little advantage in using DOS.
+
+On the other hand, there is an advantage of using PDOS. Usually, the distance between vertices is the length of the shortest path, but with this definition, we can express how similar the properties of the vertices are. This may make it possible to search for vertices with similar properties.
+
+\subsubsection{Applications}
+The spectral distribution for networks has not been studied deeply yet, but the spectral distribution for materials has already been studied in the field of condensed matter physics and other fields. It is possible to apply ideas from these fields to networks as well. For example, a fast online search algorithm for similar spectra has been proposed \cite{borysov2018online,geilhufe2018towards}, and since DOS and PDOS are capable of precomputation, the results of the calculation can be stored in a database for fast search of networks with similar spectra. In this case, it is necessary to define the distance between two networks, which can be expressed as a vector by considering DOS as a discrete distribution, and Euclidean distance and cosine distance can be used.
+
+Another example of applications is deep learning on networks. DOS and PDOS are closely related to a structure of a network. Therefore, we may be able to use the discrete probability distributions of DOS/PDOS as feature vectors for deep learning on graphs.
 
 \chapter{Conclusion}
-We discussed how to use all the eigenvalues of a large network for analysis and application.
+We discussed how to use all the eigenvalues of a large network for analysis and application. Overall, we use some approximation techniques such as stochastic trace estimator, and stochastic Lanczos estimator that use diagonal elements.
 
-First, we proposed the STE algorithm and the SLQ algorithm as algorithms for approximating the sum of the powers of the eigenvalues. These algorithms are the first algorithms for finding SPEs that scale to large graphs. For the Laplacian and normalized Laplacian matrices, good approximations were obtained in most of the experimental cases. For the Laplacian and normalized Laplacian matrices, good approximations were obtained in most experimental cases.
+First, we proposed the STE algorithm and the SLQ algorithm as algorithms for approximating the sum of the powers of eigenvalues of networks. These algorithms are the first algorithms for calculating SPENet that scale to large graphs. For the Laplacian and normalized Laplacian matrices, good approximations were obtained in most of the experimental cases.
 
-However, when k is an odd number, we found experimentally that the algorithm does not work well for adjacency matrices, such as bipartite graphs or matrices with many closed paths. k is 3, it can be obtained by triangle counting, so it may be better to use another approximation algorithm. In the case of k = 3, it is possible to obtain the result by triangle counting, so it may be better to use another approximation algorithm. There are several types of starting random vectors, and the error bound that can be given depends on which one is chosen. There are some previous studies on the errors generated by stochastic trace estimators, but they do not become positive semi-definite when applied to adjacency matrices with k odd. Also, there is no mention of the error caused by the Gauss quadrature rule when k is a real number. The error bound and variance for these are open problems.
+However, when k is an odd number, we found experimentally that the algorithm does not work well for some adjacency matrices of graphs, such as bipartite graphs or matrices with many closed paths. In the case of k = 3, it is possible to obtain the result by triangle counting, so it may be better to use another approximation algorithm. There are several types of starting random vectors, and the error bounds of SPENet depends on which one is chosen. There are some previous studies on the errors generated by stochastic trace estimators. However, we do not know how big the error is when applied to adjacency matrices with k odd, because they do not become positive semi-definite. Also, there is no mention of the error caused by the Gauss quadrature rule when k is a real number. The error bound and variance for these are open problems.
 
+Next, we also study the DOS and PDOS of large-scale networks obtained by the Kernel Polynomial Method. We showed DOS and PDOS for synthesized graphs and real-world networks where the spectral distribution is not yet known. As a result, it can be inferred that networks with a common spectrum would have common properties. This provides a stepping stone for the analysis of networks using spectral distribution.
+Although previous studies have shown that the visualization of these values is a great advantage, the specific use of these values is not described in detail. We discussed that for PDOS, quantitative evaluation could be a new evaluation value that would allow comparison among vertices.
 
-Next, the DOS and PDOS of large-scale networks that can be obtained by using the Kernel Polynomial Method are discussed. Although previous studies have shown that the visualization of these values is a great advantage, the specific use of these values is not described in detail. We discussed that for PDOS, quantitative evaluation could be a new evaluation index that would allow comparison among vertices. We also calculated and showed DOS and PDOS for synthesized graphs and real-world networks where the spectral distribution is not yet known. As a result, it can be inferred that networks with a common spectrum would have common properties. This provides a stepping stone for the analysis of networks using spectral distribution.
-
-However, we have not been able to show what the distance between vertices using PDOS means in concrete terms. If we can show some results even experimentally, it will be a clue for the future. Also, the correspondence between the spectral distribution and the nature of the network is only inferred and not formally discussed. It is well known that a random graph has a semicircular spectrum, but it is necessary to show how other shapes correspond to the properties of the network.
+However, we have not been able to show what the distance between vertices using PDOS means. If we can show some results even experimentally, it will be a clue for the future. Also, the relationship between the spectral distributions and the properties of networks is only inferred and not formally proved. It is well known that a random graph has a semicircular spectrum, but it is necessary to show how other shapes correspond to the properties of the network.
 
 \subsection*{Future research}
 To take the analysis of large-scale graphs to the next stage, where only some eigenvalues have been used, it is necessary to conduct research using all eigenvalues.
